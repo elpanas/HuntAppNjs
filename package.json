@@ -1,7 +1,7 @@
 {
   "name": "hunt-app-njs",
   "version": "0.0.1",
-  "description": "HuntAppNjs",
+  "description": "Hunting Treasure Web Service",
   "main": "server.js",
   "author": {
     "name": "Luca Panariello"
