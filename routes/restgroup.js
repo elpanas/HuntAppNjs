@@ -22,7 +22,7 @@ router.get('/:id', (req, res) => {
             if (result.length != 0)
                 res.status(200).json(result);
             else
-                res.status(404).send('Event was not found');
+                res.status(404).send('Group was not found');
         })
         .catch((error) => { res.status(404).send(error) })
 });
@@ -36,7 +36,7 @@ router.put('/:id', (req, res) => {
             if (result) {
                 updateGroup(req.params.id, req.body)
                     .then(() => { res.status(200).send() })
-                    .catch(() => { res.status(404).send('Event was not found') })
+                    .catch(() => { res.status(404).send('Group was not found') })
             }
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();
