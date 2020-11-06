@@ -1,10 +1,10 @@
 const { Riddle } = require('../models/schemas');
 
 // CREATE RIDDLE
-async function createRiddle(event_id, riddle_data) {
+async function createRiddle(riddle_data) {
 
     const riddle = new Riddle({
-        event: event_id,
+        event: riddle_data.event_id,
         riddle_type: riddle_data.type,
         riddle_param: riddle_data.param,
         image_path: riddle_data.image,

@@ -1,12 +1,12 @@
 const { Game } = require('../models/schemas');
 
 // CREATE GAME
-async function createGame(game_data, user_id, event_id) {
+async function createGame(game_data) {
 
     const game = new Game({
-        event: event_id,
+        event: game_data.event_id,
         name: game_data.name,
-        organizer: user_id
+        organizer: game_data.user_id
     });
 
     // salva il documento

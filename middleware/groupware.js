@@ -1,10 +1,10 @@
 const { Group } = require('../models/schemas');
 
 // CREATE GROUP
-async function createGroup(game_id, group_data) {
+async function createGroup(group_data) {
 
     const group = new Group({
-        game: game_id,
+        game: group_data.game_id,
         name: group_data.name,
         captain: group_data.captain,
         num_players: group_data.num_players,

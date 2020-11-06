@@ -1,11 +1,11 @@
 const { Location } = require('../models/schemas');
 
 // CREATE GAME
-async function createLocation(game_id, cluster_id, loc_data) {
+async function createLocation(loc_data) {
 
     const loc = new Location({
-        game: game_id,
-        cluster: cluster_id,
+        game: loc_data.game_id,
+        cluster: loc_data.cluster_id,
         location: {
             type: 'Point',
             coordinates: [loc_data.longitude, loc_data.latitude]
