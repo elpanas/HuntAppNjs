@@ -22,7 +22,7 @@ async function createGame(game_data, user_id, event_id) {
 
 // GET GAME
 async function getGame(id) {
-    return await Event.findById(id);
+    return await Game.findById(id);
 }
 // --------------------------------------------------------------------
 
@@ -30,7 +30,7 @@ async function getGame(id) {
 // UPDATE GAME
 async function updateGame(idg, game_data) {
 
-    const game = await Event.update({ _id: idg }, {
+    const game = await Game.update({ _id: idg }, {
         $set: {
             name: game_data.name
         }
@@ -43,7 +43,7 @@ async function updateGame(idg, game_data) {
 
 // REMOVE GAME
 async function removeGame(id) {
-    return result = await Event.findByIdAndDelete(id);
+    return result = await Game.findByIdAndDelete(id);
 }
 // --------------------------------------------------------------------
 
