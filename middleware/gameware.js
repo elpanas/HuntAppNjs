@@ -30,13 +30,11 @@ async function getGame(id) {
 // UPDATE GAME
 async function updateGame(idg, game_data) {
 
-    const game = await Game.update({ _id: idg }, {
+    return game = await Game.update({ _id: idg }, {
         $set: {
             name: game_data.name
         }
     }, { new: true });
-
-    return game;
 }
 // --------------------------------------------------------------------
 

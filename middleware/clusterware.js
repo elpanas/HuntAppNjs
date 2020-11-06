@@ -27,7 +27,7 @@ async function getCluster(id) {
 // UPDATE CLUSTER
 async function updateCluster(idc, cluster_data) {
 
-    return cluster = await Cluster.update({ _id: idg }, {
+    return cluster = await Cluster.update({ _id: idc }, {
         $set: {
             name: cluster_data.name
         }

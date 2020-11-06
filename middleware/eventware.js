@@ -32,7 +32,7 @@ async function getEvent(id) {
 // UPDATE EVENT
 async function updateEvent(ide, event_data) {
 
-    const event = await Event.update({ _id: ide }, {
+    return event = await Event.update({ _id: ide }, {
         $set: {
             name: event_data.name,
             min_locations: event_data.min_locations,
@@ -40,8 +40,6 @@ async function updateEvent(ide, event_data) {
             min_avg_distance: event_data.min_avg_distance
         }
     }, { new: true });
-
-    return event;
 }
 // --------------------------------------------------------------------
 

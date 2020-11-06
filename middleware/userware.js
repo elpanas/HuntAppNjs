@@ -15,7 +15,6 @@ async function createUser(user_data) {
         is_admin: user_data.is_admin
     });
 
-    // salva il documento
     const result = await user.save();
 
     if (result)
