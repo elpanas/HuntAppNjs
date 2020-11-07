@@ -4,7 +4,8 @@ const { Cluster } = require('../models/schemas');
 async function createCluster(game_data) {
 
     const cluster = new Cluster({
-        game: game_data.id
+        game: game_data.id,
+        progressive_nr: game_data.prog_nr
     });
 
     const result = await cluster.save();

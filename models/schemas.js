@@ -5,10 +5,9 @@ const Schema = mongoose.Schema;
 const clusterSchema = Schema({
     game: {
         type: Schema.Types.ObjectId, ref: 'game'
-    },    
-    locations: {
-        type: [{ type: Schema.Types.ObjectId, ref: 'location' }],
-        default: null
+    },
+    progressive_nr: {
+        type: Number, default: 0
     }
 });
 //.index({ nome: 1, localita: 1, provincia: 1 }, { unique: true });
@@ -47,10 +46,6 @@ const gameSchema = Schema({
     },
     name: {
         type: String, default: null, unique: true
-    },
-    clusters: {
-        type: [{ type: Schema.Types.ObjectId, ref: 'cluster' }],
-        default: null
     },
     organizer: {
         type: Schema.Types.ObjectId, ref: 'user'
