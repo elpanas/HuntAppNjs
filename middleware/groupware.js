@@ -8,6 +8,7 @@ async function createGroup(group_data) {
         name: group_data.name,
         captain: group_data.captain,
         num_players: group_data.num_players,
+        image_path: group_data.image,
         final_location: group_data.final_location
     });
 

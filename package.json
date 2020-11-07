@@ -9,6 +9,6 @@
   "dependencies": {
     "express": "^4.17.1",
     "geo-point": "^1.2.2",
-    "mongoose": "^5.10.11"
+    "mongoose": "^5.10.13"
   }
 }

@@ -1,7 +1,12 @@
 const express = require('express'), // framework nodejs
       mongoose = require('mongoose'), // framework mongoDB
+      restcluster = require('./routes/restcluster'), // router clusters   
       restevent = require('./routes/restevent'), // router paths
-      restuser = require('./routes/restuser'),
+      restgame = require('./routes/restgame'), // router game
+      restgroup = require('./routes/restgroup'), // router group
+      restloc = require('./routes/restloc'), // router location
+      restriddle = require('./routes/restriddle'), // router riddle
+      restuser = require('./routes/restuser'), // router user
       url = 'mongodb://localhost:27017/?readPreference=primary&appname=MongoDB%20Compass&ssl=false'; // local db
 // const url = process.env.DB_URI; // remote db connection string
 
@@ -21,8 +26,13 @@ app.get('/', (req, res) => {
     res.send('Hunting Treasure Web Service');
 });
 
-// every request calls a different script, based on its path
+// every request calls a different script based on its path
+app.use('/api/cluster', restcluster); 
 app.use('/api/event', restevent); 
+app.use('/api/game', restgame); 
+app.use('/api/group', restgroup); 
+app.use('/api/loc', restloc); 
+app.use('/api/riddle', restriddle); 
 app.use('/api/user', restuser);
 
 const port = process.env.PORT || 3000;
