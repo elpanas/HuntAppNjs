@@ -134,18 +134,20 @@ const Riddle = mongoose.model('riddle', riddleSchema);
 
 // ----- USERS -----
 const userSchema = Schema({
-    first_name: {
+    /*first_name: {
         type: String, required: true
     },
     full_name: {
         type: String, required: true
-    },
+    },*/
     username: {
         type: String, require: true, unique: true
     },
     password: {
         type: String, required: true
     },
+    // pin: { type: [String], required: true }
+    // is_active: { type: boolean, required: true, default: false }
     is_admin: {
         type: Number, default: 0
     }

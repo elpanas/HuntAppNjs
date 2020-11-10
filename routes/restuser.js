@@ -10,8 +10,8 @@ const router = express.Router();
 // CREATE
 router.post('/', (req, res) => {
     createUser(req.body)
-        .then((result) => { if (result) res.status(200).send(result); else res.status(400).send(); })
-        .catch(() => { res.status(400).send() })
+        .then((result) => { res.status(200).send(result) })
+        .catch(() => res.status(400).send())
 });
 // --------------------------------------------------------------------
 
@@ -26,7 +26,7 @@ router.get('/:id', (req, res) => {
             else
                 res.status(404).send('User was not found');
         })
-        .catch(() => { res.status(404).send('User was not found') })
+        .catch(() => res.status(404).send('User was not found'))
 });
 
 // login
@@ -38,7 +38,7 @@ router.get('/login', (req, res) => {
             else
                 res.status(200).json("id", result);
         })
-        .catch(() => { res.status(404).send('Error') })
+        .catch(() => res.status(404).send('Error'))
 });
 // --------------------------------------------------------------------
 
@@ -49,13 +49,13 @@ router.put('/:id', (req, res) => {
         .then((result) => {
             if (result) {
                 updateUser(req.params.id, req.body)
-                    .then(() => { res.status(200).send() })
-                    .catch(() => { res.status(404).send('The user with the given id was not found') })
+                    .then(() => res.status(200).send())
+                    .catch(() => res.status(404).send('The user with the given id was not found'))
             }
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Area Riservata"').send();
         })
-        .catch(() => { res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Area Riservata"').send() })
+        .catch(() => res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Area Riservata"').send())
 });
 // --------------------------------------------------------------------
 
@@ -66,13 +66,13 @@ router.delete('/:id', (req, res) => {
         .then((result) => {
             if (result) {
                 removeUser(req.params.id)
-                    .then(() => { res.status(200).send() })
-                    .catch(() => { res.status(404).send('The user with the given id was not found') })
+                    .then(() => res.status(200).send())
+                    .catch(() => res.status(404).send('The user with the given id was not found'))
             }
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Area Riservata"').send();
         })
-        .catch(() => { res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Area Riservata"').send() });
+        .catch(() => res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Area Riservata"').send());
 });
 // --------------------------------------------------------------------
 
