@@ -2,6 +2,7 @@ const express = require('express'),
     { checkUser } = require('../middleware/userware'),
     { createEvent,
     getEvent,
+    getAllEvents,
     checkEvent,
     updateEvent,
     removeEvent } = require('../middleware/eventware');    
@@ -29,6 +30,18 @@ router.post('/', (req, res) => {
 
 
 // READ
+router.get('/', (req, res) => {
+    getAllEvents()
+        .then((result) => {
+            if (result)
+                res.status(200).json(result);
+            else
+                res.status(404).send('Event was not found');
+        })
+        .catch((error) => res.status(400).send(error))
+});
+
+
 router.get('/:id', (req, res) => {
     getEvent(req.params.id)
         .then((result) => {

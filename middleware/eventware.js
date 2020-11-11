@@ -17,9 +17,9 @@ async function createEvent(event_data, user_id) {
 // --------------------------------------------------------------------
 
 
-// GET EVENT BY ID
-async function getEvent(id) {
-    return await Event.findById(id);
+// GET ALL EVENTS
+async function getAllEvents() {
+    return await Event.find().populate('organizer','username');
 }
 
 // GET EVENT BY NAME
@@ -52,6 +52,7 @@ async function removeEvent(id) {
 
 module.exports.createEvent = createEvent;
 module.exports.getEvent = getEvent;
+module.exports.getAllEvents = getAllEvents;
 module.exports.checkEvent = checkEvent;
 module.exports.updateEvent = updateEvent;
 module.exports.removeEvent = removeEvent;
