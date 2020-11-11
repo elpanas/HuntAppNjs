@@ -146,7 +146,7 @@ const userSchema = Schema({
     password: {
         type: String, required: true
     },
-    // pin: { type: [String], required: true }
+    //pin: { type: String, required: true },
     // is_active: { type: boolean, required: true, default: false }
     is_admin: {
         type: Number, default: 0

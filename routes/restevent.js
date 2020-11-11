@@ -1,16 +1,29 @@
 const express = require('express'),
+    { checkUser } = require('../middleware/userware'),
     { createEvent,
     getEvent,
+    checkEvent,
     updateEvent,
-    removeEvent } = require('../middleware/eventware'),
-    { checkUser } = require('../middleware/userware');
+    removeEvent } = require('../middleware/eventware');    
 const router = express.Router();
 
 // CREATE
-router.post('/', (req, res) => {
-    createEvent(req.body)
-        .then((result) => { if (result) res.status(200).send(result); else res.status(400).send(); })
-        .catch(() => { res.status(400).send() })
+router.post('/', (req, res) => {    
+    checkUser(req.get('Authorization'))
+        .then((idu) => {
+            if (idu) {
+                checkEvent(req.body.name)
+                    .then((eventexist) => {
+                        if (!eventexist) {
+                            createEvent(req.body, idu)
+                                .then(() => res.status(200).send())
+                                .catch(() => res.status(400).send())
+                        } else 
+                            res.status(400).send('Error: name already exists');                
+                    }) // checkEvent                      
+            } else
+                res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send()  
+        })
 });
 // --------------------------------------------------------------------
 

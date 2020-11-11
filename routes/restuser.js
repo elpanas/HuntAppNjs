@@ -1,7 +1,6 @@
 const express = require('express');
 const { createUser,
     getUser,
-    getLogin,
     updateUser,
     removeUser,
     checkUser } = require('../middleware/userware');
@@ -10,7 +9,7 @@ const router = express.Router();
 // CREATE
 router.post('/', (req, res) => {
     createUser(req.body)
-        .then((result) => { res.status(200).send(result) })
+        .then((result) => res.status(200).send(result))
         .catch(() => res.status(400).send())
 });
 // --------------------------------------------------------------------
@@ -31,7 +30,7 @@ router.get('/:id', (req, res) => {
 
 // login
 router.get('/login', (req, res) => {
-    getLogin(req.get('Authorization'))
+    checkUser(req.get('Authorization'))
         .then((result) => {
             if (!result)
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Area Riservata"').send();

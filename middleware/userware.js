@@ -26,28 +26,6 @@ async function getUser(id) {
 // --------------------------------------------------------------------
 
 
-// USER LOGIN
-async function getLogin(auth) {
-
-    const tmp = auth.split(' ');   // Divido in base allo spazio  "Basic Y2hhcmxlczoxMjM0NQ==" per recuperare la 2a parte
-    const buf = Buffer.from(tmp[1], 'base64').toString(); // creo un buffer e lo avviso che l'input e' in base64    
-
-    // At this point buf = "username:password"
-    const [username, password] = buf.split(':');      // divido auth in base a ':'
-
-    const result = await Utente.findOne({
-        username: username,
-        password: password
-    }) // criteri di ricerca         
-
-    if (result)
-        return result._id;
-    else
-        return false;
-}
-// --------------------------------------------------------------------
-
-
 // UPDATE USER
 async function updateUser(idu, user_data) {
 
@@ -76,12 +54,16 @@ async function removeUser(id) {
 async function checkUser(auth) {
 
     const tmp = auth.split(' ');   // Divido in base allo spazio  "Basic Y2hhcmxlczoxMjM0NQ==" per recuperare la 2a parte
-    const idu = Buffer.from(tmp[1], 'base64').toString(); // creo un buffer e lo avviso che l'input e' in base64       
+    const buf = Buffer.from(tmp[1], 'base64').toString(); // creo un buffer e lo avviso che l'input e' in base64
+    const [username, password] = buf.split(':');      // divido auth in base a ':'
 
-    const result = await User.find({ _id: idu }) // criteri di ricerca 
+    const result = await User.findOne({
+        username: username,
+        password: password
+    }) // criteri di ricerca         
 
     if (result)
-        return true;
+        return result._id;
     else
         return false;
 }
@@ -90,7 +72,6 @@ async function checkUser(auth) {
 
 module.exports.createUser = createUser;
 module.exports.getUser = getUser;
-module.exports.getLogin = getLogin;
 module.exports.updateUser = updateUser;
 module.exports.removeUser = removeUser;
 module.exports.checkUser = checkUser;
