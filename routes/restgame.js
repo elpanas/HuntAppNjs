@@ -1,6 +1,6 @@
 const express = require('express'),
     { createGame,
-    getGame,
+    getAllGames,
     updateGame,
     removeGame } = require('../middleware/gameware'),
     { checkUser } = require('../middleware/userware');
@@ -16,6 +16,17 @@ router.post('/', (req, res) => {
 
 
 // READ
+router.get('/event/:id', (req, res) => {
+    getAllGames(req.params.id)
+        .then((result) => {
+            if (result.length > 0)
+                res.status(200).json(result);            
+            else
+                res.status(404).send('No games found'); 
+        })
+        .catch((error) => res.status(404).send(error))
+});
+
 router.get('/:id', (req, res) => {
     getGame(req.params.id)
         .then((result) => {

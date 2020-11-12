@@ -20,6 +20,11 @@ async function createGame(game_data) {
 // --------------------------------------------------------------------
 
 
+// GET ALL GAMES
+async function getAllGames(event_id) {
+    return await Game.find({ event: event_id }).select('_id name');
+}
+
 // GET GAME
 async function getGame(id) {
     return await Game.findById(id);
@@ -47,5 +52,6 @@ async function removeGame(id) {
 
 module.exports.createGame = createGame;
 module.exports.getGame = getGame;
+module.exports.getAllGames = getAllGames;
 module.exports.updateGame = updateGame;
 module.exports.removeGame = removeGame;

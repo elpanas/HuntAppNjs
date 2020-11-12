@@ -51,7 +51,6 @@ async function removeEvent(id) {
 // --------------------------------------------------------------------
 
 module.exports.createEvent = createEvent;
-module.exports.getEvent = getEvent;
 module.exports.getAllEvents = getAllEvents;
 module.exports.checkEvent = checkEvent;
 module.exports.updateEvent = updateEvent;
