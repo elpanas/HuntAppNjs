@@ -1,26 +1,15 @@
 const { Location } = require('../models/schemas');
 
 // CREATE GAME
-async function createLocation(loc_data) {
+async function createLocations(locs_data) {
+    await Location.insertMany(locs_data);
+}
+// --------------------------------------------------------------------
 
-    const loc = new Location({
-        game: loc_data.game_id,
-        cluster: loc_data.cluster_id,
-        location: {
-            type: 'Point',
-            coordinates: [loc_data.longitude, loc_data.latitude]
-        },        
-        image_path: loc_data.image,
-        is_start: loc_data.is_start,
-        is_end: loc_data.is_end
-    });
 
-    const result = await loc.save();
-
-    if (result)
-        return result._id;
-    else
-        return false;
+// GET NUMBER OF THE CLUSTER
+function getNrClusterLoc(idg) {
+    return Location.findOne({ game: idg }).select('cluster').sort('-cluster');
 }
 // --------------------------------------------------------------------
 
@@ -56,7 +45,9 @@ async function removeLocation(id) {
 }
 // --------------------------------------------------------------------
 
-module.exports.createLocation = createLocation;
+//module.exports.createLocation = createLocation;
+module.exports.createLocations = createLocations;
+module.exports.getNrClusterLoc = getNrClusterLoc;
 module.exports.getLocation = getLocation;
 module.exports.updateLocation = updateLocation;
 module.exports.removeLocation = removeLocation;

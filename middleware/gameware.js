@@ -6,16 +6,12 @@ async function createGame(game_data) {
     const game = new Game({
         event: game_data.event_id,
         name: game_data.name,
-        organizer: game_data.user_id
+        riddle_category: game_data.riddle_category,
+        is_open: game_data.is_open
     });
 
     // salva il documento
-    const result = await game.save();
-
-    if (result)
-        return result._id;
-    else
-        return false;
+    return await game.save();
 }
 // --------------------------------------------------------------------
 

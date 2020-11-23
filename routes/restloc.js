@@ -1,5 +1,5 @@
 const express = require('express'),
-    { createLocation,
+    { createLocations,
     getLocation,
     updateLocation,
     removeLocation } = require('../middleware/locatware'),
@@ -8,9 +8,9 @@ const router = express.Router();
 
 // CREATE
 router.post('/', (req, res) => {
-    createLocation(req.body)
-        .then((result) => { if (result) res.status(200).send(result); else res.status(400).send(); })
-        .catch(() => { res.status(400).send() })
+    createLocations(req.body)
+        .then((result) => { if (result) res.status(200).send(); else res.status(400).send(); })
+        .catch(() => res.status(400).send());
 });
 // --------------------------------------------------------------------
 

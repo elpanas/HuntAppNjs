@@ -1,29 +1,39 @@
 const { Riddle } = require('../models/schemas');
+var PO = require('pofile');
 
 // CREATE RIDDLE
 async function createRiddle(riddle_data) {
 
     const riddle = new Riddle({
-        event: riddle_data.event_id,
+        riddle_category: riddle_data.category,
         riddle_type: riddle_data.type,
         riddle_param: riddle_data.param,
-        image_path: riddle_data.image,
-        solution: riddle_data.solution
+        riddle_image_path: riddle_data.image_path,
+        riddle_solution: riddle_data.solution
     });
 
-    const result = await riddle.save();
-
-    if (result)
-        return result._id;
-    else
-        return false;
+    return await riddle.save();
 }
 // --------------------------------------------------------------------
 
 
 // GET RIDDLE
-async function getRiddle(id) {
-    return await Riddle.findById(id);
+function generateRiddle(id, locale) {
+    PO.load('src/translation/it_IT/LC_MESSAGES/riddles.po', (err, po) => {
+        
+        const riddle = Riddle.findById(id).select('riddle_type');
+
+        console.log(riddle.riddle_type);
+
+        const message = po.items.find(item => item.msgid == 'riddle_type_' + riddle.riddle_type);
+        
+        const riddledata = {
+            "text": message.msgstr
+            // riddle.riddle_param*/
+        }
+
+        return riddledata;    
+    });    
 }
 // --------------------------------------------------------------------
 
@@ -50,6 +60,6 @@ async function removeRiddle(id) {
 // --------------------------------------------------------------------
 
 module.exports.createRiddle = createRiddle;
-module.exports.getRiddle = getRiddle;
+module.exports.generateRiddle = generateRiddle;
 module.exports.updateRiddle = updateRiddle;
 module.exports.removeRiddle = removeRiddle;

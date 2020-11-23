@@ -1,18 +1,29 @@
 const mongoose = require('mongoose'); // MongoDB framework
 const Schema = mongoose.Schema;
 
-// ----- CLUSTERS -----
-const clusterSchema = Schema({
-    game: {
-        type: Schema.Types.ObjectId, ref: 'game'
-    },
-    progressive_nr: {
-        type: Number, default: 0
-    }
-});
 //.index({ nome: 1, localita: 1, provincia: 1 }, { unique: true });
 
-const Cluster = mongoose.model('cluster', clusterSchema);
+
+// ----- USERS -----
+const userSchema = Schema({
+    first_name: {
+        type: String
+    },
+    full_name: {
+        type: String
+    },
+    username: {
+        type: String, require: true
+    },
+    password: {
+        type: String, required: true
+    },
+    is_admin: {
+        type: Boolean, default: false
+    }
+});
+
+const User = mongoose.model('user', userSchema);
 // --------------------------------------------------------------------
 
 
@@ -21,11 +32,14 @@ const eventSchema = Schema({
     name: {
         type: String, default: null, unique: true
     },
+    logo_path: {
+        type: String, default: null
+    },
     min_locations: {
-        type: Number, default: 10
+        type: Number, default: 2
     },
     max_locations: {
-        type: Number, default: 30
+        type: Number, default: 8
     },
     min_avg_distance: {
         type: Number, default: null
@@ -47,8 +61,13 @@ const gameSchema = Schema({
     name: {
         type: String, default: null, unique: true
     },
-    organizer: {
-        type: Schema.Types.ObjectId, ref: 'user'
+    riddle_category: {
+        type: String,
+        enum: ['Basic','Intermediate','Advanced']
+    },
+    // start_date: Date,
+    is_open: {
+        type: Boolean, default: false
     }
 });
 
@@ -56,26 +75,38 @@ const Game = mongoose.model('game', gameSchema);
 // --------------------------------------------------------------------
 
 
-// ----- GROUPS -----
-const groupSchema = Schema({
+// ----- SINGLE GAME -----
+const singleGameSchema = Schema({ // when game is booted
     game: {
         type: Schema.Types.ObjectId, ref: 'game'
-    },
-    name: {
+    },    
+    group_name: {
         type: String, default: null, unique: true
     },
-    captain: {
+    group_captain: {
         type: Schema.Types.ObjectId, ref: 'user'
     },
-    num_players: {
+    group_nr_players: {
         type: Number, required: true
     },
-    final_location: {
-        type: Schema.Types.ObjectId, ref:'location'
+    group_photo_path: {
+        type: String, default: null
+    },    
+    steps: [
+        {
+            prog_nr: Number,
+            step: { type: Schema.Types.ObjectId, ref: 'location' },
+            reachedOn: { type: Date, default: null },
+            riddle: { type: Schema.Types.ObjectId, ref: 'riddle', default: null },
+            solvedOn: { type: Date, default: null }
+        },
+    ],
+    bootdate: { // a parità di partite con stesso id, sceglie quella più recente
+        type: Date, default: Date.now
     }
 });
 
-const Group = mongoose.model('group', groupSchema);
+const SingleGame = mongoose.model('singlegame', singleGameSchema);
 // --------------------------------------------------------------------
 
 
@@ -84,9 +115,7 @@ const locationSchema = Schema({
     game: {
         type: Schema.Types.ObjectId, ref: 'game'
     },
-    cluster: {
-        type: Schema.Types.ObjectId, ref: 'cluster'
-    },
+    cluster: Number, // progressive number
     location: {
         type: {
             type: String, 
@@ -97,10 +126,12 @@ const locationSchema = Schema({
     image_path: {
         type: String, default: null
     },
+    description: String,
+    hint: String, 
     is_start: {
         type: Boolean, default: false
     },
-    is_end: {
+    is_final: {
         type: Boolean, default: false
     }
 });
@@ -109,58 +140,32 @@ const Location = mongoose.model('location', locationSchema);
 // --------------------------------------------------------------------
 
 
-// ----- RIDDLES -----
-const riddleSchema = Schema({
-    event: {
-        type: Schema.Types.ObjectId, ref: 'event'
+// ----- RIDDLE -----
+const riddleSchema = Schema({   
+    riddle_category: {
+        type: String,
+        enum: ['Basic','Intermadiate','Hard']
     },
     riddle_type: {
-        type: Number, default: 1, required: true
+        type: Number, default: 1
     },
     riddle_param: {
-        type: String, default: '', required: true
+        type: String, default: ''
     },
-    image_path: {
+    riddle_image_path: {
         type: String, default: null
     },
-    solution: {
-        type: String, required: true
+    riddle_solution: {
+        type: String
     }
 });
 
 const Riddle = mongoose.model('riddle', riddleSchema);
 // --------------------------------------------------------------------
 
-
-// ----- USERS -----
-const userSchema = Schema({
-    /*first_name: {
-        type: String, required: true
-    },
-    full_name: {
-        type: String, required: true
-    },*/
-    username: {
-        type: String, require: true, unique: true
-    },
-    password: {
-        type: String, required: true
-    },
-    //pin: { type: String, required: true },
-    // is_active: { type: boolean, required: true, default: false }
-    is_admin: {
-        type: Number, default: 0
-    }
-});
-
-const User = mongoose.model('user', userSchema);
-// --------------------------------------------------------------------
-
-
-exports.Cluster = Cluster;
+exports.User = User;
 exports.Event = Event;
 exports.Game = Game;
-exports.Group = Group;
+exports.SingleGame = SingleGame;
 exports.Location = Location;
 exports.Riddle = Riddle;
-exports.User = User;

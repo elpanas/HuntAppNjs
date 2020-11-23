@@ -5,16 +5,14 @@ async function createUser(user_data) {
 
     // creazione dell'oggetto (o record) della collezione
     const user = new User({
+        first_name: user_data.first_name,
+        full_name: user_data.full_name,
         username: Buffer.from(user_data.username, 'base64').toString(),
         password: Buffer.from(user_data.password, 'base64').toString(),
         is_admin: user_data.is_admin
-        // pin.push: rand()
-        // sendSMS(user_data.phone)
     });
 
-    const result = await user.save();
-
-    return result._id
+    return await user.save();
 }
 // --------------------------------------------------------------------
 
