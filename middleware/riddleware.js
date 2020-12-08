@@ -14,52 +14,41 @@ async function createRiddle(riddle_data) {
 
     return await riddle.save();
 }
+
+async function createRiddles(riddle_data) {
+    return await Riddle.insertMany(riddle_data);
+}
 // --------------------------------------------------------------------
 
 
 // GET RIDDLE
-function generateRiddle(id, locale) {
-    PO.load('src/translation/it_IT/LC_MESSAGES/riddles.po', (err, po) => {
-        
-        const riddle = Riddle.findById(id).select('riddle_type');
 
-        console.log(riddle.riddle_type);
+function generateRiddle(riddle, locale, readValue) {
+        
+    PO.load('src/translation/it_IT/LC_MESSAGES/riddles.po', (err, po) => { 
 
         const message = po.items.find(item => item.msgid == 'riddle_type_' + riddle.riddle_type);
-        
-        const riddledata = {
-            "text": message.msgstr
-            // riddle.riddle_param*/
-        }
 
-        return riddledata;    
-    });    
+        readValue({
+            "idr": riddle._id,
+            "text": message.msgstr.toString().replace('%RIDDLE_PARAM%', riddle.riddle_param),
+            "riddle_image_path": riddle.riddle_image_path,
+            "solution": riddle.riddle_solution
+        });
+    });
 }
-// --------------------------------------------------------------------
 
-
-// UPDATE RIDDLE
-async function updateRiddle(idr, riddle_data) {
-
-    return riddle = await Riddle.update({ _id: idr }, {
-        $set: {            
-            riddle_type: riddle_data.type,
-            riddle_param: riddle_data.param,
-            image_path: riddle_data.image,
-            solution: riddle_data.solution
-        }
-    }, { new: true });
+function getRiddle(idr) {
+    return Riddle.findById(idr);
 }
-// --------------------------------------------------------------------
 
-
-// REMOVE RIDDLE
-async function removeRiddle(id) {
-    return result = await Riddle.findByIdAndDelete(id);
+function checkRiddle(riddledata) {
+    return Riddle.findOne({ _id: riddledata.idr, riddle_solution: riddledata.solution });
 }
 // --------------------------------------------------------------------
 
 module.exports.createRiddle = createRiddle;
+module.exports.createRiddles = createRiddles;
+module.exports.getRiddle = getRiddle;
 module.exports.generateRiddle = generateRiddle;
-module.exports.updateRiddle = updateRiddle;
-module.exports.removeRiddle = removeRiddle;
+module.exports.checkRiddle = checkRiddle;

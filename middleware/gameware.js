@@ -6,6 +6,7 @@ async function createGame(game_data) {
     const game = new Game({
         event: game_data.event_id,
         name: game_data.name,
+        organizer: game_data.organizer,
         riddle_category: game_data.riddle_category,
         is_open: game_data.is_open
     });
@@ -17,37 +18,31 @@ async function createGame(game_data) {
 
 
 // GET ALL GAMES
-async function getAllGames(event_id) {
-    return await Game.find({ event: event_id }).select('_id name');
+function getAllGames(event_id) {
+    return Game.find({ event: event_id }).select('_id name');
 }
 
-// GET GAME
-async function getGame(id) {
-    return await Game.findById(id);
+function getGameCategory(idg) {
+    return Game.findById(idg).select('riddle_category');
 }
-// --------------------------------------------------------------------
 
+function getGame(idg) {
+    return Game.findById(idg);
+}
 
-// UPDATE GAME
-async function updateGame(idg, game_data) {
-
-    return game = await Game.update({ _id: idg }, {
-        $set: {
-            name: game_data.name
-        }
-    }, { new: true });
+function getGameEvent(idg) {
+    return Game.findById(idg).select('event').populate('event');
 }
 // --------------------------------------------------------------------
 
-
-// REMOVE GAME
-async function removeGame(id) {
-    return result = await Game.findByIdAndDelete(id);
+function setQrCode(idg) {
+    return Game.findByIdAndUpdate(idg, { qr_created: true });
 }
 // --------------------------------------------------------------------
 
 module.exports.createGame = createGame;
+module.exports.getGameCategory = getGameCategory;
 module.exports.getGame = getGame;
+module.exports.getGameEvent = getGameEvent;
 module.exports.getAllGames = getAllGames;
-module.exports.updateGame = updateGame;
-module.exports.removeGame = removeGame;
+module.exports.setQrCode = setQrCode;

@@ -1,10 +1,8 @@
 const express = require('express'),
     { createEvent } = require('../middleware/eventware'),
     { createGame } = require('../middleware/gameware'),
-    { createSingleGame, createSteps, getSgameStep } = require('../middleware/sgameware'),
-    { createLocations,
-        getNrClusterLoc } = require('../middleware/locatware'),
-    { createRiddle, getRiddle } = require('../middleware/riddleware'),
+    { createSingleGame, createSteps } = require('../middleware/sgameware'),
+    { createLocations } = require('../middleware/locatware'),
     { createUser } = require('../middleware/userware');
 
 const router = express.Router();
@@ -12,18 +10,6 @@ const router = express.Router();
 function startTest() {
 
     //FASE 1 CREAZIONE
-    
-    // creazione indovinello
-    const riddledata = {        
-        "category": "Basic", // 1 basic, 2 intermetiate, 3 hard
-        "type": 2,
-        "param": '',
-        "image_path": 'codeweek-2017/img2-1.png',
-        "solution": 'frflff'
-    };    
-    createRiddle(riddledata)
-        .then(() => {
-
     // Registrazione utente
     const userdata = {
         "first_name": "Luca",
@@ -37,16 +23,15 @@ function startTest() {
             var idu = user._id;
             const eventdata = {
                 "name": "Event1",
-                "min_locations": 2,
-                "max_locations": 4,
-                "min_avg_distance": 100,
-                "organizer": idu
+                "minloc": 2,
+                "maxloc": 4,
+                "avgloc": 100
             };
-            createEvent(eventdata)
+            createEvent(eventdata, idu)
                 .then((event) => { 
                     var ide = event._id;
                     const gamedata = {
-                        "event": ide,
+                        "event_id": ide,
                         "name": "Game1",
                         "organizer": idu,
                         "riddle_category": "Basic",
@@ -168,49 +153,34 @@ function startTest() {
                                 .then(() => {
                                     // FASE 2 Creazione squadra
                                     const singleGameInput = { 
-                                        "game": idg,                                         
-                                        "group_name": 'Group1', 
-                                        "group_captain": idu, 
-                                        "group_nr_players": 5,
-                                        "group_photo_path": ''
-                                        
+                                        "game_id": idg,                                         
+                                        "group_name": 'Group1',  
+                                        "group_nr_players": 5                                      
                                     };
-                                    createSingleGame(singleGameInput)
+                                    createSingleGame(singleGameInput, idu)
                                         .then((singleGame) => {
                                             var idsg = singleGame._id;
 
                                             createSteps(idg, idsg, riddle_cat)
                                                 .then(() => {
                                                     // FASE 3 GIOCO
-                                                    var actualstep = getSgameStep(idsg); // take the next step
-                                                    /*if (actualstep.riddle != null) generateRiddle(actualstep.riddle, 'it')
-                                                    // if (checkRiddle()) getSgameStep // take the next step */
+                                                    /*   
+                                                    1) getAction(idsg) // prende e invia le info sulla tappa (descrizione, coordinate) 
+                                                    
+                                                    2) setReached(ida); // dopo aver scansionato il qrcode, attiva la tappa e...
+                                                    
+                                                    3) getRiddleFromAction(ida) // prende l'id dal campo riddle di actions
+                                                       generateRiddle(idr, 'it') // genera il riddle e lo invia                                                       
+
+                                                    4) if (checkRiddle(riddledata)) setSolved(ida) // se la soluzione corrisponde, aggiorna il campo solved
+                                                    5) riparte dal punto 1;
+                                                    */
                                                 }); // createSteps                                            
                                         }); // createSingleGame                                    
                                 }); // createLocations
                         }); // createGame
                 }); // createEvent            
         }); // createUser
-    }); // createRiddle
-
-       
-
-    /*
-    
-    // Scelta automatica tappe all'attivazione della partita
-    createSteps(idsg, riddle_cat); // aggiunge le tappe scelte casualmente tra le location in ordine di cluster
-
-    // FASE 3 GIOCO
-    // apre la tappa successiva (partendo dalla prima)
-    const step = getStep(idsg); // mostra il contenuto (riddle o location)
-
-    // se è un riddle
-    // if (step.solution) 
-
-    // altrimenti mostra lo step successivo
-
-    // if (step.is_end) // se è l'ultimo, termina
-    */
 }
 
 router.get('/', (req, res) => {

@@ -18,8 +18,8 @@ async function createEvent(event_data, user_id) {
 
 
 // GET ALL EVENTS
-async function getAllEvents() {
-    return await Event.find().populate('organizer','username');
+function getAllEvents() {
+    return Event.find().populate('organizer');
 }
 
 // GET EVENT BY NAME
@@ -28,30 +28,6 @@ async function checkEvent(event_name) {
 }
 // --------------------------------------------------------------------
 
-
-// UPDATE EVENT
-async function updateEvent(ide, event_data) {
-
-    return await Event.update({ _id: ide }, {
-        $set: {
-            name: event_data.name,
-            min_locations: event_data.min_locations,
-            max_locations: event_data.max_locations,
-            min_avg_distance: event_data.min_avg_distance
-        }
-    }, { new: true });
-}
-// --------------------------------------------------------------------
-
-
-// REMOVE EVENT
-async function removeEvent(id) {
-    return await Event.findByIdAndDelete(id);
-}
-// --------------------------------------------------------------------
-
 module.exports.createEvent = createEvent;
 module.exports.getAllEvents = getAllEvents;
 module.exports.checkEvent = checkEvent;
-module.exports.updateEvent = updateEvent;
-module.exports.removeEvent = removeEvent;

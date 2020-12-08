@@ -5,3 +5,4 @@
 /node_modules
 /obj
 .vscode/settings.json
+.env

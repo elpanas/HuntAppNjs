@@ -1,0 +1,219 @@
+[
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 1,
+        "riddle_param": "FFLFFLF",
+        "riddle_image_path": "codeweek-2017/img1-1.png",
+        "riddle_solution": "b"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 1,
+        "riddle_param": "FFFLFFFRF",
+        "riddle_image_path": "codeweek-2017/img1-1.png",
+        "riddle_solution": "a"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 1,
+        "riddle_param": "LFFFRFF",
+        "riddle_image_path": "codeweek-2017/img1-1.png",
+        "riddle_solution": "c"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 1,
+        "riddle_param": "RFLFF",
+        "riddle_image_path": "codeweek-2017/img1-2.png",
+        "riddle_solution": "b"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 1,
+        "riddle_param": "FLFF",
+        "riddle_image_path": "codeweek-2017/img1-2.png",
+        "riddle_solution": "a"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 1,
+        "riddle_param": "RFFRF",
+        "riddle_image_path": "codeweek-2017/img1-2.png",
+        "riddle_solution": "c"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 2,
+        "riddle_param": "",
+        "riddle_image_path": "codeweek-2017/img2-1.png",
+        "riddle_solution": "frflff"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 2,
+        "riddle_param": "",
+        "riddle_image_path": "codeweek-2017/img2-2.png",
+        "riddle_solution": "rfrflff"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 2,
+        "riddle_param": "",
+        "riddle_image_path": "codeweek-2017/img2-3.png",
+        "riddle_solution": "fflff"
+    },
+   {        
+        "riddle_category": "Basic",
+        "riddle_type": 2,
+        "riddle_param": "",
+        "riddle_image_path": "codeweek-2017/img2-4.png",
+        "riddle_solution": "ffrfff"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 2,
+        "riddle_param": "",
+        "riddle_image_path": "codeweek-2017/img2-5.png",
+        "riddle_solution": "ffrfffrf"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 3,
+        "riddle_param": "FFLFLFF",
+        "riddle_image_path": "codeweek-2017/img3-1.png",
+        "riddle_solution": "1"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 3,
+        "riddle_param": "FLFRFF",
+        "riddle_image_path": "codeweek-2017/img3-1.png",
+        "riddle_solution": "1"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 3,
+        "riddle_param": "FFLFFRFF",
+        "riddle_image_path": "codeweek-2017/img3-2.png",
+        "riddle_solution": "1"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 3,
+        "riddle_param": "FFFLFFF",
+        "riddle_image_path": "codeweek-2017/img3-2.png",
+        "riddle_solution": "0"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 3,
+        "riddle_param": "FLFFRRFF",
+        "riddle_image_path": "codeweek-2017/img3-3.png",
+        "riddle_solution": "2"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 4,
+        "riddle_param": "",
+        "riddle_image_path": "codeweek-2017/img4-1.png",
+        "riddle_solution": "l"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 4,
+        "riddle_param": "",
+        "riddle_image_path": "codeweek-2017/img4-2.png",
+        "riddle_solution": "r"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 4,
+        "riddle_param": "",
+        "riddle_image_path": "codeweek-2017/img4-3.png",
+        "riddle_solution": "f"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 4,
+        "riddle_param": "",
+        "riddle_image_path": "codeweek-2017/img4-4.png",
+        "riddle_solution": "l"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 5,
+        "riddle_param": "FFFLFLFFF",
+        "riddle_image_path": "codeweek-2017/img5-1.png",
+        "riddle_solution": "c"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 5,
+        "riddle_param": "FLFRFF",
+        "riddle_image_path": "codeweek-2017/img5-1.png",
+        "riddle_solution": "b"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 5,
+        "riddle_param": "FFFRFRFFF",
+        "riddle_image_path": "codeweek-2017/img5-1.png",
+        "riddle_solution": "a"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 5,
+        "riddle_param": "FLFFLF",
+        "riddle_image_path": "codeweek-2017/img5-2.png",
+        "riddle_solution": "a"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 5,
+        "riddle_param": "FFLFF",
+        "riddle_image_path": "codeweek-2017/img5-2.png",
+        "riddle_solution": "c"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 5,
+        "riddle_param": "LFFRFF",
+        "riddle_image_path": "codeweek-2017/img5-2.png",
+        "riddle_solution": "b"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 6,
+        "riddle_param": "",
+        "riddle_image_path": "codeweek-2017/img6-1.png",
+        "riddle_solution": "19"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 6,
+        "riddle_param": "",
+        "riddle_image_path": "codeweek-2017/img6-2.png",
+        "riddle_solution": "15"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 7,
+        "riddle_param": "",
+        "riddle_image_path": "codeweek-2017/img7-1.png",
+        "riddle_solution": "11"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 7,
+        "riddle_param": "",
+        "riddle_image_path": "codeweek-2017/img7-2.png",
+        "riddle_solution": "9"
+    },
+    {        
+        "riddle_category": "Basic",
+        "riddle_type": 7,
+        "riddle_param": "",
+        "riddle_image_path": "codeweek-2017/img7-3.png",
+        "riddle_solution": "6"
+    }
+]
