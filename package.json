@@ -7,13 +7,15 @@
     "name": "Luca Panariello"
   },
   "dependencies": {
-    "bwip-js": "^2.0.11",
     "core-js": "^3.8.1",
     "dotenv": "^8.2.0",
+    "easy-pdf-merge": "^0.2.5",
     "express": "^4.17.1",
     "geo-point": "^1.2.2",
-    "mongoose": "^5.10.14",
+    "mongoose": "^5.11.5",
+    "pdf-creator-node": "^1.4.1",
     "pdfkit": "^0.11.0",
-    "pofile": "^1.1.0"
+    "pofile": "^1.1.0",
+    "qrcode": "^1.4.4"
   }
 }

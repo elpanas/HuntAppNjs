@@ -1,6 +1,5 @@
 const { Location } = require('../models/schemas');
 const mongoose = require('mongoose');
-const bwipjs = require('bwip-js');
 const fs = require('fs');
 const PDFDocument = require('pdfkit');
 
@@ -29,10 +28,10 @@ async function createLocation(loc_data) {
 
 
 // GET
-// get locations of a cluster
+/* get locations of a cluster
 function getCluster(idg, cluster_nr) {
     return Location.find({ game: idg, cluster: cluster_nr }).sort('cluster');
-}
+}*/
 
 function checkStartFinal(idg) {
     newidg = mongoose.Types.ObjectId(idg);
@@ -57,6 +56,11 @@ function getNrLocations(idg) {
     return Location.estimatedDocumentCount({ game: newidg });
 }
 
+function getLocations(idg) {
+    // newidg = mongoose.Types.ObjectId(idg);
+    return Location.find({ game: idg }).sort('cluster');
+}
+
 function checkDistance(event_dist, locdata) {    
     const distanceAVG = Location.aggregate([
             { $match: { game: locdata.game_id } },
@@ -73,64 +77,15 @@ function checkDistance(event_dist, locdata) {
     else
         return false;
 }
-
-function getAllLocations(idg) {
-    return Location.find({ game: idg }).sort('cluster');
-}
 // --------------------------------------------------------------------
 
-function createImg(idg, idl) {    
 
-    const dir = './tmpdata' + idg +'/';
-    if(!fs.existsSync(dir)) fs.mkdirSync(dir);
-
-    bwipjs.toBuffer({
-        bcid:        'qrcode',       // Barcode type
-        text:        idl,    // Text to encode
-        scale:       3,               // 3x scaling factor
-        height:      10,              // Bar height, in millimeters
-        includetext: true,            // Show human-readable text
-        textxalign:  'center',        // Always good to set this
-    })
-    .then(png => {
-        fs.writeFile(dir + loc._id + '.png', png, () => {});                                      
-    })
-    .catch(err => console.log(err));
-    /*fs.rmdirSync(dir, { recursive: true }, (err) => {
-        if (err) {
-            throw err;
-        }
-    })*/      
-}
-
-function createPdf(idg) {    
-    const dir = './tmpdata' + idg +'/';
-    fs.readdir(dir, (err, files) => {
-    var pdfDoc = new PDFDocument;
-    pdfDoc.pipe(fs.createWriteStream('./data/cw_qrcodes.pdf'));
-       files.forEach(name => {
-            pdfDoc  
-            .fontSize(25)          
-            .text('CodeWeek')
-            .image(dir + name, {
-                fit:[400,500],
-                align: 'center',
-                valign: 'center'
-                })
-            .addPage()
-            
-       });
-       pdfDoc.end();   
-    }) 
-}
 
 module.exports.createLocation = createLocation;
 module.exports.createLocations = createLocations;
-module.exports.getCluster = getCluster;
+//module.exports.getCluster = getCluster;
 module.exports.getClusterList = getClusterList;
 module.exports.checkStartFinal = checkStartFinal;
 module.exports.getNrLocations = getNrLocations;
+module.exports.getLocations = getLocations;
 module.exports.checkDistance = checkDistance;
-module.exports.getAllLocations = getAllLocations;
-module.exports.createImg = createImg;
-module.exports.createPdf = createPdf;
