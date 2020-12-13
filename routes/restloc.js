@@ -12,6 +12,7 @@ const { createQrCode, createPdf } = require('../middleware/pdfware');
 const router = express.Router();
 
 // CREATE
+/*
 router.post('/', (req, res) => {
     checkUser(req.headers.authorization)
         .then((idu) => {
@@ -24,7 +25,7 @@ router.post('/', (req, res) => {
     })
     .catch(err => res.status(400).send(err))
 });
-
+*/
 
 router.post('/', (req, res) => {
     checkUser(req.headers.authorization)

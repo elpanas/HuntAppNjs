@@ -2,13 +2,50 @@ const express = require('express'),
     { createRiddle,
     generateRiddle  } = require('../middleware/riddleware'),
     { checkUser } = require('../middleware/userware');
+
+const multer = require('multer');
 const router = express.Router();
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, './src/riddles');
+    },
+    filename: (req, file, cb) => {
+        cb(null, file.originalname);
+    }
+}),
+    imgFilter = (req, file, cb) => {
+        if (file.mimetype == 'image/jpeg' || file.mimetype == 'image/png')
+            cb(null, true);
+        else 
+            cb(null, false);
+    }
+
+var upload = multer({ storage: storage, fileFilter: imgFilter });
+
+router.post('/', upload.single('rphoto'), (req, res) => {
+    try {
+        checkUser(req.headers.authorization)
+            .then(idu => {
+                if (idu) 
+                    createRiddle(req.body).then(() => res.status(200).send())            
+                else
+                    res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();
+            })
+    } catch(err) {
+      res.status(400).send(err);
+    }
+});
 
 // CREATE
 router.post('/', (req, res) => {
-    createRiddle(req.body)
-        .then((result) => { if (result) res.status(200).send(result); else res.status(400).send(); })
-        .catch(() => { res.status(400).send() })
+    checkUser(req.headers.authorization)
+        .then(idu => {
+            if (idu)
+                createRiddle(req.body)
+                    .then((result) => (result) ? res.status(200).send() : res.status(400).send())
+                    .catch(err => res.status(400).send(err))    
+        })    
 });
 // --------------------------------------------------------------------
 

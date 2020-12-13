@@ -1,6 +1,6 @@
-const { Location } = require('../models/schemas');
+// const { Location } = require('../models/schemas');
+//const mongoose = require('mongoose');
 const QRCode = require('qrcode');
-const mongoose = require('mongoose');
 var fs = require('fs');
 var pdf = require("pdf-creator-node");
 const merge = require('easy-pdf-merge');
