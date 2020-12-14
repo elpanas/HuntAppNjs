@@ -4,12 +4,12 @@
     <title>Code Hunting Games</title>
     <style>
       html, body {
-        margin: 0;
+        margin-left: 30px;
         padding: 0;
         font-family: sans-serif;
         font-weight: 500;
         font-size: 40pt;
-        background: rgb(255,255,255);
+        /*background: rgb(255,255,255);*/
         -webkit-print-color-adjust: exact;
         box-sizing: border-box;
       }
@@ -17,8 +17,9 @@
     padding: 10mm;
     width: 128.5mm;
     height: 190.0mm;
-    position: absolute;
+    /*position: absolute; */
     }
+    
     .header-img {
     }
     .qrcode{
@@ -46,22 +47,22 @@
   </head>
   <body>
   <div class="page" id="second-page">
-    <img class="header-img" width="100%" src="./images/header.png"><br/>
+    <img class="header-img" width="100%" src="%header%"><br/>
     <div class="content">
       <div class="loc-lat">
-        <span class="label">LATITUDE:</span> %loc-latitude%<br/>
+        <span class="label">LATITUDE:</span> %loclatitude%<br/>
       </div>
       <div class="loc-long">
-        <span class="label">LONGITUDE:</span> %loc-longitude%<br/>
+        <span class="label">LONGITUDE:</span> %loclongitude%<br/>
       </div>
       <div class="loc-id">
-        <span class="label">ID:</span> %loc-id%<br/>
+        <span class="label">ID:</span> %locid%<br/>
       </div>
       <div class="loc-content">
-        <span class="label">QRCODE CONTENT:</span> %qr-content%<br/>
+        <span class="label">QRCODE CONTENT:</span> %qrcontent%<br/>
       </div>
       <div class="loc-name">
-        <span class="label">NAME:</span> %loc-name%<br/>
+        <span class="label">NAME:</span> %locname%<br/>
       </div>
     </div>
     </div>

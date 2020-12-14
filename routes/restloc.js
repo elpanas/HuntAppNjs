@@ -7,8 +7,8 @@ const express = require('express'),
     checkStartFinal,
     getLocations } = require('../middleware/locatware'),
     { checkUser } = require('../middleware/userware'),
-    { getGameEvent } = require('../middleware/gameware');
-const { createQrCode, createPdf } = require('../middleware/pdfware');
+    { getGameEvent } = require('../middleware/gameware'),
+    { generateQrPdf } = require('../middleware/pdfware');
 const router = express.Router();
 
 // CREATE
@@ -38,11 +38,12 @@ router.post('/', (req, res) => {
                             if (distok)
                                 createLocation(req.body)
                                     .then((result) => { 
-                                        if (result) {
-                                            createQrCode(result);
-                                            res.sendStatus(200); 
-                                        }                                            
-                                        else res.sendStatus(400);
+                                        if (result._id) {
+                                            if (result.is_final) { generatePdf(req.body.game_id) }      
+
+                                            res.status(200).send(); 
+                                        }
+                                        else res.status(400).send();
                                     })
                                     .catch(err => res.status(400).send(err));
                                 // add createImg
@@ -63,8 +64,8 @@ router.get('/clusters/:idg', (req, res) => {
         .then((idu) => {
             if(idu)
                 getClusterList(req.params.idg)
-                    .then((result) => {
-                        if (result.length != 0)
+                    .then(result => {
+                        if (result.length > 0)
                             res.status(200).json(result);
                         else
                             res.status(404).send('Location was not found');
@@ -77,17 +78,16 @@ router.get('/clusters/:idg', (req, res) => {
 });
 
 // Generate and send the final pdf
-router.get('/pdf/:idg', (req, res) => {
+router.get('/pdf/:idg', (req, res) => {  
     checkUser(req.headers.authorization)
-        .then((idu) => {            
-            if (idu) {                    
-                generatePdf(req.params.idg);                
-                res.download('./html2pdf/pdfs/' + req.params.idg + '/cwqrcodes.pdf', 'cwqrcodes.pdf', err => console.log(err));  
-            }       
+        .then(idu => {            
+            if (idu)     
+            generateQrPdf(req.params.idg).then(() => res.status(200).send());
+                //res.download(process.cwd() + '/html2pdf/pdfs/' + req.params.idg + '/test.pdf', 'test.pdf', err => console.log(err));
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();
         })
-        .catch((err) => res.status(400).send(err));
+        .catch(err => res.status(400).send(err));
 });
 
 
@@ -96,7 +96,7 @@ router.get('/game/:idg', (req, res) => {
         .then(idu => {
             if(idu) 
                 getLocations(req.params.idg)
-                    .then((result) => res.status(200).json(result))
+                    .then((result) => { (result.length > 0) ? res.status(200).json(result) : res.status(400).send()})
                     .catch(() => res.statusCode(400))            
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send()

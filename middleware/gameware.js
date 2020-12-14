@@ -1,3 +1,4 @@
+const { mongoose } = require('mongoose');
 const { Game } = require('../models/schemas');
 
 // CREATE GAME
@@ -26,6 +27,10 @@ function getGameCategory(idg) {
     return Game.findById(idg).select('riddle_category');
 }
 
+function checkActive(idg) {
+    return Game.exists({_id: idg, active: true});
+}
+
 function getGame(idg) {
     return Game.findById(idg);
 }
@@ -38,11 +43,17 @@ function getGameEvent(idg) {
 function setQrCode(idg) {
     return Game.findByIdAndUpdate(idg, { qr_created: true });
 }
+
+function activateGame(idg) {
+    return Game.findByIdAndUpdate(idg, { active: true });
+}
 // --------------------------------------------------------------------
 
 module.exports.createGame = createGame;
 module.exports.getGameCategory = getGameCategory;
+module.exports.checkActive = checkActive;
 module.exports.getGame = getGame;
 module.exports.getGameEvent = getGameEvent;
 module.exports.getAllGames = getAllGames;
 module.exports.setQrCode = setQrCode;
+module.exports.activateGame = activateGame;

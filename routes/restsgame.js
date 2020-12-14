@@ -19,7 +19,7 @@ router.post('/', (req, res) => {
                             .catch(() => res.status(400).send());
                     })
             else
-                res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Area Riservata"').send();    
+                res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();    
         })    
         .catch(() => res.status(400).send());
     });
@@ -35,7 +35,7 @@ router.get('/game/:idg', (req, res) => {
                     .then(idsg => { (idsg) ? res.status(200).json(idsg) : res.status(400).send() })
                     .catch(() => res.status(400).send())
             else
-                res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Area Riservata"').send();
+                res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();
         })    
 });
 
@@ -44,10 +44,10 @@ router.get('/multiple/:idg', (req, res) => {
         .then((idu) => {
             if (idu)            
                 checkMultipleGame(req.params.idg, idu)
-                    .then(result => { (result.game.is_open) ? res.status(200).send() : res.status().send() })
+                    .then(result => { (result.game.is_open) ? res.status(200).send() : res.status(400).send() })
                     .catch(err => res.status(400).send(err))
             else
-                res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Area Riservata"').send();
+                res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();
         })    
 });
 // --------------------------------------------------------------------
@@ -61,7 +61,7 @@ router.put('/completed', (req, res) => { // richiamo questa funzione se non c'è
                     .then(() => res.status(200).send())
                     .catch(() => res.status(400).send())
             else
-                res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Area Riservata"').send();
+                res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();
         })    
 });
 module.exports = router;

@@ -98,9 +98,6 @@ const singleGameSchema = Schema({ // when game is booted
     group_photo_path: {
         type: String, default: null
     },   
-    bootdate: { // a parità di partite con stesso id, sceglie quella più recente
-        type: Date, default: Date.now
-    },
     is_completed: {
         type: Boolean, default: false
     }
@@ -137,6 +134,9 @@ const locationSchema = Schema({
             enum: ['Point']           
         },
         coordinates: [Number]
+    },
+    name: {
+        type: String, default: ''
     },
     image_path: {
         type: String, default: null

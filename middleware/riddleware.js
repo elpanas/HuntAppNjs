@@ -1,6 +1,5 @@
 const { Riddle } = require('../models/schemas');
 var PO = require('pofile');
-const path = require('path');
 
 // CREATE RIDDLE
 async function createRiddle(riddle_data) {
@@ -9,7 +8,7 @@ async function createRiddle(riddle_data) {
         riddle_category: riddle_data.category,
         riddle_type: riddle_data.type,
         riddle_param: riddle_data.param,
-        riddle_image_path: '/src/riddles/' + path.basename(riddle_data.image),
+        riddle_image_path: '/src/riddles/' + riddle_data.image,
         riddle_solution: riddle_data.solution,
         is_final: (riddle_data.final == 'true') ? true : false
     });
@@ -46,7 +45,7 @@ function getRiddle(idr) {
 }
 
 function checkRiddle(riddledata) {
-    return Riddle.findOne({ _id: riddledata.idr, riddle_solution: riddledata.solution });
+    return Riddle.exists({ _id: riddledata.idr, riddle_solution: riddledata.solution });
 }
 // --------------------------------------------------------------------
 

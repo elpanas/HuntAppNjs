@@ -71,8 +71,8 @@ router.get('/riddle/:ida', (req, res) => {
                 getRiddleFromAction(req.params.ida) // get the riddle id
                     .then((result) => { 
                         getRiddle(result.riddle)
-                            .then((riddle) => {
-                                generateRiddle(riddle, 'it', function (riddledata) {                                            
+                            .then((riddle) => {                                
+                                generateRiddle(riddle, 'it', function (riddledata) {  
                                     res.status(200).json(riddledata);
                                     })                                            
                             })   
@@ -103,12 +103,7 @@ router.put('/solution', (req, res) => { // recupera l'ultimo step
                     .then((solok) => {
                         if (solok) 
                             setSolved(req.body.ida)
-                                .then(() => {
-                                    if (req.body.is_final)
-                                        setCompleted(req.body.idsg)
-                                            .then(() => res.status(200).send())
-                                            .catch((err) => res.status(400).send(err))
-                                })
+                                .then(() => res.status(200).send())
                                 .catch((err) => res.status(400).send(err));                   
                         else
                             res.status(400).send();

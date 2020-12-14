@@ -1,6 +1,8 @@
 const express = require('express'),
     { createGame,
-    getAllGames, 
+    getAllGames,
+    checkActive,
+    activateGame, 
     setQrCode} = require('../middleware/gameware'),
     { checkUser } = require('../middleware/userware');
 const router = express.Router();
@@ -40,6 +42,7 @@ router.get('/event/:ide', (req, res) => {
     .catch(err => res.status(400).send(err))
 });
 
+/*
 router.get('/:id', (req, res) => {
     getGame(req.params.id)
         .then((result) => {
@@ -49,6 +52,19 @@ router.get('/:id', (req, res) => {
                 res.status(404).send('Game was not found');
         })
         .catch(error => res.status(400).send(error) )
+});
+*/
+
+router.get('/active/:idg', (req, res) => {
+    checkUser(req.headers.authorization)
+        .then(idu => {
+            if(idu)
+                checkActive(req.params.idg)
+                    .then(result => { (result) ? res.status(200).send() : res.status(400).send() })
+                    .catch(err => res.status(400).send(err))
+            else
+                res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send()
+        });
 });
 // --------------------------------------------------------------------
 
@@ -68,6 +84,18 @@ router.put('/qrc', (req, res) => {
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send()
         })
+});
+
+router.get('/activate/:idg', (req, res) => {
+    checkUser(req.headers.authorization)
+        .then(idu => {
+            if(idu)
+                activateGame(req.params.idg)
+                    .then(result => { (result) ? res.status(200).send() : res.status(400).send() })
+                    .catch(err => res.status(400).send(err))
+            else
+                res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send()
+        });
 });
 // --------------------------------------------------------------------
 
