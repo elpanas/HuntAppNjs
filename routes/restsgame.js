@@ -5,6 +5,7 @@ const express = require('express'),
     setCompleted,
     checkMultipleGame} = require('../middleware/sgameware'),
     { checkUser } =  require('../middleware/userware');    
+const { generateCertPdf } = require('../middleware/pdfware');
 const router = express.Router();
 
 
@@ -51,6 +52,22 @@ router.get('/multiple/:idg', (req, res) => {
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();
         })    
 });
+
+// Generate and send the final pdf
+router.get('/pdf/:idsg', (req, res) => {  
+    checkUser(req.headers.authorization)
+        .then(idu => {  
+            if (idu)   
+                generateCertPdf(req.params.idsg).then(() => res.status(200).send());
+            //generateQrPdf(req.params.idg).then(() => res.status(200).send());
+                /*res.download(process.cwd() + '/html2pdf/pdfs/' + req.params.idsg + '-cert.pdf',
+                            req.params.idg + '-cert.pdf',
+                            err => console.log('Error: ' + err));*/
+            else
+                res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();
+        })
+        .catch(err => res.status(400).send(err));
+});
 // --------------------------------------------------------------------
 
 
@@ -59,7 +76,10 @@ router.put('/completed', (req, res) => { // richiamo questa funzione se non c'è
         .then((idu) => {
             if (idu)                
                 setCompleted(req.body.idsg)
-                    .then(() => res.status(200).send())
+                    .then(() => {
+                        generateCertPdf(idsg)
+                            .then(() => res.status(200).send());
+                    })
                     .catch(() => res.status(400).send())
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();

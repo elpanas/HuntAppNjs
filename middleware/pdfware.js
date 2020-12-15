@@ -4,8 +4,10 @@ const { Location, Actions, SingleGame } = require('../models/schemas'),
     fs = require('fs'),
     Prince = require("prince"),
     util   = require("util"),
+    millisec = require('millisec');
     rimraf = require("rimraf"),
-    multiReplace = require('string-multiple-replace');
+    multiReplace = require('string-multiple-replace'),
+    dateFormat = require("dateformat");
 
 function generateQrPdf(idg) {  
     const tmpqrc = process.cwd() + '/html2pdf/temp/qrcodes/' + idg +'/',
@@ -15,6 +17,7 @@ function generateQrPdf(idg) {
         dirtemplate1 = process.cwd() + '/html2pdf/template1.html',
         dirtemplate2 = process.cwd() + '/html2pdf/template2.html',
         newidg = mongoose.Types.ObjectId(idg);
+    
     var matcherObj,
         qrfilename,
         pathinputs = [];
@@ -51,18 +54,10 @@ function generateQrPdf(idg) {
                 pathinputs.push(tmppdf + loc._id + 'page2.html');  
             })
 
-            var options = {
-                "princess": {
-                    options: {
-                        license: "license.dat",
-                        size: 'A4'
-                    }
-                }
-            };
-
-            Prince(options)
+            Prince()
                 .inputs(pathinputs)
-                .output(dirpdf + idg + '-file.pdf')
+                .option('page-size', 'A4')
+                .output(dirpdf + idg + '-file.pdf')                
                 .execute()
                 .then(function () {
                     console.log("OK: done");
@@ -81,45 +76,67 @@ function populateTemplate(tmppdf, dirtemplate, matcherObj, idl, p) {
     fs.writeFileSync(tmppdf + idl + 'page' + p + '.html', base_file);
 }
 
-function generateCertPdf(idgs) {
-    // time elapsed
-    // team name
-    // avatar name
-    const millis_elapsed = Actions.aggregate([
-        { $match: { sgame: idgs } },              
-        { $group: { 
-            _id: "$reachedOn",
-            minDate: { $min: 1 },
-            maxDate: { $max: 1 }
-            }
+
+async function generateCertPdf(idsg) {
+    const tmppdf = process.cwd() + '/html2pdf/temp/templates/' + idsg +'/',
+        dirpdf = process.cwd() + '/html2pdf/pdfs/',
+        dirimg = process.cwd() + '/html2pdf/images/',
+        dirtemplate = process.cwd() + '/html2pdf/template-certificate.html',
+        newidg = mongoose.Types.ObjectId(idsg);
+
+    if(!fs.existsSync(tmppdf)) fs.mkdirSync(tmppdf);
+    if(!fs.existsSync(dirpdf)) fs.mkdirSync(dirpdf);
+
+    var base_file = fs.readFileSync(dirtemplate, {encoding: 'utf8', flag: 'r+'} );
+
+    const loadtime = await Actions.aggregate([
+        { $match: { sgame: newidg } },              
+        { 
+            $group: { 
+            _id: null,
+            minDate: { $min: "$reachedOn" },
+            maxDate: { $max: "$reachedOn" }
+            }  
         },
-        { $project: { _id: 0, timeElapsed: { $substract: [maxDate, minDate] } } }  
-    ]).exec();
+        {
+            $addFields : { timeElapsed : { $subtract: [ "$maxDate", "$minDate" ] } }
+        },
+        { $project: { _id: 0, timeElapsed: 1 } } 
+    ])
 
-    const team_avatar_names = SingleGame.findById(idsg)
-        .populate('group_captain')
-        .select('group_name group_captain.username');
 
-    const time_elapsed = msConversion(millis_elapsed);
-}
+    const loadgroup = SingleGame.findById(idsg).select('group_name').exec();
 
-function msConversion(millis) {
-    let sec = Math.floor(millis / 1000);
-    let hrs = Math.floor(sec / 3600);
-    sec -= hrs * 3600;
-    let min = Math.floor(sec / 60);
-    sec -= min * 60;
-  
-    sec = '' + sec;
-    sec = ('00' + sec).substring(sec.length);
-  
-    if (hrs > 0) {
-      min = '' + min;
-      min = ('00' + min).substring(min.length);
-      return hrs + ":" + min + ":" + sec;
-    }
-    else
-      return min + ":" + sec;
+    const time_elapsed = millisec(loadtime[0].timeElapsed).format('mm');
+
+    loadgroup.then(group => {       
+
+        const matcherObj = {
+            "%backimage%": dirimg + "codeweek_certificate.jpg",
+            "%bubble%": dirimg + "bubbles-50.png",
+            "%TEAM_NAME%": group.group_name,
+            "%DATE%": dateFormat(Date.now(), "d/m/yyyy"),
+            "%ELAPSED_MINS%": time_elapsed,
+            "%AVATAR_NAME%": dirimg + "default_user.jpg"
+        }
+
+        base_file = multiReplace(base_file, matcherObj); 
+
+        fs.writeFileSync(tmppdf + idsg + 'tmp.html', base_file);
+
+        Prince()
+            .inputs(tmppdf + idsg + 'tmp.html')
+            .option("page-size", 'A4 landscape')
+            .output(dirpdf + idsg + '-cert.pdf')
+            .execute()
+            .then(function () {
+                console.log("OK: done");
+                rimraf.sync(tmppdf);
+            }, function (error) {
+                console.log("ERROR: ", util.inspect(error))
+            })
+    });   
 }
 
 module.exports.generateQrPdf = generateQrPdf;
+module.exports.generateCertPdf = generateCertPdf;

@@ -11,7 +11,7 @@
 
     <style>
 html, body {
-    margin: 0;
+    margin-left: 82px;
     padding: 0;
     font-family: 'DejaVu Sans', 'Arial', sans-serif;
     font-weight: 500;
@@ -19,15 +19,13 @@ html, body {
     background: rgb(255,255,255);
     -webkit-print-color-adjust: exact;
     box-sizing: border-box;
-    width: 297.0mm;
-    height: 210.0mm;
 }
 .background {
     position: absolute;
     top: 0;
     left: 0;
-    width: 297mm;
-    height: 210mm;
+    width: 100%;
+    height: 100%;
 }
 .page {
     position: absolute;
@@ -42,7 +40,7 @@ html, body {
     left: 0;
     width: 297.0mm;
     height: 210.0mm;
-    background-image: url('/html2pdf/images/bubbles-50.png');
+    background-image: url('%bubble%');
     background-repeat: no-repeat;
 }
 .left-overlay {
@@ -77,7 +75,7 @@ html, body {
     </style>
 </head>
 <body>
-    <img src="/html2pdf/images/codeweek_certificate.jpg" class="background" />
+    <img src="%backimage%" class="background" />
 
     <div class="page">
         <!--<div class="header">
@@ -102,7 +100,7 @@ html, body {
     <div class="overlay right-overlay">
     </div>-->
 
-    <img src="/data/avatars/%AVATAR_NAME%" style="position: absolute; width: 40mm; height: auto; max-height: 70mm; top: 48mm; left: 22mm" />
+    <img src="%AVATAR_NAME%" style="position: absolute; width: 40mm; height: auto; max-height: 70mm; top: 48mm; left: 22mm" />
 
     <!--<img src="/html2pdf/images/codyroby.png" style="position: absolute; width: 50mm; height: auto; top: 21mm; right: 10mm" />-->
 </body>
