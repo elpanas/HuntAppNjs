@@ -24,8 +24,8 @@ async function createSteps(idg, idsg, riddle_cat) {
         tot_steps = 2;
 
     Location.find({ game: idg }).select('_id cluster is_start is_final').sort('cluster')
-        .then((locations) => {
-            locations.forEach((loc) => {
+        .then(locations => {
+            locations.forEach(loc => {
                 if (tot_loc == 0) clusters[actual_cluster] = [];
 
                 if (actual_cluster != (loc.cluster-1)) {
@@ -35,7 +35,7 @@ async function createSteps(idg, idsg, riddle_cat) {
                 }
                 
                 if (loc.is_start)
-                    startLoc = { "prog_nr": 1, "sgame": idsg, "step": loc._id };
+                    startLoc = { "prog_nr": 1, "sgame": idsg, "step": loc._id, "riddle": null};
                 else if (loc.is_final) 
                     finalLoc = loc._id;
                 else 
@@ -55,43 +55,53 @@ async function createSteps(idg, idsg, riddle_cat) {
                         { 
                             "prog_nr": tot_steps++,
                             "sgame": idsg,
-                            "step": step                           
+                            "step": step,
+                            "riddle": null                         
                         }
                     );                    
                 }); // cluster.forEach()
             }); // clusters.forEach()  
-
-            // add last element
+            
             stepsLoc.push(
                 {
                     "prog_nr": tot_steps,
                     "sgame": idsg,
-                    "step": finalLoc
+                    "step": finalLoc,
+                    "riddle": null // insieme di riddle più difficili
                 }
             );
-            
+
             // associate a riddle foreach location
             Riddle.aggregate()
-                .match({ riddle_category: riddle_cat })
+                .match({ riddle_category: riddle_cat /*, is_final: false*/ })
                 .project({ _id: 1 })
-                .sample(tot_steps)
+                .sample(tot_steps) // decrease by 1 to add a final game in the next query
                 .then(riddles => {
                     var s = 0;
                     riddles.forEach(r => {
                         stepsLoc[s].riddle = r._id;
                         s++;
                     });
+                    
+                /*Riddle.aggregate()
+                    .match({ riddle_category: riddle_cat, is_final: true })
+                    .project({ _id: 1 })
+                    .sample(1)
+                    .then(finalriddle => {
+                        stepsLoc.push(
+                            {
+                                "prog_nr": tot_steps,
+                                "sgame": idsg,
+                                "step": finalLoc,
+                                "riddle": finalriddle._id // insieme di riddle più difficili
+                            }
+                        );
 
-                    /* stepsLoc.push(
-                        {
-                            "prog_nr": tot_steps,
-                            "sgame": idsg,
-                            "step": finalLoc,
-                            "riddle": finalriddle // insieme di riddle più difficili
-                        }
-                    )*/
                     // adds actions
-                    Actions.insertMany(stepsLoc);                  
+                    Actions.insertMany(stepsLoc);   
+                    });  */       
+                    // adds actions
+                    Actions.insertMany(stepsLoc);      
                 });                 
         });
 }
@@ -100,13 +110,13 @@ async function createSteps(idg, idsg, riddle_cat) {
 // GET STEP
 function checkGroup(idg, idu) {
     return SingleGame.findOne(
-            { 
-                game: idg, 
-                group_captain: idu,
-                is_completed: false
-            })
-            .select('_id')
-            .sort('-bootdate');
+        { 
+            game: idg, 
+            group_captain: idu,
+            is_completed: false
+        })
+        .select('_id')
+        .sort('-bootdate');
 }
 
 function checkMultipleGame(idg, idu) {

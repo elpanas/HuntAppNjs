@@ -56,7 +56,7 @@ const gameSchema = Schema({
         type: Schema.Types.ObjectId, ref: 'event'
     },
     name: {
-        type: String, default: null, unique: true
+        type: String, required: true, unique: true
     },
     organizer: {
         type: Schema.Types.ObjectId, ref: 'user'
@@ -136,7 +136,7 @@ const locationSchema = Schema({
         coordinates: [Number]
     },
     name: {
-        type: String, default: ''
+        type: String, required: true, unique: true
     },
     image_path: {
         type: String, default: null

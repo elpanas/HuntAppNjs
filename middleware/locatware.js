@@ -1,7 +1,5 @@
 const { Location } = require('../models/schemas');
 const mongoose = require('mongoose');
-const fs = require('fs');
-const PDFDocument = require('pdfkit');
 
 // CREATE 
 async function createLocations(locs_data) {
@@ -12,6 +10,7 @@ async function createLocation(loc_data) {
 
     const loc = new Location({
         game: loc_data.game_id,
+        name: loc_data.name,
         cluster: loc_data.cluster,
         location: loc_data.location,
         description: loc_data.description,
@@ -26,18 +25,6 @@ async function createLocation(loc_data) {
 }
 // --------------------------------------------------------------------
 
-
-// GET
-/* get locations of a cluster
-function getCluster(idg, cluster_nr) {
-    return Location.find({ game: idg, cluster: cluster_nr }).sort('cluster');
-}*/
-
-function checkStartFinal(idg) {
-    newidg = mongoose.Types.ObjectId(idg);
-    return Location.find({ game: newidg, $or: [{is_start: true}, {is_final: true}] })
-        .select('is_start is_final');
-}
 
 // get the game cluster list
 async function getClusterList(idg) {
@@ -61,31 +48,34 @@ function getLocations(idg) {
     return Location.find({ game: idg }).sort('cluster');
 }
 
-function checkDistance(event_dist, locdata) {    
-    const distanceAVG = Location.aggregate([
-            { $match: { game: locdata.game_id } },
-            { $geoNear: {
-                near: locdata.location,
-                distanceField: "distance"
+function getDistances(locdata) {  
+    const newidg = mongoose.Types.ObjectId(locdata.game_id);
+    return Location.aggregate([
+            { 
+                $geoNear: {                    
+                    near: locdata.location,
+                    query: { game: newidg },
+                    distanceField: "distance",
                 } 
             },
-            { $project: { distAvg: { $avg: '$distance' } } }
-        ]);
-    
-    if (distanceAVG.distAvg >= event_dist)
-        return true;
-    else
-        return false;
+            { $project: { _id: 0, distance: 1 } }
+        ]).exec();
+}
+
+function computeMean(distances) {
+    var sum = 0;
+    for( var i = 0; i < distances.length; i++ ){
+        sum += distances[i].distance; //don't forget to add the base
+    }
+
+    return sum / distances.length;
 }
 // --------------------------------------------------------------------
 
-
-
 module.exports.createLocation = createLocation;
 module.exports.createLocations = createLocations;
-//module.exports.getCluster = getCluster;
 module.exports.getClusterList = getClusterList;
-module.exports.checkStartFinal = checkStartFinal;
 module.exports.getNrLocations = getNrLocations;
 module.exports.getLocations = getLocations;
-module.exports.checkDistance = checkDistance;
+module.exports.getDistances = getDistances;
+module.exports.computeMean = computeMean;

@@ -43,7 +43,8 @@ function generateQrPdf(idg) {
                     "%loclatitude%": loc.location.coordinates[0],
                     "%loclongitude%": loc.location.coordinates[1],
                     "%locid%": loc._id,
-                    "%qrcontent%": loc._id
+                    "%qrcontent%": loc._id,
+                    "%locname%": loc.name
                 }
                 
                 populateTemplate(tmppdf, dirtemplate2, matcherObj, loc._id, 2);  

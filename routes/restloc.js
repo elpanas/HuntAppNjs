@@ -1,13 +1,11 @@
 const express = require('express'),
     { createLocations,
         createLocation,
-        getCluster,
         getClusterList,
-    getNrLocations,
-    checkStartFinal,
-    getLocations } = require('../middleware/locatware'),
+    getLocations, 
+    getDistances,
+    computeMean} = require('../middleware/locatware'),
     { checkUser } = require('../middleware/userware'),
-    { getGameEvent } = require('../middleware/gameware'),
     { generateQrPdf } = require('../middleware/pdfware');
 const router = express.Router();
 
@@ -27,32 +25,36 @@ router.post('/', (req, res) => {
 });
 */
 
-router.post('/', (req, res) => {
+router.post('/', (req, res) => {    
     checkUser(req.headers.authorization)
-        .then((idu) => {
-            if(idu)                
-                getGameEvent(req.body)
-                .then((event) => {
-                    checkDistance(event.min_avg_distance, req.body)
-                        .then((distok) => {
-                            if (distok)
-                                createLocation(req.body)
-                                    .then((result) => { 
-                                        if (result._id) {
-                                            if (result.is_final) { generatePdf(req.body.game_id) }      
+        .then(idu => {
+            if(idu)                         
+                getDistances(req.body).then(distances => {
+                    var is_mean = false;
+  
+                    if (!req.body.is_start) {
+                        if (distances.length == 1 && distances[0].distance >= req.body.avg_distance )
+                            is_mean = true;
+                        else                       
+                            is_mean = (computeMean(distances) >= req.body.avg_distance);
+                    }   
 
-                                            res.status(200).send(); 
-                                        }
-                                        else res.status(400).send();
-                                    })
-                                    .catch(err => res.status(400).send(err));
-                                // add createImg
-                        });                    
-                });
+                    if (req.body.is_start || is_mean)                        
+                        createLocation(req.body)
+                            .then(result => { 
+                                if (result._id) {
+                                    if (result.is_final) { generateQrPdf(result.game) }  
+                                    res.status(200).send(); 
+                                }
+                                else res.status(400).send();
+                            })
+                            .catch(err => res.status(400).send(err));
+                    else
+                        res.status(400).send();
+                })            
             else
             res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send()
-    })
-    .catch(err => res.status(400).send(err))
+    });
 });
 // --------------------------------------------------------------------
 
@@ -82,8 +84,10 @@ router.get('/pdf/:idg', (req, res) => {
     checkUser(req.headers.authorization)
         .then(idu => {            
             if (idu)     
-            generateQrPdf(req.params.idg).then(() => res.status(200).send());
-                //res.download(process.cwd() + '/html2pdf/pdfs/' + req.params.idg + '/test.pdf', 'test.pdf', err => console.log(err));
+            //generateQrPdf(req.params.idg).then(() => res.status(200).send());
+                res.download(process.cwd() + '/html2pdf/pdfs/' + req.params.idg + '-file.pdf',
+                            req.params.idg + '-file.pdf',
+                            err => console.log('Error: ' + err));
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();
         })
@@ -104,20 +108,6 @@ router.get('/game/:idg', (req, res) => {
     .catch(err => res.status(400).send(err))
 });
 
-
-
-// check if there are start and final locations
-/*router.get('/locsf/:idg', (req, res) => {
-    checkStartFinal(req.params.idg)
-        .then((result) => {
-            if (result.length != 0)
-                res.status(200).json(result);
-            else
-                res.status(404).send('Location was not found');
-            
-        })
-        .catch((error) => res.status(404).send(error))
-});*/
 
 router.get('/:id', (req, res) => {
     getLocation(req.params.id)

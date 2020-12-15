@@ -20,19 +20,11 @@ async function createGame(game_data) {
 
 // GET ALL GAMES
 function getAllGames(event_id) {
-    return Game.find({ event: event_id }).select('_id name');
+    return Game.find({ event: event_id }).select('_id name riddle_category organizer qr_created active is_open');
 }
 
 function getGameCategory(idg) {
     return Game.findById(idg).select('riddle_category');
-}
-
-function checkActive(idg) {
-    return Game.exists({_id: idg, active: true});
-}
-
-function getGame(idg) {
-    return Game.findById(idg);
 }
 
 function getGameEvent(idg) {
@@ -51,8 +43,6 @@ function activateGame(idg) {
 
 module.exports.createGame = createGame;
 module.exports.getGameCategory = getGameCategory;
-module.exports.checkActive = checkActive;
-module.exports.getGame = getGame;
 module.exports.getGameEvent = getGameEvent;
 module.exports.getAllGames = getAllGames;
 module.exports.setQrCode = setQrCode;

@@ -1,5 +1,6 @@
 const express = require('express'),
     { createSingleGame, 
+        createSteps,
     checkGroup, 
     setCompleted,
     checkMultipleGame} = require('../middleware/sgameware'),
@@ -10,13 +11,13 @@ const router = express.Router();
 // ----- CREATE -----
 router.post('/', (req, res) => {
     checkUser(req.headers.authorization)
-        .then((idu) => {
+        .then(idu => {
             if (idu)
                 createSingleGame(req.body, idu)
-                    .then((singleGame) => {
+                    .then(singleGame => {
                         createSteps(req.body.game_id, singleGame._id, req.body.riddle_cat)
-                            .then(() => res.status(200).json({"idsg": singleGame._id}))
-                            .catch(() => res.status(400).send());
+                            .then(() => res.status(200).send())
+                            .catch(err => res.status(400).send(err));
                     })
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();    

@@ -1,9 +1,8 @@
 const express = require('express'),
     { createRiddle,
     generateRiddle  } = require('../middleware/riddleware'),
-    { checkUser } = require('../middleware/userware');
-
-const multer = require('multer');
+    { checkUser } = require('../middleware/userware'),
+    multer = require('multer');
 const router = express.Router();
 
 const storage = multer.diskStorage({
