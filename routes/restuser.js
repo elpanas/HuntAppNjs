@@ -1,5 +1,5 @@
 const express = require('express'),
-    { createUser, checkUser } = require('../middleware/userware');
+    { createUser, checkLogin } = require('../middleware/userware');
 const router = express.Router();
 
 // CREATE
@@ -14,12 +14,12 @@ router.post('/', (req, res) => {
 // READ
 // login
 router.get('/login', (req, res) => {
-    checkUser(req.headers.authorization)
-        .then((result) => {            
+    checkLogin(req.headers.authorization)
+        .then(result => {            
             if (!result)
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();
             else
-                res.status(200).send(result);
+                res.status(200).send(result.is_admin);
         })
         .catch(() => res.status(404).send('Error'))
 });

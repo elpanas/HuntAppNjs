@@ -44,8 +44,8 @@ function getRiddle(idr) {
     return Riddle.findById(idr);
 }
 
-function checkRiddle(riddledata) {
-    return Riddle.exists({ _id: riddledata.idr, riddle_solution: riddledata.solution });
+async function checkRiddle(riddledata) {
+    return await Riddle.exists({ _id: riddledata.idr, riddle_solution: riddledata.solution });
 }
 // --------------------------------------------------------------------
 

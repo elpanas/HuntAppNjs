@@ -8,9 +8,8 @@ const express = require('express'),
         checkRiddle, 
         getRiddle } = require('../middleware/riddleware'),
     { checkUser } = require('../middleware/userware'),
-    { setCompleted } = require('../middleware/sgameware');
-
-const multer = require('multer');
+    { setCompleted } = require('../middleware/sgameware'),
+    multer = require('multer');
 
 const storage = multer.diskStorage({
         destination: (req, file, cb) => {
@@ -55,8 +54,8 @@ router.get('/sgame/:idsg', (req, res) => { // recupera l'ultimo step
         .then((idu) => {
             if (idu) {
                 getActionLoc(req.params.idsg)
-                    .then((result) => res.status(200).json(result) )
-                    .catch((err) => res.status(400).send(err));
+                    .then(result => res.status(200).json(result))
+                    .catch(err => res.status(400).send(err));
             }           
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Area Riservata"').send();
@@ -72,7 +71,7 @@ router.get('/riddle/:ida', (req, res) => {
                     .then((result) => { 
                         getRiddle(result.riddle)
                             .then((riddle) => {                                
-                                generateRiddle(riddle, 'it', function (riddledata) {  
+                                generateRiddle(riddle, 'en', function (riddledata) {  
                                     res.status(200).json(riddledata);
                                     })                                            
                             })   
@@ -101,6 +100,7 @@ router.put('/solution', (req, res) => { // recupera l'ultimo step
             if (idu) {
                 checkRiddle(req.body)
                     .then((solok) => {
+                        console.log(solok);
                         if (solok) 
                             setSolved(req.body.ida)
                                 .then(() => res.status(200).send())

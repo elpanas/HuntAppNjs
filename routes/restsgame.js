@@ -57,12 +57,10 @@ router.get('/multiple/:idg', (req, res) => {
 router.get('/pdf/:idsg', (req, res) => {  
     checkUser(req.headers.authorization)
         .then(idu => {  
-            if (idu)   
-                generateCertPdf(req.params.idsg).then(() => res.status(200).send());
-            //generateQrPdf(req.params.idg).then(() => res.status(200).send());
-                /*res.download(process.cwd() + '/html2pdf/pdfs/' + req.params.idsg + '-cert.pdf',
-                            req.params.idg + '-cert.pdf',
-                            err => console.log('Error: ' + err));*/
+            if (idu)  
+                res.download(process.cwd() + '/html2pdf/pdfs/' + req.params.idsg + '-cert.pdf',
+                            req.params.idsg + '-cert.pdf',
+                            err => console.log('Error: ' + err));              
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();
         })
@@ -77,10 +75,9 @@ router.put('/completed', (req, res) => { // richiamo questa funzione se non c'è
             if (idu)                
                 setCompleted(req.body.idsg)
                     .then(() => {
-                        generateCertPdf(idsg)
-                            .then(() => res.status(200).send());
+                        generateCertPdf(req.body.idsg).then(() => res.status(200).send());
                     })
-                    .catch(() => res.status(400).send())
+                    .catch(err => res.status(400).send(err))
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();
         })    

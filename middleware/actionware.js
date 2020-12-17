@@ -1,8 +1,8 @@
 const { Actions } = require('../models/schemas');
 
 // get location info
-function getActionLoc(idsg) {    
-    return Actions.findOne({ sgame: idsg, solvedOn: null })
+async function getActionLoc(idsg) {    
+    return await Actions.findOne({ sgame: idsg, solvedOn: null })
         .sort('prog_nr')
         .select('reachedOn step')
         .populate('step');

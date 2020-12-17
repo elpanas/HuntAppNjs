@@ -1,4 +1,4 @@
-const dotenv = require('dotenv').config();
+const dotenv = require('dotenv').config(); // do not delete this
 const express = require('express'), // framework nodejs
       mongoose = require('mongoose'), // framework mongoDB 
       restaction = require('./routes/restaction'), // router paths
@@ -10,7 +10,6 @@ const express = require('express'), // framework nodejs
       restuser = require('./routes/restuser'), // router user
       resttest = require('./testing/test'), // router test
       restutility = require('./utility/loadRiddles'),
-      path = require('path'), // router test
       url = process.env.DB_LOC_URI; // local db
 // const url = process.env.DB_URI; // remote db connection string
 

@@ -84,58 +84,60 @@ async function generateCertPdf(idsg) {
         dirtemplate = process.cwd() + '/html2pdf/template-certificate.html',
         newidg = mongoose.Types.ObjectId(idsg);
 
-    if(!fs.existsSync(tmppdf)) fs.mkdirSync(tmppdf);
-    if(!fs.existsSync(dirpdf)) fs.mkdirSync(dirpdf);
+    if(!fs.existsSync(dirpdf + idsg + '-cert.pdf')) { 
+        if(!fs.existsSync(tmppdf)) fs.mkdirSync(tmppdf);
+        if(!fs.existsSync(dirpdf)) fs.mkdirSync(dirpdf);
 
-    var base_file = fs.readFileSync(dirtemplate, {encoding: 'utf8', flag: 'r+'} );
+        var base_file = fs.readFileSync(dirtemplate, {encoding: 'utf8', flag: 'r+'} );
 
-    const loadtime = await Actions.aggregate([
-        { $match: { sgame: newidg } },              
-        { 
-            $group: { 
-            _id: null,
-            minDate: { $min: "$reachedOn" },
-            maxDate: { $max: "$reachedOn" }
-            }  
-        },
-        {
-            $addFields : { timeElapsed : { $subtract: [ "$maxDate", "$minDate" ] } }
-        },
-        { $project: { _id: 0, timeElapsed: 1 } } 
-    ])
+        const loadtime = await Actions.aggregate([
+            { $match: { sgame: newidg } },              
+            { 
+                $group: { 
+                _id: null,
+                minDate: { $min: "$reachedOn" },
+                maxDate: { $max: "$reachedOn" }
+                }  
+            },
+            {
+                $addFields : { timeElapsed : { $subtract: [ "$maxDate", "$minDate" ] } }
+            },
+            { $project: { _id: 0, timeElapsed: 1 } } 
+        ])
 
 
-    const loadgroup = SingleGame.findById(idsg).select('group_name').exec();
+        const loadgroup = SingleGame.findById(idsg).select('group_name').exec();
 
-    const time_elapsed = millisec(loadtime[0].timeElapsed).format('mm');
+        const time_elapsed = millisec(loadtime[0].timeElapsed).format('mm');
 
-    loadgroup.then(group => {       
+        loadgroup.then(group => {       
 
-        const matcherObj = {
-            "%backimage%": dirimg + "codeweek_certificate.jpg",
-            "%bubble%": dirimg + "bubbles-50.png",
-            "%TEAM_NAME%": group.group_name,
-            "%DATE%": dateFormat(Date.now(), "d/m/yyyy"),
-            "%ELAPSED_MINS%": time_elapsed,
-            "%AVATAR_NAME%": dirimg + "default_user.jpg"
-        }
+            const matcherObj = {
+                "%backimage%": dirimg + "codeweek_certificate.jpg",
+                "%bubble%": dirimg + "bubbles-50.png",
+                "%TEAM_NAME%": group.group_name,
+                "%DATE%": dateFormat(Date.now(), "d/m/yyyy"),
+                "%ELAPSED_MINS%": time_elapsed,
+                "%AVATAR_NAME%": dirimg + "default_user.jpg"
+            }
 
-        base_file = multiReplace(base_file, matcherObj); 
+            base_file = multiReplace(base_file, matcherObj); 
 
-        fs.writeFileSync(tmppdf + idsg + 'tmp.html', base_file);
+            fs.writeFileSync(tmppdf + idsg + 'tmp.html', base_file);
 
-        Prince()
-            .inputs(tmppdf + idsg + 'tmp.html')
-            .option("page-size", 'A4 landscape')
-            .output(dirpdf + idsg + '-cert.pdf')
-            .execute()
-            .then(function () {
-                console.log("OK: done");
-                rimraf.sync(tmppdf);
-            }, function (error) {
-                console.log("ERROR: ", util.inspect(error))
-            })
-    });   
+            Prince()
+                .inputs(tmppdf + idsg + 'tmp.html')
+                .option("page-size", 'A4 landscape')
+                .output(dirpdf + idsg + '-cert.pdf')
+                .execute()
+                .then(function () {
+                    console.log("OK: done");
+                    rimraf.sync(tmppdf);
+                }, function (error) {
+                    console.log("ERROR: ", util.inspect(error))
+                })
+        }); 
+    }  
 }
 
 module.exports.generateQrPdf = generateQrPdf;

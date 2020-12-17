@@ -41,9 +41,22 @@ async function checkUser(auth) {
     else
         return false;
 }
+
+async function checkLogin(auth) {
+
+    const tmp = auth.split(' ');   // Divido in base allo spazio  "Basic Y2hhcmxlczoxMjM0NQ==" per recuperare la 2a parte
+    const buf = Buffer.from(tmp[1], 'base64').toString(); // creo un buffer e lo avviso che l'input e' in base64
+    const [username, password] = buf.split(':');      // divido auth in base a ':'
+
+    return await User.findOne({
+        username: username,
+        password: password
+    }) // criteri di ricerca         
+}
 // --------------------------------------------------------------------
 
 
 module.exports.createUser = createUser;
 module.exports.getUser = getUser;
 module.exports.checkUser = checkUser;
+module.exports.checkLogin = checkLogin;
