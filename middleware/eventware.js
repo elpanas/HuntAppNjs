@@ -17,12 +17,12 @@ async function createEvent(event_data, user_id) {
 // --------------------------------------------------------------------
 
 
-// GET ALL EVENTS
+// get all events and organizer infos
 function getAllEvents() {
     return Event.find().populate('organizer');
 }
 
-// GET EVENT BY NAME
+// check if there is an event with the same name
 async function checkEvent(event_name) {
     return await Event.exists({ name: event_name });
 }

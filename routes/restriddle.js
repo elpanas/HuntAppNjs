@@ -26,10 +26,9 @@ router.post('/', upload.single('rphoto'), (req, res) => {
     try {
         checkUser(req.headers.authorization)
             .then(idu => {
-                if (idu) 
-                    createRiddle(req.body).then(() => res.status(200).send())            
-                else
-                    res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();
+                (idu) 
+                    ? createRiddle(req.body).then(() => res.status(200).send())            
+                    : res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();
             })
     } catch(err) {
       res.status(400).send(err);
@@ -53,10 +52,9 @@ router.post('/', (req, res) => {
 router.get('/:id', (req, res) => {
     generateRiddle(req.params.id)
         .then((result) => {
-            if (result.length != 0)
-                res.status(200).json(result);
-            else
-                res.status(404).send('Riddle was not found');
+            (result.length != 0)
+                ? res.status(200).json(result)
+                : res.status(404).send('Riddle was not found');
         })
         .catch((error) => { res.status(404).send(error) })
 });

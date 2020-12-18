@@ -16,15 +16,13 @@ async function createRiddle(riddle_data) {
     return await riddle.save();
 }
 
-
-
 async function createRiddles(riddle_data) {
     return await Riddle.insertMany(riddle_data);
 }
 // --------------------------------------------------------------------
 
 
-// GET RIDDLE
+// create the riddle, joining the text with a parameter
 function generateRiddle(riddle, locale, readValue) {
         
     PO.load('src/translation/en_US/LC_MESSAGES/riddles.po', (err, po) => { 
@@ -40,10 +38,12 @@ function generateRiddle(riddle, locale, readValue) {
     });
 }
 
+/*
 function getRiddle(idr) {
     return Riddle.findById(idr);
-}
+}*/
 
+// check the solution correctness 
 async function checkRiddle(riddledata) {
     return await Riddle.exists({ _id: riddledata.idr, riddle_solution: riddledata.solution });
 }

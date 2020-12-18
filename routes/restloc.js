@@ -33,10 +33,9 @@ router.post('/', (req, res) => {
                     var is_mean = false;
   
                     if (!req.body.is_start) {
-                        if (distances.length == 1 && distances[0].distance >= req.body.avg_distance )
-                            is_mean = true;
-                        else                       
-                            is_mean = (computeMean(distances) >= req.body.avg_distance);
+                        is_mean = (distances.length == 1 && distances[0].distance >= req.body.avg_distance )
+                            ? true
+                            : (computeMean(distances) >= req.body.avg_distance);
                     }   
 
                     if (req.body.is_start || is_mean)                        
@@ -63,14 +62,13 @@ router.post('/', (req, res) => {
 //Get clusters for this game
 router.get('/clusters/:idg', (req, res) => {
     checkUser(req.headers.authorization)
-        .then((idu) => {
+        .then(idu => {
             if(idu)
                 getClusterList(req.params.idg)
                     .then(result => {
-                        if (result.length > 0)
-                            res.status(200).json(result);
-                        else
-                            res.status(404).send('Location was not found');
+                        (result.length > 0)
+                            ? res.status(200).json(result)
+                            : res.status(404).send('Location was not found');
                     })
                     .catch(err => res.status(404).send(err))
             else
@@ -84,7 +82,6 @@ router.get('/pdf/:idg', (req, res) => {
     checkUser(req.headers.authorization)
         .then(idu => {            
             if (idu)     
-            //generateQrPdf(req.params.idg).then(() => res.status(200).send());
                 res.download(process.cwd() + '/html2pdf/pdfs/' + req.params.idg + '-file.pdf',
                             req.params.idg + '-file.pdf',
                             err => console.log('Error: ' + err));
@@ -111,11 +108,10 @@ router.get('/game/:idg', (req, res) => {
 
 router.get('/:id', (req, res) => {
     getLocation(req.params.id)
-        .then((result) => {
-            if (result.length != 0)
-                res.status(200).json(result);
-            else
-                res.status(404).send('Location was not found');
+        .then(result => {
+            (result.length != 0)
+                ? res.status(200).json(result)
+                : res.status(404).send('Location was not found');
         })
         .catch((error) => { res.status(404).send(error) })
 });

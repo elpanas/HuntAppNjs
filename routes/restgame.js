@@ -9,11 +9,11 @@ const router = express.Router();
 // CREATE
 router.post('/', (req, res) => {
     checkUser(req.headers.authorization)
-        .then((idu) => {
+        .then(idu=> {
             if(idu)
                 createGame(req.body)
-                    .then((result) => { if (result) res.status(200).send(); else res.status(400).send(); })
-                    .catch(() => { res.status(400).send() })
+                    .then(result => { (result) ? res.status(200).send() : res.status(400).send(); })
+                    .catch(err => res.status(400).send(err))
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send()
         })
@@ -25,16 +25,15 @@ router.post('/', (req, res) => {
 // READ
 router.get('/event/:ide', (req, res) => {
     checkUser(req.headers.authorization)
-        .then((idu) => {
+        .then(idu => {
             if(idu)
                 getAllGames(req.params.ide)
-                    .then((result) => {
-                        if (result.length > 0)
-                            res.status(200).json(result);            
-                        else
-                            res.status(404).send('No games found'); 
+                    .then(result => {
+                        (result.length > 0)
+                           ? res.status(200).json(result)
+                           : res.status(404).send('No games found'); 
                     })
-                    .catch((error) => res.status(404).send(error))
+                    .catch(err => res.status(404).send(err))
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send()
     })
@@ -61,10 +60,9 @@ router.put('/qrc', (req, res) => {
             if(idu)
                 setQrCode(req.body.idg)
                     .then((result) => {
-                        if (result.length != 0)
-                            res.status(200).send();
-                        else
-                            res.status(404).send('Game was not found');
+                        (result.length != 0)
+                           ? res.status(200).send()
+                           : res.status(404).send('Game was not found');
                     })
                     .catch((error) => res.status(400).send(error));
             else

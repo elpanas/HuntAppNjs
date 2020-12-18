@@ -43,11 +43,13 @@ function getNrLocations(idg) {
     return Location.estimatedDocumentCount({ game: newidg });
 }
 
+// get all locations of a game
 function getLocations(idg) {
     // newidg = mongoose.Types.ObjectId(idg);
     return Location.find({ game: idg }).sort('cluster');
 }
 
+// get all distances between the new place and the others
 function getDistances(locdata) {  
     const newidg = mongoose.Types.ObjectId(locdata.game_id);
     return Location.aggregate([
@@ -62,6 +64,7 @@ function getDistances(locdata) {
         ]).exec();
 }
 
+// mean computation among the distances
 function computeMean(distances) {
     var sum = 0;
     for( var i = 0; i < distances.length; i++ ){

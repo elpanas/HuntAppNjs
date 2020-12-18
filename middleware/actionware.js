@@ -8,18 +8,19 @@ async function getActionLoc(idsg) {
         .populate('step');
 }
 
+// get riddle id from field in the action object
+function getRiddleFromAction(ida) {
+    return Actions.findById(ida).select('riddle').populate('riddle');
+}
+
 // set location as reached
 async function setReached(ida) {  // qrcode     
     return await Actions.findByIdAndUpdate(ida, { reachedOn: Date.now() });
 }
 
+// set the path of the selfie image
 async function setPhoto(ida, file) {
     return await Actions.findByIdAndUpdate(ida, { group_photo: '/data/gamephoto/' + file }); 
-}
-
-// get riddle id from field in the action object
-function getRiddleFromAction(ida) {
-    return Actions.findById(ida);
 }
 
 // set riddle as solved

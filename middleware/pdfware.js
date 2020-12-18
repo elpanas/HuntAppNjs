@@ -9,6 +9,7 @@ const { Location, Actions, SingleGame } = require('../models/schemas'),
     multiReplace = require('string-multiple-replace'),
     dateFormat = require("dateformat");
 
+// create the pdf file with qrcodes and related infos
 function generateQrPdf(idg) {  
     const tmpqrc = process.cwd() + '/html2pdf/temp/qrcodes/' + idg +'/',
         tmppdf = process.cwd() + '/html2pdf/temp/templates/' + idg +'/',
@@ -69,6 +70,7 @@ function generateQrPdf(idg) {
         })
 }
 
+// support generalization function to the previous one
 function populateTemplate(tmppdf, dirtemplate, matcherObj, idl, p) {      
     
     var base_file = fs.readFileSync(dirtemplate, {encoding: 'utf8', flag: 'r+'} );
@@ -76,7 +78,7 @@ function populateTemplate(tmppdf, dirtemplate, matcherObj, idl, p) {
     fs.writeFileSync(tmppdf + idl + 'page' + p + '.html', base_file);
 }
 
-
+// create a certificate pdf file
 async function generateCertPdf(idsg) {
     const tmppdf = process.cwd() + '/html2pdf/temp/templates/' + idsg +'/',
         dirpdf = process.cwd() + '/html2pdf/pdfs/',

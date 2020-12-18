@@ -107,7 +107,7 @@ async function createSteps(idg, idsg, riddle_cat) {
 }
 // --------------------------------------------------------------------
 
-// GET STEP
+// check if a group has been created
 function checkGroup(idg, idu) {
     return SingleGame.findOne(
         { 
@@ -119,6 +119,7 @@ function checkGroup(idg, idu) {
         .sort('-bootdate');
 }
 
+// check if there are other games already played by this user
 function checkMultipleGame(idg, idu) {
     return SingleGame.findOne(
         {
@@ -132,7 +133,7 @@ function checkMultipleGame(idg, idu) {
 // --------------------------------------------------------------------
 
 
-// SET
+// set a game session as completed
 async function setCompleted(idsg) {
     return SingleGame.findByIdAndUpdate(idsg, { is_completed: true });
 }

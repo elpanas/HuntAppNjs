@@ -46,7 +46,14 @@ router.get('/multiple/:idg', (req, res) => {
         .then((idu) => {
             if (idu)            
                 checkMultipleGame(req.params.idg, idu)
-                    .then(result => { (result.game.is_open) ? res.status(200).send() : res.status(400).send() })
+                    .then(result => { 
+                        if (result == null) 
+                            res.status(200).send();
+                        else if (result.game.is_open)
+                            res.status(200).send();
+                        else
+                            res.status(404).send();
+                    })
                     .catch(err => res.status(400).send(err))
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();

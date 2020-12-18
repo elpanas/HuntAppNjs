@@ -1,15 +1,15 @@
 const dotenv = require('dotenv').config(); // do not delete this
 const express = require('express'), // framework nodejs
       mongoose = require('mongoose'), // framework mongoDB 
-      restaction = require('./routes/restaction'), // router paths
-      restevent = require('./routes/restevent'), // router paths
-      restgame = require('./routes/restgame'), // router game
-      restsgame = require('./routes/restsgame'), // router group
-      restloc = require('./routes/restloc'), // router location
-      restriddle = require('./routes/restriddle'), // router riddle
-      restuser = require('./routes/restuser'), // router user
-      resttest = require('./testing/test'), // router test
-      restutility = require('./utility/loadRiddles'),
+      restaction = require('./routes/restaction'), // route paths
+      restevent = require('./routes/restevent'), // route paths
+      restgame = require('./routes/restgame'), // route game
+      restsgame = require('./routes/restsgame'), // route group
+      restloc = require('./routes/restloc'), // route location
+      restriddle = require('./routes/restriddle'), // route riddle
+      restuser = require('./routes/restuser'), // route user
+      resttest = require('./testing/test'), // route test
+      restutility = require('./utility/loadRiddles'), // route riddles
       url = process.env.DB_LOC_URI; // local db
 // const url = process.env.DB_URI; // remote db connection string
 
@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
 });
 
 // every request calls a different script based on its path
-app.use(express.static(__dirname));
+app.use(express.static(__dirname)); // static calls
 app.use('/api/action', restaction); 
 app.use('/api/event', restevent); 
 app.use('/api/game', restgame); 

@@ -8,10 +8,10 @@ const router = express.Router();
 // CREATE
 router.post('/', (req, res) => {    
     checkUser(req.headers.authorization)
-        .then((idu) => {
+        .then(idu => {
             if (idu) {
                 checkEvent(req.body.name)
-                    .then((eventexist) => {
+                    .then(eventexist => {
                         if (!eventexist) {
                             createEvent(req.body, idu)
                                 .then(() => res.status(200).send())
@@ -29,10 +29,10 @@ router.post('/', (req, res) => {
 // READ
 router.get('/', (req, res) => {
     checkUser(req.headers.authorization)
-        .then((idu) => {
+        .then(idu => {
             if (idu) 
                 getAllEvents()
-                    .then((result) => {
+                    .then(result => {
                         if (result.length > 0)
                             res.status(200).json(result);
                         else
@@ -44,18 +44,6 @@ router.get('/', (req, res) => {
         })
         .catch(err => res.status(400).send(err))
 });
-
-/*
-router.get('/:id', (req, res) => {
-    getEvent(req.params.id)
-        .then((result) => {
-            if (result.length > 0)
-                res.status(200).json(result);
-            else
-                res.status(404).send('Event was not found');
-        })
-        .catch((error) => { res.status(404).send(error) })
-});*/
 // --------------------------------------------------------------------
 
 

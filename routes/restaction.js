@@ -5,12 +5,11 @@ const express = require('express'),
         setSolved, 
         setPhoto } = require("../middleware/actionware"),
     { generateRiddle, 
-        checkRiddle, 
-        getRiddle } = require('../middleware/riddleware'),
+        checkRiddle } = require('../middleware/riddleware'),
     { checkUser } = require('../middleware/userware'),
-    { setCompleted } = require('../middleware/sgameware'),
     multer = require('multer');
 
+// storage infos 
 const storage = multer.diskStorage({
         destination: (req, file, cb) => {
             cb(null, './data/gamephoto');
@@ -63,17 +62,15 @@ router.get('/sgame/:idsg', (req, res) => { // recupera l'ultimo step
         .catch((err) => res.status(400).send(err));
 });
 
+// get riddle
 router.get('/riddle/:ida', (req, res) => { 
     checkUser(req.headers.authorization)
-        .then((idu) => {
+        .then(idu => {
             if (idu) {
-                getRiddleFromAction(req.params.ida) // get the riddle id
-                    .then((result) => { 
-                        getRiddle(result.riddle)
-                            .then((riddle) => {                                
-                                generateRiddle(riddle, 'en', function (riddledata) {  
-                                    res.status(200).json(riddledata);
-                                    })                                            
+                getRiddleFromAction(req.params.ida) // get the riddle id from the action record
+                    .then(result => {                                                  
+                        generateRiddle(result.riddle, 'en', function (riddledata) {  
+                            res.status(200).json(riddledata);
                             })   
                     }) 
             }

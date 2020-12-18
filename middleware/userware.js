@@ -17,14 +17,14 @@ async function createUser(user_data) {
 // --------------------------------------------------------------------
 
 
-// GET USER
+// get user
 async function getUser(id) {
     return await User.findById(id);
 }
 // --------------------------------------------------------------------
 
 
-// CHECK USER
+// check credentials
 async function checkUser(auth) {
 
     const tmp = auth.split(' ');   // Divido in base allo spazio  "Basic Y2hhcmxlczoxMjM0NQ==" per recuperare la 2a parte
@@ -42,6 +42,7 @@ async function checkUser(auth) {
         return false;
 }
 
+// check the same thing but it returns the whole document
 async function checkLogin(auth) {
 
     const tmp = auth.split(' ');   // Divido in base allo spazio  "Basic Y2hhcmxlczoxMjM0NQ==" per recuperare la 2a parte
