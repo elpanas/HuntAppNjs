@@ -51,6 +51,6 @@ async function checkRiddle(riddledata) {
 
 module.exports.createRiddle = createRiddle;
 module.exports.createRiddles = createRiddles;
-module.exports.getRiddle = getRiddle;
+//module.exports.getRiddle = getRiddle;
 module.exports.generateRiddle = generateRiddle;
 module.exports.checkRiddle = checkRiddle;

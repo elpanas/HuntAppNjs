@@ -49,15 +49,70 @@ async function checkLogin(auth) {
     const buf = Buffer.from(tmp[1], 'base64').toString(); // creo un buffer e lo avviso che l'input e' in base64
     const [username, password] = buf.split(':');      // divido auth in base a ':'
 
+    const user = await User.aggregate([
+        { $match: 
+            { 
+            username: username,
+            password: password 
+            }
+        },              
+        {
+            $addFields : { logStatus: { $subtract: [ "$$NOW", '$logged' ] } }
+        },
+        { $project: { _id: 0, logStatus: 1 } } 
+    ])
+
+    if (user[0].logStatus < (60*60000)) {
+        return await User.findOneAndUpdate({
+            username: username,
+            password: password
+            },
+            {   logged: Date.now()  },
+            { new: true });
+    }
+    else 
+        return false;
+
+    /*
     return await User.findOne({
         username: username,
         password: password
-    }) // criteri di ricerca         
+    })*/// criteri di ricerca         
 }
 // --------------------------------------------------------------------
+
+async function makeLogin(auth) {
+
+    const tmp = auth.split(' ');   // Divido in base allo spazio  "Basic Y2hhcmxlczoxMjM0NQ==" per recuperare la 2a parte
+    const buf = Buffer.from(tmp[1], 'base64').toString(); // creo un buffer e lo avviso che l'input e' in base64
+    const [username, password] = buf.split(':');      // divido auth in base a ':'
+    
+    return await User.findOneAndUpdate({
+        username: username,
+        password: password
+        },
+        {   logged: Date.now()  },
+        { new: true });      
+}
+
+async function makeLogout(auth) {
+
+    const tmp = auth.split(' ');   // Divido in base allo spazio  "Basic Y2hhcmxlczoxMjM0NQ==" per recuperare la 2a parte
+    const buf = Buffer.from(tmp[1], 'base64').toString(); // creo un buffer e lo avviso che l'input e' in base64
+    const [username, password] = buf.split(':');      // divido auth in base a ':'
+    
+    return await User.findOneAndUpdate({
+        username: username,
+        password: password
+        },
+        {   logged: null  },
+        { new: true });      
+}
 
 
 module.exports.createUser = createUser;
 module.exports.getUser = getUser;
 module.exports.checkUser = checkUser;
 module.exports.checkLogin = checkLogin;
+module.exports.makeLogin = makeLogin;
+module.exports.makeLogout = makeLogout;

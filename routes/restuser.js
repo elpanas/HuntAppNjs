@@ -1,5 +1,5 @@
 const express = require('express'),
-    { createUser, checkLogin } = require('../middleware/userware');
+    { createUser, checkLogin, makeLogin, makeLogout } = require('../middleware/userware');
 const router = express.Router();
 
 // CREATE
@@ -13,8 +13,19 @@ router.post('/', (req, res) => {
 
 // READ
 // login
-router.get('/login', (req, res) => {
+router.get('/chklogin', (req, res) => {
     checkLogin(req.headers.authorization)
+        .then(result => {
+            (result)
+                ? res.status(200).send()
+                : res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send()
+        })
+        //.catch(err => res.status(404).send(err))
+});
+// --------------------------------------------------------------------
+
+router.put('/login', (req, res) => {
+    makeLogin(req.headers.authorization)
         .then(result => {            
             (!result)
                 ? res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send()
@@ -22,6 +33,15 @@ router.get('/login', (req, res) => {
         })
         .catch(err => res.status(404).send(err))
 });
-// --------------------------------------------------------------------
+
+router.put('/logout', (req, res) => {
+    makeLogout(req.headers.authorization)
+        .then(result => {            
+            (!result)
+                ? res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send()
+                : res.status(200).send();
+        })
+        .catch(err => res.status(404).send(err))
+});
 
 module.exports = router;

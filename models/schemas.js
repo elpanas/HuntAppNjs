@@ -20,6 +20,9 @@ const userSchema = Schema({
     },
     is_admin: {
         type: Boolean, default: false
+    },
+    logged: {
+        type: Date, default: Date.now()
     }
 });
 
