@@ -4,5 +4,8 @@
 /HuntAppNjs.zip
 /node_modules
 /obj
+/data/gamephoto
+/html2pdf/pdfs
 .vscode/settings.json
 .env
+
