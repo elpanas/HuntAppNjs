@@ -20,7 +20,7 @@ router.get('/chklogin', (req, res) => {
                 ? res.status(200).send()
                 : res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send()
         })
-        //.catch(err => res.status(404).send(err))
+        .catch(err => res.status(404).send(err))
 });
 // --------------------------------------------------------------------
 

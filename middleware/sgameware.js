@@ -130,6 +130,16 @@ function checkMultipleGame(idg, idu) {
         .select('game')
         .populate('game');
 }
+
+async function getTerminatedList(idu) {
+    return await SingleGame.find(
+        {
+            group_captain: idu,
+            is_completed: true
+        })
+        .populate('game')
+        .select('_id game');
+}
 // --------------------------------------------------------------------
 
 
@@ -143,4 +153,5 @@ module.exports.createSingleGame = createSingleGame;
 module.exports.createSteps = createSteps;
 module.exports.checkGroup = checkGroup;
 module.exports.checkMultipleGame = checkMultipleGame;
+module.exports.getTerminatedList = getTerminatedList;
 module.exports.setCompleted = setCompleted;
