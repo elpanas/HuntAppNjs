@@ -2,6 +2,7 @@ const express = require('express'),
     { getActionLoc,
         setReached,
         getRiddleFromAction,
+        getImages,
         setSolved, 
         setPhoto } = require("../middleware/actionware"),
     { generateRiddle, 
@@ -45,6 +46,7 @@ router.post('/gphoto', upload.single('selfie'), (req, res) => {
       res.status(400).send(err);
     }
 });
+// --------------------------------------------------------------------
 
 // GET
 // get the location info
@@ -77,6 +79,21 @@ router.get('/riddle/:ida', (req, res) => {
         })
 });
 
+// returns selfie paths list of a singlegame
+router.get('/selfies/:idsg', (req, res) => {  
+    checkUser(req.headers.authorization)
+        .then(idu => {  
+            if (idu) 
+                getImages(req.params.idsg)
+                    .then(imageslist => res.status(200).send(imageslist))
+                    .catch(err => res.status(400).send(err));                                   
+            else
+                res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();
+        })
+        .catch(err => res.status(400).send(err));
+});
+// --------------------------------------------------------------------
+
 // PUT
 // qrcode checked when a location is reached
 router.put('/reached/:ida', (req, res) => { 
@@ -96,8 +113,7 @@ router.put('/solution', (req, res) => { // recupera l'ultimo step
         .then((idu) => {
             if (idu) {
                 checkRiddle(req.body)
-                    .then((solok) => {
-                        console.log(solok);
+                    .then((solok) => {                        
                         if (solok) 
                             setSolved(req.body.ida)
                                 .then(() => res.status(200).send())

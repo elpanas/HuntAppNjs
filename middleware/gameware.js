@@ -1,4 +1,3 @@
-const { mongoose } = require('mongoose');
 const { Game } = require('../models/schemas');
 
 // CREATE GAME

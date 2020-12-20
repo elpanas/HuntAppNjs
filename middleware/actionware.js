@@ -1,4 +1,5 @@
 const { Actions } = require('../models/schemas');
+const mongoose = require('mongoose');
 
 // get location info
 async function getActionLoc(idsg) {    
@@ -11,6 +12,11 @@ async function getActionLoc(idsg) {
 // get riddle id from field in the action object
 function getRiddleFromAction(ida) {
     return Actions.findById(ida).select('riddle').populate('riddle');
+}
+
+function getImages(idsg) {
+    var newidsg = mongoose.Types.ObjectId(idsg);
+    return Actions.find({sgame: newidsg}).sort('prog_nr').select('group_photo');
 }
 
 // set location as reached
@@ -29,7 +35,8 @@ async function setSolved(ida) {  // qrcode
 }
 
 module.exports.getActionLoc = getActionLoc;
+module.exports.getRiddleFromAction = getRiddleFromAction;
+module.exports.getImages = getImages;
 module.exports.setReached = setReached;
 module.exports.setPhoto = setPhoto;
-module.exports.getRiddleFromAction = getRiddleFromAction;
 module.exports.setSolved = setSolved;

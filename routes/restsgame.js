@@ -78,7 +78,7 @@ router.get('/pdf/:idsg', (req, res) => {
 
 router.put('/completed', (req, res) => { // richiamo questa funzione se non c'è un id-action memorizzato in locale
     checkUser(req.headers.authorization)
-        .then((idu) => {
+        .then(idu => {
             if (idu)                
                 setCompleted(req.body.idsg)
                     .then(() => {
