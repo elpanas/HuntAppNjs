@@ -65,13 +65,13 @@ router.get('/sgame/:idsg', (req, res) => { // recupera l'ultimo step
 });
 
 // get riddle
-router.get('/riddle/:ida', (req, res) => { 
+router.get('/riddle/:ida/:locale', (req, res) => { 
     checkUser(req.headers.authorization)
         .then(idu => {
             if (idu) {
                 getRiddleFromAction(req.params.ida) // get the riddle id from the action record
                     .then(result => {                                                  
-                        generateRiddle(result.riddle, 'en', function (riddledata) {  
+                        generateRiddle(result.riddle, req.params.locale, function (riddledata) {  
                             res.status(200).json(riddledata);
                             })   
                     }) 
