@@ -85,7 +85,7 @@ router.get('/selfies/:idsg', (req, res) => {
         .then(idu => {  
             if (idu) 
                 getImages(req.params.idsg)
-                    .then(imageslist => res.status(200).send(imageslist))
+                    .then(imageslist => res.status(200).json(imageslist))
                     .catch(err => res.status(400).send(err));                                   
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();

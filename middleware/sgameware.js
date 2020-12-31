@@ -1,4 +1,4 @@
-const { SingleGame, Riddle, Actions, Location } = require('../models/schemas');
+const { SingleGame, Riddle, Actions, Location, Cluster } = require('../models/schemas');
 
 // ----- CREATE -----
 async function createSingleGame(single_data, idu) {
@@ -7,105 +7,89 @@ async function createSingleGame(single_data, idu) {
         group_name: single_data.group_name,
         group_captain: idu,
         group_nr_players: single_data.group_nr_players,
-        group_photo_path: single_data.group_photo_path
+        group_flag: single_data.group_flag
+        //group_photo_path: single_data.group_photo_path
     });
     
     return await sgame.save();
 }
 
 async function createSteps(idg, idsg, riddle_cat) {
+
+    const clusters = await getClusters(idg),
+        locations = await getLocations(idg);
+
+    var steps = [],
+        m = 0,
+        s = 0,
+        tot_steps = 1,
+        middleLocs,
+        filteredLocs;
+
+    const startLocObj = locations.find(loc => loc.is_start),
+        finalLocObj = locations.find(loc => loc.is_final);
+
+    steps.push(createObj(tot_steps++, idsg, startLocObj._id));
     
-    var actual_cluster = 0,
-        startLoc,
-        finalLoc,
-        clusters = [],
-        stepsLoc = [],
-        tot_loc = 0,
-        tot_steps = 2;
+    clusters.forEach(clt => {
 
-    Location.find({ game: idg }).select('_id cluster is_start is_final').sort('cluster')
-        .then(locations => {
-            locations.forEach(loc => {
-                if (tot_loc == 0) clusters[actual_cluster] = [];
+        filteredLocs = shuffle(locations.filter(loc => loc.cluster == clt.cluster && !loc.is_start && !loc.is_final));
 
-                if (actual_cluster != (loc.cluster-1)) {
-                    clusters[actual_cluster].sort(() => Math.random() - 0.5); // shuffle locs in clusters
-                    actual_cluster++;
-                    clusters[actual_cluster] = [];
-                }
-                
-                if (loc.is_start)
-                    startLoc = { "prog_nr": 1, "sgame": idsg, "step": loc._id, "riddle": null};
-                else if (loc.is_final) 
-                    finalLoc = loc._id;
-                else 
-                    clusters[actual_cluster].push(loc._id); // inserisci qui il subarray
-                
-                tot_loc++;
-            });
+        middleLocs = (filteredLocs.length > clt.nr_extracted_loc)
+                    ? filteredLocs.slice(0, clt.nr_extracted_loc - 1)
+                    : filteredLocs; // extract locs from cluster
 
-            tot_loc--;
+        for (m = 0; m < middleLocs.length; m++)
+            steps.push(createObj(tot_steps++, idsg, middleLocs[m]._id));
+    });
 
-            // add first element
-            stepsLoc.push(startLoc);
+    steps.push(createObj(tot_steps, idsg, finalLocObj._id));
 
-            clusters.forEach(cluster => {   
-                cluster.forEach(step => {                    
-                    stepsLoc.push(
-                        { 
-                            "prog_nr": tot_steps++,
-                            "sgame": idsg,
-                            "step": step,
-                            "riddle": null                         
-                        }
-                    );                    
-                }); // cluster.forEach()
-            }); // clusters.forEach()  
-            
-            stepsLoc.push(
-                {
-                    "prog_nr": tot_steps,
-                    "sgame": idsg,
-                    "step": finalLoc,
-                    "riddle": null // insieme di riddle più difficili
-                }
-            );
+    const riddles = await getRiddles(tot_steps, riddle_cat);
 
-            // associate a riddle foreach location
-            Riddle.aggregate()
-                .match({ riddle_category: riddle_cat /*, is_final: false*/ })
-                .project({ _id: 1 })
-                .sample(tot_steps) // decrease by 1 to add a final game in the next query
-                .then(riddles => {
-                    var s = 0;
-                    riddles.forEach(r => {
-                        stepsLoc[s].riddle = r._id;
-                        s++;
-                    });
-                    
-                /*Riddle.aggregate()
-                    .match({ riddle_category: riddle_cat, is_final: true })
-                    .project({ _id: 1 })
-                    .sample(1)
-                    .then(finalriddle => {
-                        stepsLoc.push(
-                            {
-                                "prog_nr": tot_steps,
-                                "sgame": idsg,
-                                "step": finalLoc,
-                                "riddle": finalriddle._id // insieme di riddle più difficili
-                            }
-                        );
+    riddles.forEach(r => steps[s++].riddle = r._id );
 
-                    // adds actions
-                    Actions.insertMany(stepsLoc);   
-                    });  */       
-                    // adds actions
-                    Actions.insertMany(stepsLoc);      
-                });                 
-        });
+    // adds actions
+    Actions.insertMany(steps);   
 }
-// --------------------------------------------------------------------
+
+// auxiliary functions
+async function getClusters(idg) {
+    return await Cluster.find({ game: idg })
+                    .select('cluster nr_extracted_loc')
+                    .sort('cluster')
+                    .lean();
+}
+
+async function getLocations(idg) {
+    return await Location.find({ game: idg })
+                    .select('_id cluster is_start is_final')
+                    .sort('cluster')
+                    .lean();
+}
+
+async function getRiddles(tot_steps, rid_cat) {
+    return await Riddle.aggregate()
+                    .match({ riddle_category: rid_cat })
+                    .project({ _id: 1 })
+                    .sample(tot_steps);
+}
+
+function createObj(nr, idsg, id) {
+    return { "prog_nr": nr, "sgame": idsg, "step": id, "riddle": null };
+}
+
+// Fisher Yates shuffle method
+function shuffle(arr) {
+    for (i = arr.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * i)
+        k = arr[i]
+        arr[i] = arr[j]
+        arr[j] = k
+      } 
+    return arr;
+}
+// ------------------------------------------------------
 
 // check if a group has been created
 function checkGroup(idg, idu) {
@@ -116,7 +100,8 @@ function checkGroup(idg, idu) {
             is_completed: false
         })
         .select('_id')
-        .sort('-bootdate');
+        .sort('-bootdate')
+        .lean();
 }
 
 // check if there are other games already played by this user

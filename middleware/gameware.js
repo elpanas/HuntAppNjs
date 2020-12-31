@@ -1,6 +1,6 @@
 const { Game } = require('../models/schemas');
 
-// CREATE GAME
+// CREATE
 async function createGame(game_data) {
 
     const game = new Game({
@@ -16,15 +16,15 @@ async function createGame(game_data) {
 }
 // --------------------------------------------------------------------
 
-
+//READ
 // get all games infos
 function getAllGames(event_id) {
-    return Game.find({ event: event_id }).select('_id name riddle_category organizer qr_created active is_open');
+    return Game.find({ event: event_id }).select('_id name riddle_category organizer qr_created active is_open').lean();
 }
 
 // get the riddle category of a game
 function getGameCategory(idg) {
-    return Game.findById(idg).select('riddle_category');
+    return Game.findById(idg).select('riddle_category').lean();
 }
 
 // get infos about the event at the top of a game
@@ -33,6 +33,7 @@ function getGameEvent(idg) {
 }
 // --------------------------------------------------------------------
 
+// UPDATE
 // set qrcode pdf as created
 function setQrCode(idg) {
     return Game.findByIdAndUpdate(idg, { qr_created: true });

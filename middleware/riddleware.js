@@ -17,9 +17,10 @@ async function createRiddle(riddle_data) {
     return await riddle.save();
 }
 
+/*
 async function createRiddles(riddle_data) {
     return await Riddle.insertMany(riddle_data);
-}
+}*/
 // --------------------------------------------------------------------
 
 
@@ -43,11 +44,6 @@ function generateRiddle(riddle, mylocale, readValue) {
     });
 }
 
-/*
-function getRiddle(idr) {
-    return Riddle.findById(idr);
-}*/
-
 // check the solution correctness 
 async function checkRiddle(riddledata) {
     return await Riddle.exists({ _id: riddledata.idr, riddle_solution: riddledata.solution });
@@ -55,7 +51,7 @@ async function checkRiddle(riddledata) {
 // --------------------------------------------------------------------
 
 module.exports.createRiddle = createRiddle;
-module.exports.createRiddles = createRiddles;
+//module.exports.createRiddles = createRiddles;
 //module.exports.getRiddle = getRiddle;
 module.exports.generateRiddle = generateRiddle;
 module.exports.checkRiddle = checkRiddle;

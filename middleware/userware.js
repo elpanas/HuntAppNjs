@@ -34,7 +34,7 @@ async function checkUser(auth) {
     const result = await User.findOne({
         username: username,
         password: password
-    }) // criteri di ricerca         
+    }).lean() // criteri di ricerca         
 
     if (result)
         return result._id;

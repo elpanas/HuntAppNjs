@@ -8,7 +8,8 @@ async function createEvent(event_data, user_id) {
         min_locations: event_data.minloc,
         max_locations: event_data.maxloc,
         min_avg_distance: event_data.avgloc,
-        organizer: user_id
+        organizer: user_id,
+        max_distance: event_data.maxdist
     });
 
     // salva il documento
@@ -16,11 +17,18 @@ async function createEvent(event_data, user_id) {
 }
 // --------------------------------------------------------------------
 
-
-// get all events and organizer infos
-function getAllEvents() {
-    return Event.find().populate('organizer');
+// READ
+function getAllEvents(lat,long) {  
+    return Event.find({
+        location: { 
+            $near: { 
+                $geometry: { type: "Point", coordinates: [lat,long] },                  
+                $maxDistance: 20000
+            }                              
+        } 
+    }).populate('organizer');
 }
+
 
 // check if there is an event with the same name
 async function checkEvent(event_name) {

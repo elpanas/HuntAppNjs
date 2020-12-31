@@ -1,12 +1,12 @@
 const express = require('express'),
     { createLocations,
         createLocation,
-        getClusterList,
     getLocations, 
     getDistances,
     computeMean} = require('../middleware/locatware'),
     { checkUser } = require('../middleware/userware'),
-    { generateQrPdf } = require('../middleware/pdfware');
+    { generateQrPdf } = require('../middleware/pdfware'),
+    { createCluster } = require('../middleware/clusterware');
 const router = express.Router();
 
 // CREATE
@@ -42,6 +42,7 @@ router.post('/', (req, res) => {
                         createLocation(req.body)
                             .then(result => { 
                                 if (result._id) {
+                                    if (result.cluster == 1) createCluster(result.game);
                                     if (result.is_final) { generateQrPdf(result.game) }  
                                     res.status(200).send(); 
                                 }
@@ -59,24 +60,6 @@ router.post('/', (req, res) => {
 
 
 // READ
-//Get clusters for this game
-router.get('/clusters/:idg', (req, res) => {
-    checkUser(req.headers.authorization)
-        .then(idu => {
-            if(idu)
-                getClusterList(req.params.idg)
-                    .then(result => {
-                        (result.length > 0)
-                            ? res.status(200).json(result)
-                            : res.status(404).send('Location was not found');
-                    })
-                    .catch(err => res.status(404).send(err))
-            else
-                res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send()
-        })
-        .catch(err => res.status(400).send(err))
-});
-
 // Generate and send the final pdf
 router.get('/pdf/:idg', (req, res) => {  
     checkUser(req.headers.authorization)

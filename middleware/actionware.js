@@ -1,5 +1,4 @@
 const { Actions } = require('../models/schemas');
-const mongoose = require('mongoose');
 
 // get location info
 async function getActionLoc(idsg) {    
@@ -15,8 +14,7 @@ function getRiddleFromAction(ida) {
 }
 
 function getImages(idsg) {
-    var newidsg = mongoose.Types.ObjectId(idsg);
-    return Actions.find({sgame: newidsg}).sort('prog_nr').select('group_photo');
+    return Actions.find({sgame: idsg}).sort('prog_nr').select('group_photo').lean();
 }
 
 // set location as reached

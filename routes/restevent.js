@@ -27,18 +27,18 @@ router.post('/', (req, res) => {
 
 
 // READ
-router.get('/', (req, res) => {
+router.get('/lat/:lat/long/:long', (req, res) => {
     checkUser(req.headers.authorization)
         .then(idu => {
             if (idu) 
-                getAllEvents()
+                getAllEvents(req.params.lat, req.params.long)
                     .then(result => {
                         if (result.length > 0)
                             res.status(200).json(result);
                         else
                             res.status(404).send('Events not found');
                     })
-                    .catch((error) => res.status(400).send(error))
+                    .catch((error) => { console.log(error); res.status(400).send(error)})
             else 
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send()   
         })

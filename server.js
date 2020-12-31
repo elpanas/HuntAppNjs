@@ -5,6 +5,7 @@ const express = require('express'), // framework nodejs
       restevent = require('./routes/restevent'), // route paths
       restgame = require('./routes/restgame'), // route game
       restsgame = require('./routes/restsgame'), // route group
+      restcluster = require('./routes/restcluster'), // route group
       restloc = require('./routes/restloc'), // route location
       restriddle = require('./routes/restriddle'), // route riddle
       restuser = require('./routes/restuser'), // route user
@@ -33,6 +34,7 @@ app.use('/api/action', restaction);
 app.use('/api/event', restevent); 
 app.use('/api/game', restgame); 
 app.use('/api/sgame', restsgame); 
+app.use('/api/cluster', restcluster);
 app.use('/api/loc', restloc); 
 app.use('/api/riddle', restriddle); 
 app.use('/api/user', restuser);

@@ -5,8 +5,8 @@ const express = require('express'),
     setCompleted,
     checkMultipleGame,
     getTerminatedList} = require('../middleware/sgameware'),
-    { checkUser } =  require('../middleware/userware');    
-const { generateCertPdf } = require('../middleware/pdfware');
+    { checkUser } =  require('../middleware/userware'),  
+    { generateCertPdf } = require('../middleware/pdfware');
 const router = express.Router();
 
 
@@ -16,11 +16,12 @@ router.post('/', (req, res) => {
         .then(idu => {
             if (idu)
                 createSingleGame(req.body, idu)
-                    .then(singleGame => {
+                    .then(singleGame => {                  
                         createSteps(req.body.game_id, singleGame._id, req.body.riddle_cat)
                             .then(() => res.status(200).send())
-                            .catch(err => res.status(400).send(err));
+                            .catch(err => res.status(400).send(err))
                     })
+                    .catch(err => res.status(400).send(err))
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();    
         })    
@@ -82,7 +83,7 @@ router.get('/terminated', (req, res) => {
             if (idu)            
                 getTerminatedList(idu)
                     .then(result => res.status(200).json(result))
-                    //.catch(() => res.status(400).send())
+                    .catch(() => res.status(400).send())
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();
         })    
@@ -96,7 +97,9 @@ router.put('/completed', (req, res) => { // richiamo questa funzione se non c'è
             if (idu)                
                 setCompleted(req.body.idsg)
                     .then(() => {
-                        generateCertPdf(req.body.idsg).then(() => res.status(200).send());
+                        generateCertPdf(req.body.idsg)
+                            .then(() => res.status(200).send())
+                            .catch(err => res.status(400).send(err))
                     })
                     .catch(err => res.status(400).send(err))
             else

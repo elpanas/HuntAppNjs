@@ -46,8 +46,21 @@ const eventSchema = Schema({
     },
     organizer: {
         type: Schema.Types.ObjectId, ref: 'user'
+    },
+    location: { // center of the circle of radius max_distance
+        type: {
+            type: String, 
+            enum: ['Point']           
+        },
+        coordinates: [Number]
+    },
+    max_distance: { // radius in mt
+        type: Number, default: 5000
+    },
+    end_date: {
+        type: Date, default: null
     }
-});
+}).index( { location : "2dsphere" } );
 
 const Event = mongoose.model('event', eventSchema);
 // --------------------------------------------------------------------
@@ -90,7 +103,7 @@ const singleGameSchema = Schema({ // when game is booted
         type: Schema.Types.ObjectId, ref: 'game'
     },    
     group_name: {
-        type: String, default: null, unique: true
+        type: String, default: null
     },
     group_captain: {
         type: Schema.Types.ObjectId, ref: 'user'
@@ -100,11 +113,14 @@ const singleGameSchema = Schema({ // when game is booted
     },
     group_photo_path: {
         type: String, default: null
-    },   
+    },
+    group_flag: {
+        type: String
+    },
     is_completed: {
         type: Boolean, default: false
     }
-}).index({ game: 1, is_start: 1, is_final: 1 }, { unique: true });
+});
 
 const SingleGame = mongoose.model('singlegame', singleGameSchema);
 // --------------------------------------------------------------------
@@ -161,6 +177,18 @@ const locationSchema = Schema({
 const Location = mongoose.model('location', locationSchema);
 // --------------------------------------------------------------------
 
+// ----- CLUSTER -----
+const clusterSchema = Schema({
+    game: {
+        type: Schema.Types.ObjectId, ref: 'game'
+    }, 
+    cluster: { type: Number, default: 1 },
+    nr_extracted_loc: { type: Number, default: 1 }
+});
+
+const Cluster = mongoose.model('cluster', clusterSchema);
+// --------------------------------------------------------------------
+
 
 // ----- RIDDLE -----
 const riddleSchema = Schema({   
@@ -193,5 +221,6 @@ exports.Event = Event;
 exports.Game = Game;
 exports.SingleGame = SingleGame;
 exports.Location = Location;
+exports.Cluster = Cluster;
 exports.Riddle = Riddle;
 exports.Actions = Actions;

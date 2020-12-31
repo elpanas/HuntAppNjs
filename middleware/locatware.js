@@ -25,28 +25,15 @@ async function createLocation(loc_data) {
 }
 // --------------------------------------------------------------------
 
-
-// get the game cluster list
-async function getClusterList(idg) {
-    newidg = mongoose.Types.ObjectId(idg);
-    return await Location.aggregate([        
-        { $match: { game: newidg } },   
-        { $project: { _id: 0, cluster: 1 } },     
-        { $group: { _id: "$cluster" } },         
-        { $sort: { _id: 1 } }
-    ])
-}
-
+// GET
 // get locations nr
 function getNrLocations(idg) {
-    newidg = mongoose.Types.ObjectId(idg);
-    return Location.estimatedDocumentCount({ game: newidg });
+    return Location.estimatedDocumentCount({ game: idg });
 }
 
 // get all locations of a game
 function getLocations(idg) {
-    // newidg = mongoose.Types.ObjectId(idg);
-    return Location.find({ game: idg }).sort('cluster');
+    return Location.find({ game: idg }).sort('cluster').lean();
 }
 
 // get all distances between the new place and the others
@@ -77,7 +64,6 @@ function computeMean(distances) {
 
 module.exports.createLocation = createLocation;
 module.exports.createLocations = createLocations;
-module.exports.getClusterList = getClusterList;
 module.exports.getNrLocations = getNrLocations;
 module.exports.getLocations = getLocations;
 module.exports.getDistances = getDistances;
