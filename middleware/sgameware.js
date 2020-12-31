@@ -23,14 +23,14 @@ async function createSteps(idg, idsg, riddle_cat) {
     var steps = [],
         m = 0,
         s = 0,
-        tot_steps = 1,
+        tot_steps = 2,
         middleLocs,
         filteredLocs;
 
     const startLocObj = locations.find(loc => loc.is_start), // get start location
         finalLocObj = locations.find(loc => loc.is_final); // get final location
 
-    steps.push(createObj(tot_steps++, idsg, startLocObj._id)); // push the first loc in the array
+    steps.push(createObj(1, idsg, startLocObj._id)); // push the first loc in the array
     
     // for and from each cluster, get the specified number of locations
     clusters.forEach(clt => {

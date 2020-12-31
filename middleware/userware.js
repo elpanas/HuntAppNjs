@@ -67,7 +67,7 @@ async function checkLogin(auth) {
             username: username,
             password: password
             },
-            {   logged: Date.now()  },
+            { logged: Date.now() },
             { new: true });
     }
     else 
