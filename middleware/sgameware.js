@@ -14,10 +14,11 @@ async function createSingleGame(single_data, idu) {
     return await sgame.save();
 }
 
+// generate random steps on the 
 async function createSteps(idg, idsg, riddle_cat) {
 
-    const clusters = await getClusters(idg),
-        locations = await getLocations(idg);
+    const clusters = await getClusters(idg), // get all cluster infos of this game
+        locations = await getLocations(idg); // get all location of this game
 
     var steps = [],
         m = 0,
@@ -26,31 +27,34 @@ async function createSteps(idg, idsg, riddle_cat) {
         middleLocs,
         filteredLocs;
 
-    const startLocObj = locations.find(loc => loc.is_start),
-        finalLocObj = locations.find(loc => loc.is_final);
+    const startLocObj = locations.find(loc => loc.is_start), // get start location
+        finalLocObj = locations.find(loc => loc.is_final); // get final location
 
-    steps.push(createObj(tot_steps++, idsg, startLocObj._id));
+    steps.push(createObj(tot_steps++, idsg, startLocObj._id)); // push the first loc in the array
     
+    // for and from each cluster, get the specified number of locations
     clusters.forEach(clt => {
 
+        // get an array without start and final locations
         filteredLocs = shuffle(locations.filter(loc => loc.cluster == clt.cluster && !loc.is_start && !loc.is_final));
 
+        // extract the number of locations, specified in the cluster options
         middleLocs = (filteredLocs.length > clt.nr_extracted_loc)
                     ? filteredLocs.slice(0, clt.nr_extracted_loc - 1)
-                    : filteredLocs; // extract locs from cluster
-
-        for (m = 0; m < middleLocs.length; m++)
+                    : filteredLocs;
+        
+        for (m = 0; m < middleLocs.length; m++) // create and push an "action" object (step) for each middle location
             steps.push(createObj(tot_steps++, idsg, middleLocs[m]._id));
     });
 
-    steps.push(createObj(tot_steps, idsg, finalLocObj._id));
+    steps.push(createObj(tot_steps, idsg, finalLocObj._id)); // push the final loc in the array
 
-    const riddles = await getRiddles(tot_steps, riddle_cat);
+    const riddles = await getRiddles(tot_steps, riddle_cat); // get riddles as much as the locations
 
-    riddles.forEach(r => steps[s++].riddle = r._id );
+    riddles.forEach(r => steps[s++].riddle = r._id ); // insert riddle id in each step just created
 
     // adds actions
-    Actions.insertMany(steps);   
+    Actions.insertMany(steps); // push steps into the action collection
 }
 
 // auxiliary functions
@@ -116,6 +120,7 @@ function checkMultipleGame(idg, idu) {
         .populate('game');
 }
 
+// get a list of finished games
 async function getTerminatedList(idu) {
     return await SingleGame.find(
         {

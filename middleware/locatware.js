@@ -20,7 +20,6 @@ async function createLocation(loc_data) {
         is_final: loc_data.is_final
     });
 
-    // salva il documento
     return await loc.save();
 }
 // --------------------------------------------------------------------

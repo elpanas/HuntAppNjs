@@ -128,6 +128,7 @@ async function getLocations(idg) {
     return await Location.find({ game: idg }).sort('cluster').lean();
 }
 
+// get the session game duration
 async function getTime(idg) {
     return await Actions.aggregate([
         { $match: { sgame: idg } },              

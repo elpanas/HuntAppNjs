@@ -11,7 +11,6 @@ async function createGame(game_data) {
         is_open: game_data.is_open
     });
 
-    // salva il documento
     return await game.save();
 }
 // --------------------------------------------------------------------

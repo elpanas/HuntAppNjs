@@ -13,6 +13,7 @@ function getRiddleFromAction(ida) {
     return Actions.findById(ida).select('riddle').populate('riddle');
 }
 
+// get selfies for the final carousel
 function getImages(idsg) {
     return Actions.find({sgame: idsg}).sort('prog_nr').select('group_photo').lean();
 }

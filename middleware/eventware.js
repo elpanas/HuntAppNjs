@@ -18,6 +18,7 @@ async function createEvent(event_data, user_id) {
 // --------------------------------------------------------------------
 
 // READ
+// get all events at 20km
 function getAllEvents(lat,long) {  
     return Event.find({
         location: { 
