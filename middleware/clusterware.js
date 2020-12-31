@@ -11,7 +11,7 @@ async function createCluster(idg) {
 
 // GET
 function getClusterList(idg) {
-    return Cluster.find({ game: idg }).sort('cluster').select('cluster');
+    return Cluster.find({ game: idg }).sort('cluster').select('cluster').lean();
 }
 
 function getClusterInfo(idg, clt) {

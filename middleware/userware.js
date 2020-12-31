@@ -19,7 +19,7 @@ async function createUser(user_data) {
 
 // get user
 async function getUser(id) {
-    return await User.findById(id);
+    return await User.findById(id).lean();
 }
 // --------------------------------------------------------------------
 
