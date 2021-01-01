@@ -27,7 +27,7 @@ router.get('/game/:idg/clt/:clt', (req, res) => {
         .then(idu => {      
             if (idu)
                 getClusterInfo(req.params.idg, req.params.clt)
-                    .then((result) => res.status(200).send(result))
+                    .then(result => res.status(200).send(result))
                     .catch(err => res.status(400).send(err))
         })
         .catch(err => res.status(400).send(err))

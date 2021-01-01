@@ -21,6 +21,7 @@ async function generateQrPdf(idg) {
     var matcherObj,
         qrfilename,
         pathinputs = [];
+        
     if(!fs.existsSync(tmpqrc)) fs.mkdirSync(tmpqrc);
     if(!fs.existsSync(tmppdf)) fs.mkdirSync(tmppdf);
     if(!fs.existsSync(dirpdf)) fs.mkdirSync(dirpdf);    
@@ -59,11 +60,11 @@ async function generateQrPdf(idg) {
         .option('page-size', 'A4')
         .output(dirpdf + idg + '-file.pdf')                
         .execute()
-        .then(function () {
+        .then(() => {
             console.log("OK: done");
             rimraf.sync(tmpqrc);
             rimraf.sync(tmppdf);
-        }, function (error) {
+        }, (error) => {
             console.log("ERROR: ", util.inspect(error))
         })      
 }

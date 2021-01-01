@@ -34,7 +34,6 @@ async function createSteps(idg, idsg, riddle_cat) {
     
     // for and from each cluster, get the specified number of locations
     clusters.forEach(clt => {
-
         // get an array without start and final locations
         filteredLocs = shuffle(locations.filter(loc => loc.cluster == clt.cluster && !loc.is_start && !loc.is_final));
 
@@ -117,6 +116,7 @@ function checkMultipleGame(idg, idu) {
             is_completed: true
         })
         .select('game')
+        .lean()
         .populate('game');
 }
 
@@ -127,15 +127,17 @@ async function getTerminatedList(idu) {
             group_captain: idu,
             is_completed: true
         })
-        .populate('game')
-        .select('_id game');
+        .select('_id game')
+        .lean()
+        .populate('game');
+        
 }
 // --------------------------------------------------------------------
 
 
 // set a game session as completed
 async function setCompleted(idsg) {
-    return SingleGame.findByIdAndUpdate(idsg, { is_completed: true });
+    return SingleGame.findByIdAndUpdate(idsg, { is_completed: true }).lean();
 }
 // --------------------------------------------------------------------
 

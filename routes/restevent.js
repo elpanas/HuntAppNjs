@@ -15,7 +15,7 @@ router.post('/', (req, res) => {
                         if (!eventexist) {
                             createEvent(req.body, idu)
                                 .then(() => res.status(200).send())
-                                .catch(() => res.status(400).send())
+                                .catch(err => res.status(400).send(err))
                         } else 
                             res.status(400).send('Error: name already exists');                
                     }) // checkEvent                      
@@ -33,12 +33,11 @@ router.get('/lat/:lat/long/:long', (req, res) => {
             if (idu) 
                 getAllEvents(req.params.lat, req.params.long)
                     .then(result => {
-                        if (result.length > 0)
-                            res.status(200).json(result);
-                        else
-                            res.status(404).send('Events not found');
+                        (result.length > 0)
+                            ? res.status(200).json(result)                       
+                            : res.status(404).send('Events not found');
                     })
-                    .catch((error) => { console.log(error); res.status(400).send(error)})
+                    .catch(err => res.status(400).send(err))
             else 
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send()   
         })

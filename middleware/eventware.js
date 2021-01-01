@@ -21,13 +21,15 @@ async function createEvent(event_data, user_id) {
 // get all events at 20km
 function getAllEvents(lat,long) {  
     return Event.find({
-        location: { 
-            $near: { 
-                $geometry: { type: "Point", coordinates: [lat,long] },                  
-                $maxDistance: 20000
-            }                              
-        } 
-    }).populate('organizer');
+            location: { 
+                $near: { 
+                    $geometry: { type: "Point", coordinates: [lat,long] },                  
+                    $maxDistance: 20000
+                }                              
+            } 
+        })
+        .lean()
+        .populate('organizer');
 }
 
 

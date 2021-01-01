@@ -52,8 +52,8 @@ async function checkLogin(auth) {
     const user = await User.aggregate([
         { $match: 
             { 
-            username: username,
-            password: password 
+                username: username,
+                password: password 
             }
         },              
         {
@@ -68,7 +68,7 @@ async function checkLogin(auth) {
             password: password
             },
             { logged: Date.now() },
-            { new: true });
+            { new: true }).lean();
     }
     else 
         return false;
@@ -91,8 +91,8 @@ async function makeLogin(auth) {
         username: username,
         password: password
         },
-        {   logged: Date.now()  },
-        { new: true });      
+        { logged: Date.now() },
+        { new: true }).lean();      
 }
 
 async function makeLogout(auth) {
@@ -105,8 +105,8 @@ async function makeLogout(auth) {
         username: username,
         password: password
         },
-        {   logged: null  },
-        { new: true });      
+        { logged: null },
+        { new: true }).lean();      
 }
 
 

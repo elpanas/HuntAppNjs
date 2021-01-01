@@ -158,7 +158,7 @@ const locationSchema = Schema({
         type: String, required: true, unique: true
     },
     image_path: {
-        type: String, default: null
+        type: String, default: ''
     },
     description: { 
         type: String, default: null

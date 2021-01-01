@@ -8,16 +8,24 @@ async function createLocations(locs_data) {
 
 async function createLocation(loc_data) {
 
+    const locobj = 
+        { 
+            type: "Point",
+            coordinates: [parseFloat(loc_data.latitude), parseFloat(loc_data.longitude)]
+        };
+        
+    const imagepath = (loc_data.image == '') ? '' : process.cwd() + '/data/locphoto/' + loc_data.image;
+
     const loc = new Location({
         game: loc_data.game_id,
         name: loc_data.name,
-        cluster: loc_data.cluster,
-        location: loc_data.location,
+        cluster: parseInt(loc_data.cluster),
+        location: locobj,
         description: loc_data.description,
-        image_path: loc_data.imagepath,
+        image_path: imagepath,
         hint: loc_data.hint,
-        is_start: loc_data.is_start,
-        is_final: loc_data.is_final
+        is_start: (loc_data.is_start == 'true'),
+        is_final: (loc_data.is_final == 'true')
     });
 
     return await loc.save();
@@ -37,11 +45,14 @@ function getLocations(idg) {
 
 // get all distances between the new place and the others
 function getDistances(locdata) {  
-    const newidg = mongoose.Types.ObjectId(locdata.game_id);
+    const newidg = mongoose.Types.ObjectId(locdata.game_id),
+        lat = parseFloat(locdata.latitude),
+        long = parseFloat(locdata.longitude);
+
     return Location.aggregate([
             { 
                 $geoNear: {                    
-                    near: locdata.location,
+                    near: { type: "Point", coordinates: [lat, long] },
                     query: { game: newidg },
                     distanceField: "distance",
                 } 
@@ -52,10 +63,9 @@ function getDistances(locdata) {
 
 // mean computation among the distances
 function computeMean(distances) {
-    var sum = 0;
-    for( var i = 0; i < distances.length; i++ ){
-        sum += distances[i].distance; //don't forget to add the base
-    }
+    var sum = 0, i = 0;
+    for( i = 0; i < distances.length; i++ )
+        sum += distances[i].distance; // don't forget to add the base
 
     return sum / distances.length;
 }

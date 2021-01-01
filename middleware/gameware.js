@@ -26,27 +26,20 @@ function getGameCategory(idg) {
     return Game.findById(idg).select('riddle_category').lean();
 }
 
-// get infos about the event at the top of a game
-function getGameEvent(idg) {
-    return Game.findById(idg).select('event').populate('event');
-}
-// --------------------------------------------------------------------
-
 // UPDATE
 // set qrcode pdf as created
 function setQrCode(idg) {
-    return Game.findByIdAndUpdate(idg, { qr_created: true });
+    return Game.findByIdAndUpdate(idg, { qr_created: true }).lean();
 }
 
 // set a game as active
 function activateGame(idg) {
-    return Game.findByIdAndUpdate(idg, { active: true });
+    return Game.findByIdAndUpdate(idg, { active: true }).lean();
 }
 // --------------------------------------------------------------------
 
 module.exports.createGame = createGame;
 module.exports.getGameCategory = getGameCategory;
-module.exports.getGameEvent = getGameEvent;
 module.exports.getAllGames = getAllGames;
 module.exports.setQrCode = setQrCode;
 module.exports.activateGame = activateGame;

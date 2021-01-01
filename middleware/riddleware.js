@@ -9,9 +9,9 @@ async function createRiddle(riddle_data) {
         riddle_category: riddle_data.category,
         riddle_type: riddle_data.type,
         riddle_param: riddle_data.param,
-        riddle_image_path: '/src/riddles/' + riddle_data.image,
+        riddle_image_path: process.cwd() + '/src/riddles/' + riddle_data.image,
         riddle_solution: riddle_data.solution,
-        is_final: (riddle_data.final == 'true') ? true : false
+        is_final: (riddle_data.final == 'true')
     });
 
     return await riddle.save();
@@ -27,8 +27,7 @@ async function createRiddles(riddle_data) {
 // create the riddle, joining the text with a parameter
 function generateRiddle(riddle, mylocale, readValue) {
 
-    const locales = fs.readdirSync(process.cwd() + '/src/translation/');
-    
+    const locales = fs.readdirSync(process.cwd() + '/src/translation/');    
     const locale = (locales.includes(mylocale)) ? mylocale : 'en_US';
 
     PO.load('src/translation/' + locale + '/LC_MESSAGES/riddles.po', (err, po) => { 

@@ -21,7 +21,7 @@ function getClusterInfo(idg, clt) {
 
 // UPDATE
 async function addExtractedLoc(clt_data) {
-    return await Cluster.findByIdAndUpdate(clt_data.idc, { nr_extracted_loc: clt_data.stepsnr });
+    return await Cluster.findByIdAndUpdate(clt_data.idc, { nr_extracted_loc: clt_data.stepsnr }).lean();
 }
 // --------------------------------------------------------------------
 

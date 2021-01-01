@@ -28,11 +28,7 @@ router.get('/event/:ide', (req, res) => {
         .then(idu => {
             if(idu)
                 getAllGames(req.params.ide)
-                    .then(result => {
-                        (result.length > 0)
-                           ? res.status(200).json(result)
-                           : res.status(404).send('No games found'); 
-                    })
+                    .then(result => { (result.length > 0) ? res.status(200).json(result) : res.status(404).send('No games found'); })
                     .catch(err => res.status(404).send(err))
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send()
@@ -59,12 +55,8 @@ router.put('/qrc', (req, res) => {
         .then((idu) => {
             if(idu)
                 setQrCode(req.body.idg)
-                    .then((result) => {
-                        (result.length != 0)
-                           ? res.status(200).send()
-                           : res.status(404).send('Game was not found');
-                    })
-                    .catch((error) => res.status(400).send(error));
+                    .then(result => { (result.length != 0) ? res.status(200).send() : res.status(404).send('Game was not found'); })
+                    .catch(err => res.status(400).send(err));
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send()
         })

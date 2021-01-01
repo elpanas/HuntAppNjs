@@ -7,7 +7,7 @@ const router = express.Router();
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './src/riddles');
+        cb(null, process.cwd() + '/src/riddles');
     },
     filename: (req, file, cb) => {
         cb(null, file.originalname);
@@ -23,16 +23,13 @@ const storage = multer.diskStorage({
 var upload = multer({ storage: storage, fileFilter: imgFilter });
 
 router.post('/', upload.single('rphoto'), (req, res) => {
-    try {
-        checkUser(req.headers.authorization)
-            .then(idu => {
-                (idu) 
-                    ? createRiddle(req.body).then(() => res.status(200).send())            
-                    : res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();
-            })
-    } catch(err) {
-      res.status(400).send(err);
-    }
+    checkUser(req.headers.authorization)
+        .then(idu => {
+            (idu) 
+                ? createRiddle(req.body).then(() => res.status(200).send())            
+                : res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send()
+        })
+        .catch(err => res.status(400).send(err))    
 });
 
 // CREATE
@@ -41,8 +38,10 @@ router.post('/', (req, res) => {
         .then(idu => {
             if (idu)
                 createRiddle(req.body)
-                    .then((result) => (result) ? res.status(200).send() : res.status(400).send())
-                    .catch(err => res.status(400).send(err))    
+                    .then(result => (result) ? res.status(200).send() : res.status(400).send())
+                    .catch(err => res.status(400).send(err))  
+            else 
+                res.status(400).send()
         })    
 });
 // --------------------------------------------------------------------
@@ -51,12 +50,12 @@ router.post('/', (req, res) => {
 // READ
 router.get('/:id', (req, res) => {
     generateRiddle(req.params.id)
-        .then((result) => {
+        .then(result => {
             (result.length != 0)
                 ? res.status(200).json(result)
                 : res.status(404).send('Riddle was not found');
         })
-        .catch((error) => { res.status(404).send(error) })
+        .catch(err => res.status(404).send(err))
 });
 // --------------------------------------------------------------------
 

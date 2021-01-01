@@ -34,17 +34,14 @@ const router = express.Router();
 // POST
 // Upload photo
 router.post('/gphoto', upload.single('selfie'), (req, res) => {
-    try {
-        checkUser(req.headers.authorization)
-        .then((idu) => {
-            if (idu) 
-                setPhoto(req.body.ida, req.body.img).then(() => res.status(200).send())            
-            else
-                res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();
+    checkUser(req.headers.authorization)
+        .then(idu => {
+            (idu) 
+                ? setPhoto(req.body.ida, req.body.img).then(() => res.status(200).send()) 
+                : res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();
         })
-    }catch(err) {
-      res.status(400).send(err);
-    }
+        .catch(err => res.status(400).send(err));
+
 });
 // --------------------------------------------------------------------
 
@@ -52,7 +49,7 @@ router.post('/gphoto', upload.single('selfie'), (req, res) => {
 // get the location info
 router.get('/sgame/:idsg', (req, res) => { // recupera l'ultimo step
     checkUser(req.headers.authorization)
-        .then((idu) => {
+        .then(idu => {
             if (idu) {
                 getActionLoc(req.params.idsg)
                     .then(result => res.status(200).json(result))
@@ -98,10 +95,11 @@ router.get('/selfies/:idsg', (req, res) => {
 // qrcode checked when a location is reached
 router.put('/reached/:ida', (req, res) => { 
     checkUser(req.headers.authorization)
-        .then((idu) => {
+        .then(idu => {
             if (idu) 
                 setReached(req.params.ida) // after qrcode scan
-                    .then(() => res.status(200).send());                            
+                    .then(() => res.status(200).send()) 
+                    .catch(err => res.status(400).send(err));                          
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Area Riservata"').send();
         })    
@@ -110,23 +108,23 @@ router.put('/reached/:ida', (req, res) => {
 // when a riddle is solved
 router.put('/solution', (req, res) => { // recupera l'ultimo step
     checkUser(req.headers.authorization)
-        .then((idu) => {
+        .then(idu => {
             if (idu) {
                 checkRiddle(req.body)
-                    .then((solok) => {                        
+                    .then(solok => {                        
                         if (solok) 
                             setSolved(req.body.ida)
                                 .then(() => res.status(200).send())
-                                .catch((err) => res.status(400).send(err));                   
+                                .catch(err => res.status(400).send(err));                   
                         else
                             res.status(400).send();
                     })
-                    .catch((err) => res.status(400).send(err))
+                    .catch(err => res.status(400).send(err))
             }                
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Area Riservata"').send();
         })  
-        .catch((err) => res.status(400).send(err))  
+        .catch(err => res.status(400).send(err))  
 });
 // --------------------------------------------------------------------
 
