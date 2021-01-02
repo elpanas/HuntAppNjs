@@ -54,9 +54,6 @@ const eventSchema = Schema({
         },
         coordinates: [Number]
     },
-    max_distance: { // radius in mt
-        type: Number, default: 5000
-    },
     end_date: {
         type: Date, default: null
     }

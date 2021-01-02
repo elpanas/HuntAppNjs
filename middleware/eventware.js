@@ -9,7 +9,7 @@ async function createEvent(event_data, user_id) {
         max_locations: event_data.maxloc,
         min_avg_distance: event_data.avgloc,
         organizer: user_id,
-        max_distance: event_data.maxdist
+        location: event_data.location
     });
 
     // salva il documento
