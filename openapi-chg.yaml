@@ -1,0 +1,346 @@
+---
+swagger: "2.0"
+info:
+  description: Description
+  title: CHG API
+host: localhost:3000
+basePath: /
+tags: []
+schemes:
+- http
+consumes: []
+produces: []
+paths:
+  /gphoto:
+    post:
+      tags: []
+      description: ""
+      parameters: []
+      responses: {}
+  /sgame/{idsg}:
+    get:
+      tags: []
+      description: ""
+      parameters:
+      - name: idsg
+        in: path
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+  /riddle/{ida}/{locale}:
+    get:
+      tags: []
+      description: ""
+      parameters:
+      - name: ida
+        in: path
+        required: true
+      - name: locale
+        in: path
+        required: true
+      responses:
+        "200":
+          description: OK
+  /selfies/{idsg}:
+    get:
+      tags: []
+      description: ""
+      parameters:
+      - name: idsg
+        in: path
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+  /reached/{ida}:
+    put:
+      tags: []
+      description: ""
+      parameters:
+      - name: ida
+        in: path
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+  /solution:
+    put:
+      tags: []
+      description: ""
+      parameters: []
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+  /{idg}:
+    get:
+      tags: []
+      description: ""
+      parameters:
+      - name: idg
+        in: path
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+  /game/{idg}/clt/{clt}:
+    get:
+      tags: []
+      description: ""
+      parameters:
+      - name: idg
+        in: path
+        required: true
+      - name: clt
+        in: path
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+  /:
+    post:
+      tags: []
+      description: ""
+      parameters: []
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+  /lat/{lat}/long/{long}:
+    get:
+      tags: []
+      description: ""
+      parameters:
+      - name: lat
+        in: path
+        required: true
+      - name: long
+        in: path
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+  /event/{ide}:
+    get:
+      tags: []
+      description: ""
+      parameters:
+      - name: ide
+        in: path
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+  /activate/{idg}:
+    get:
+      tags: []
+      description: ""
+      parameters:
+      - name: idg
+        in: path
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+    put:
+      tags: []
+      description: ""
+      parameters:
+      - name: idg
+        in: path
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+  /qrc:
+    put:
+      tags: []
+      description: ""
+      parameters: []
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+  /pdf/{idg}:
+    get:
+      tags: []
+      description: ""
+      parameters:
+      - name: idg
+        in: path
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+  /game/{idg}:
+    get:
+      tags: []
+      description: ""
+      parameters:
+      - name: idg
+        in: path
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+  /{id}:
+    get:
+      tags: []
+      description: ""
+      parameters:
+      - name: id
+        in: path
+        required: true
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Not Found
+  /multiple/{idg}:
+    get:
+      tags: []
+      description: ""
+      parameters:
+      - name: idg
+        in: path
+        required: true
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+  /pdf/{idsg}:
+    get:
+      tags: []
+      description: ""
+      parameters:
+      - name: idsg
+        in: path
+        required: true
+      responses:
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+  /terminated:
+    get:
+      tags: []
+      description: ""
+      parameters: []
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+  /completed:
+    put:
+      tags: []
+      description: ""
+      parameters: []
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+  /chklogin:
+    get:
+      tags: []
+      description: ""
+      parameters: []
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+  /login:
+    put:
+      tags: []
+      description: ""
+      parameters: []
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+  /logout:
+    put:
+      tags: []
+      description: ""
+      parameters: []
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+securityDefinitions: {}
+definitions: {}
