@@ -17,6 +17,10 @@
     "pofile": "^1.1.0",
     "prince": "^1.8.4",
     "qrcode": "^1.4.4",
-    "string-multiple-replace": "^1.0.1"
+    "string-multiple-replace": "^1.0.1",
+    "swagger-autogen": "^2.3.5"
+  },
+  "scripts": {
+    "swagger-autogen": "node ./swaggergen.js"
   }
 }
