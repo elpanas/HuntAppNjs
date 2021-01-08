@@ -9,7 +9,7 @@ async function createRiddle(riddle_data) {
         riddle_category: riddle_data.category,
         riddle_type: riddle_data.type,
         riddle_param: riddle_data.param,
-        riddle_image_path: process.cwd() + '/src/riddles/' + riddle_data.image,
+        riddle_image_path: '/src/riddles/' + riddle_data.image,
         riddle_solution: riddle_data.solution,
         is_final: (riddle_data.final == 'true')
     });

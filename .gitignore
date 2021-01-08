@@ -7,6 +7,7 @@
 /data/gamephoto/*
 /data/locphoto/*
 /html2pdf/pdfs
+/swaggergen.js
 .vscode/settings.json
 .env
 
