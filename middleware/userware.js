@@ -49,11 +49,14 @@ async function checkLogin(auth) {
     const buf = Buffer.from(tmp[1], 'base64').toString(); // creo un buffer e lo avviso che l'input e' in base64
     const [username, password] = buf.split(':');      // divido auth in base a ':'
 
+    const user64 = Buffer(username).toString('base64'),
+        psw64 = Buffer(password).toString('base64');
+
     const user = await User.aggregate([
         { $match: 
             { 
-                username: username,
-                password: password 
+                username: user64,
+                password: psw64
             }
         },              
         {
@@ -64,8 +67,8 @@ async function checkLogin(auth) {
 
     if (user[0].logStatus < (60*60000)) {
         return await User.findOneAndUpdate({
-            username: username,
-            password: password
+            username: user64,
+            password: psw64
             },
             { logged: Date.now() },
             { new: true }).lean();
@@ -88,8 +91,8 @@ async function makeLogin(auth) {
     const [username, password] = buf.split(':');      // divido auth in base a ':'
     
     return await User.findOneAndUpdate({
-        username: username,
-        password: password
+        username: Buffer(username).toString('base64'),
+        password: Buffer(password).toString('base64')
         },
         { logged: Date.now() },
         { new: true }).lean();      
@@ -102,8 +105,8 @@ async function makeLogout(auth) {
     const [username, password] = buf.split(':');      // divido auth in base a ':'
     
     return await User.findOneAndUpdate({
-        username: username,
-        password: password
+        username: Buffer(username).toString('base64'),
+        password: Buffer(password).toString('base64')
         },
         { logged: null },
         { new: true }).lean();      
