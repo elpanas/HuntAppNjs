@@ -32,8 +32,8 @@ async function checkUser(auth) {
     const [username, password] = buf.split(':');      // divido auth in base a ':'
 
     const result = await User.findOne({
-        username: username,
-        password: password
+        username: Buffer(username).toString('base64'),
+        password: Buffer(password).toString('base64')
     }).lean() // criteri di ricerca         
 
     if (result)
