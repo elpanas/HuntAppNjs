@@ -78,19 +78,14 @@ router.get('/pdf/:idsg', (req, res) => {
 
 
 router.get('/terminated', (req, res) => {
-    try{
     checkUser(req.headers.authorization)
         .then(idu => {
             if (idu)            
                 getFinishedList(idu)
-                    .then(result => (result) ? res.status(200).json(result) : res.status(400).send())
-                    .catch(() => res.status(400).send())
+                    .then(result => (result) ? res.status(200).json(result) : res.status(400).send())                    
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();
-        })  
-    } catch {
-        res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send()
-    } 
+        })      
 });
 // --------------------------------------------------------------------
 
