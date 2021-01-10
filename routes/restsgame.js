@@ -81,9 +81,9 @@ router.get('/terminated', (req, res) => {
     checkUser(req.headers.authorization)
         .then(idu => {
             if (idu)            
-                getTerminatedList(idu)
-                    .then(result => res.status(200).json(result))
-                    .catch(err => res.status(400).send(err))
+                getFinishedList(idu)
+                    .then(result => (result) ? res.status(200).json(result) : res.status(400).send())
+                    .catch(() => res.status(400).send())
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();
         })    

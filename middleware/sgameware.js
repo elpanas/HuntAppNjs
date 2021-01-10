@@ -121,7 +121,7 @@ function checkMultipleGame(idg, idu) {
 }
 
 // get a list of finished games
-async function getTerminatedList(idu) {
+async function getFinishedList(idu) {
     return await SingleGame.find(
         {
             group_captain: idu,
@@ -145,5 +145,5 @@ module.exports.createSingleGame = createSingleGame;
 module.exports.createSteps = createSteps;
 module.exports.checkGroup = checkGroup;
 module.exports.checkMultipleGame = checkMultipleGame;
-module.exports.getTerminatedList = getTerminatedList;
+module.exports.getFinishedList = getFinishedList;
 module.exports.setCompleted = setCompleted;
