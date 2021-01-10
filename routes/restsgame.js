@@ -4,7 +4,7 @@ const express = require('express'),
     checkGroup, 
     setCompleted,
     checkMultipleGame,
-    getTerminatedList} = require('../middleware/sgameware'),
+    getFinishedList } = require('../middleware/sgameware'),
     { checkUser } =  require('../middleware/userware'),  
     { generateCertPdf } = require('../middleware/pdfware');
 const router = express.Router();
