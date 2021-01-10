@@ -32,8 +32,8 @@ async function checkUser(auth) {
     const [username, password] = buf.split(':');      // divido auth in base a ':'
 
     const result = await User.findOne({
-        username: Buffer(username).toString('base64'),
-        password: Buffer(password).toString('base64')
+        username: username,
+        password: password
     }).lean() // criteri di ricerca         
 
     if (result)
@@ -49,14 +49,11 @@ async function checkLogin(auth) {
     const buf = Buffer.from(tmp[1], 'base64').toString(); // creo un buffer e lo avviso che l'input e' in base64
     const [username, password] = buf.split(':');      // divido auth in base a ':'
 
-    const user64 = Buffer(username).toString('base64'),
-        psw64 = Buffer(password).toString('base64');
-
     const user = await User.aggregate([
         { $match: 
             { 
-                username: user64,
-                password: psw64
+                username: username,
+                password: password
             }
         },              
         {
@@ -67,8 +64,8 @@ async function checkLogin(auth) {
 
     if (user[0].logStatus < (60*60000)) {
         return await User.findOneAndUpdate({
-            username: user64,
-            password: psw64
+            username: username,
+            password: password
             },
             { logged: Date.now() },
             { new: true }).lean();
@@ -85,8 +82,8 @@ async function makeLogin(auth) {
     const [username, password] = buf.split(':');      // divido auth in base a ':'
     
     return await User.findOneAndUpdate({
-        username: Buffer(username).toString('base64'),
-        password: Buffer(password).toString('base64')
+        username: username,
+        password: password
         },
         { logged: Date.now() },
         { new: true }).lean();      
@@ -99,8 +96,8 @@ async function makeLogout(auth) {
     const [username, password] = buf.split(':');      // divido auth in base a ':'
     
     return await User.findOneAndUpdate({
-        username: Buffer(username).toString('base64'),
-        password: Buffer(password).toString('base64')
+        username: username,
+        password: password
         },
         { logged: null },
         { new: true }).lean();      

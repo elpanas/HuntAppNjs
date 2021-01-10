@@ -37,7 +37,6 @@ router.get('/lat/:lat/long/:long', (req, res) => {
                             ? res.status(200).json(result)                       
                             : res.status(404).send('Events not found');
                     })
-                    //.catch(err => res.status(400).send(err))
             else 
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send()   
         })
