@@ -11,8 +11,8 @@ const express = require('express'), // framework nodejs
       restuser = require('./routes/restuser'), // route user
       resttest = require('./testing/test'), // route test
       //restutility = require('./utility/loadRiddles'), // route riddles
-      url = process.env.DB_LOC_URI; // local db
-// url = process.env.DB_URI; // remote db connection string
+      //url = process.env.DB_LOC_URI; // local db
+      url = process.env.DB_URI; // remote db connection string
 
 const app = express();
 

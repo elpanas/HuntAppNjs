@@ -74,13 +74,7 @@ async function checkLogin(auth) {
             { new: true }).lean();
     }
     else 
-        return false;
-
-    /*
-    return await User.findOne({
-        username: username,
-        password: password
-    })*/// criteri di ricerca         
+        return false;       
 }
 // --------------------------------------------------------------------
 
