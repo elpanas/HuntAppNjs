@@ -7,8 +7,8 @@ async function createUser(user_data) {
     const user = new User({
         first_name: user_data.first_name,
         full_name: user_data.full_name,
-        username: user_data.username, // Buffer.from(user_data.username, 'base64').toString(),
-        password: user_data.password, // Buffer.from(user_data.password, 'base64').toString(),
+        username: Buffer.from(user_data.username, 'base64').toString(),
+        password: Buffer.from(user_data.password, 'base64').toString(),
         is_admin: user_data.is_admin
     });
 
