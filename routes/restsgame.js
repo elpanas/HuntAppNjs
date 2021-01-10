@@ -86,7 +86,8 @@ router.get('/terminated', (req, res) => {
                     .catch(() => res.status(400).send())
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();
-        })    
+        }) 
+        .catch(() => res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send())   
 });
 // --------------------------------------------------------------------
 
