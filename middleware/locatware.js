@@ -14,7 +14,7 @@ async function createLocation(loc_data) {
             coordinates: [parseFloat(loc_data.latitude), parseFloat(loc_data.longitude)]
         };
         
-    const imagepath = (loc_data.image == '') ? '' : process.cwd() + '/data/locphoto/' + loc_data.image;
+    const imagepath = (loc_data.image == '') ? '' : 'data/locphoto/' + loc_data.image;
 
     const loc = new Location({
         game: loc_data.game_id,
