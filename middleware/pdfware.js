@@ -66,13 +66,11 @@ async function generateQrPdf(idg) {
             setQrCode(idg);
             rimraf.sync(tmpqrc);
             rimraf.sync(tmppdf);
-            return true;
         }, (error) => {
             console.log("ERROR: ", util.inspect(error));
-            return false;
         });
 
-    return false;
+    return true;
 
 }
 
