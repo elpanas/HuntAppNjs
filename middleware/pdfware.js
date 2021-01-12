@@ -69,9 +69,6 @@ async function generateQrPdf(idg) {
         }, (error) => {
             console.log("ERROR: ", util.inspect(error));
         });
-
-    return true;
-
 }
 
 // support generalization function to the previous one
