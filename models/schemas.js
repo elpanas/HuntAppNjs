@@ -57,7 +57,7 @@ const eventSchema = Schema({
     end_date: {
         type: Date, default: null
     }
-}).index( { location : "2dsphere", name: 1 } );
+}).index( { location : "2dsphere" } );
 
 const Event = mongoose.model('event', eventSchema);
 // --------------------------------------------------------------------
@@ -169,7 +169,7 @@ const locationSchema = Schema({
     is_final: {
         type: Boolean, default: false
     }
-}).index( { game: 1, location : "2dsphere" } );
+}).index( { location : "2dsphere", game: 1 } );
 
 const Location = mongoose.model('location', locationSchema);
 // --------------------------------------------------------------------
