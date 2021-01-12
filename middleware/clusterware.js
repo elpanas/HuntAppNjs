@@ -1,8 +1,8 @@
 const { Cluster } = require('../models/schemas');
 
 // CREATE
-async function createCluster(idg) {
-    return await Cluster.create({ game: idg });
+async function createCluster(idg, cluster_nr) {
+    return await Cluster.create({ game: idg, cluster: cluster_nr});
 }
 // --------------------------------------------------------------------
 

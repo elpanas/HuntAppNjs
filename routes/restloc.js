@@ -57,15 +57,13 @@ router.post('/', upload.single('lphoto'), (req, res) => {
                         is_mean = (distances.length == 1 && distances[0].distance >= avgdist)
                             ? true
                             : (computeMean(distances) >= avgdist);
-                    }   
-
-                    console.log(is_mean);
+                    }                       
 
                     if (start || is_mean)                        
                         createLocation(req.body)
                             .then(result => {                                 
                                 if (result._id) {
-                                    if (req.body.new_cluster == 'true') createCluster(result.game);
+                                    if (req.body.new_cluster == 'true') createCluster(result.game, result.cluster);
                                     if (result.is_final) generateQrPdf(result.game); 
                                     res.status(200).send(); 
                                 }

@@ -181,7 +181,7 @@ const clusterSchema = Schema({
     }, 
     cluster: { type: Number, default: 1 },
     nr_extracted_loc: { type: Number, default: 1 }
-});
+}).index( { game: 1, cluster: 1}, { unique: true } );
 
 const Cluster = mongoose.model('cluster', clusterSchema);
 // --------------------------------------------------------------------
