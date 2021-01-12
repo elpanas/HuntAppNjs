@@ -85,10 +85,14 @@ router.post('/', upload.single('lphoto'), (req, res) => {
 router.get('/pdf/:idg', (req, res) => {  
     checkUser(req.headers.authorization)
         .then(idu => {            
-            if (idu)     
-                res.download(process.cwd() + '/html2pdf/pdfs/' + req.params.idg + '-file.pdf',
-                            req.params.idg + '-file.pdf',
-                            err => console.log('Error: ' + err));
+            if (idu)
+                generateQrPdf(req.params.idg)
+                    .then(result => {
+                        if (result)
+                            res.download(process.cwd() + '/html2pdf/pdfs/' + req.params.idg + '-file.pdf',
+                                        req.params.idg + '-file.pdf',
+                                        err => console.log('Error: ' + err));
+                    });
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();
         })

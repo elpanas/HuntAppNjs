@@ -1,4 +1,4 @@
-const { Location, Actions, SingleGame } = require('../models/schemas'),
+const { Location, Actions } = require('../models/schemas'),
     mongoose = require('mongoose'),
     QRCode = require('qrcode'),
     fs = require('fs'),
@@ -7,7 +7,8 @@ const { Location, Actions, SingleGame } = require('../models/schemas'),
     millisec = require('millisec'),
     rimraf = require("rimraf"),
     multiReplace = require('string-multiple-replace'),
-    dateFormat = require("dateformat");
+    dateFormat = require("dateformat"),
+    { setQrCode } = require('./gameware');
 
 // create the pdf file with qrcodes and related infos
 async function generateQrPdf(idg) {  
@@ -62,11 +63,17 @@ async function generateQrPdf(idg) {
         .execute()
         .then(() => {
             console.log("OK: done");
+            setQrCode(idg);
             rimraf.sync(tmpqrc);
             rimraf.sync(tmppdf);
+            return true;
         }, (error) => {
-            console.log("ERROR: ", util.inspect(error))
-        })      
+            console.log("ERROR: ", util.inspect(error));
+            return false;
+        });
+
+    return false;
+
 }
 
 // support generalization function to the previous one
