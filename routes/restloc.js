@@ -86,7 +86,7 @@ router.get('/pdf/:idg', (req, res) => {
     checkUser(req.headers.authorization)
         .then(async idu => {            
             if (idu) {
-                await generateQrPdf(req.params.idg);                                          
+                generateQrPdf(req.params.idg);                                          
                 res.download(process.cwd() + '/html2pdf/pdfs/' + req.params.idg + '-file.pdf',
                             req.params.idg + '-file.pdf',
                             err => console.log('Error: ' + err));
