@@ -53,6 +53,7 @@ function getDistances(locdata) {
                     near: { type: "Point", coordinates: [lat, long] },
                     query: { game: newidg },
                     distanceField: "distance",
+                    key: 'location'
                 } 
             },
             { $project: { _id: 0, distance: 1 } }

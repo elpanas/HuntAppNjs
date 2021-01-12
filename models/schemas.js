@@ -169,7 +169,7 @@ const locationSchema = Schema({
     is_final: {
         type: Boolean, default: false
     }
-}).index( { location : "2dsphere", game: 1 } );
+}).index( { location: "2dsphere", game: 1 } );
 
 const Location = mongoose.model('location', locationSchema);
 // --------------------------------------------------------------------
