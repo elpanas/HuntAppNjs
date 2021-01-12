@@ -24,7 +24,7 @@ const userSchema = Schema({
     logged: {
         type: Date, default: Date.now()
     }
-});
+}).index({ username: 1, password: 1 });
 
 const User = mongoose.model('user', userSchema);
 // --------------------------------------------------------------------
@@ -57,7 +57,7 @@ const eventSchema = Schema({
     end_date: {
         type: Date, default: null
     }
-}).index( { location : "2dsphere" } );
+}).index( { location : "2dsphere", name: 1 } );
 
 const Event = mongoose.model('event', eventSchema);
 // --------------------------------------------------------------------
@@ -88,7 +88,7 @@ const gameSchema = Schema({
     is_open: {
         type: Boolean, default: false
     }
-});
+}).index({ event: 1 });
 
 const Game = mongoose.model('game', gameSchema);
 // --------------------------------------------------------------------
@@ -117,7 +117,7 @@ const singleGameSchema = Schema({ // when game is booted
     is_completed: {
         type: Boolean, default: false
     }
-});
+}).index({ game: 1, group_captain: 1, is_completed: 1 });
 
 const SingleGame = mongoose.model('singlegame', singleGameSchema);
 // --------------------------------------------------------------------
@@ -132,7 +132,7 @@ const actionsSchema = Schema({
     riddle: { type: Schema.Types.ObjectId, ref: 'riddle', default: null },
     solvedOn: { type: Date, default: null },
     group_photo: { type: String, default: null }
-});
+}).index({ sgame: 1 });
 
 const Actions = mongoose.model('actions', actionsSchema);
 // --------------------------------------------------------------------
@@ -169,7 +169,7 @@ const locationSchema = Schema({
     is_final: {
         type: Boolean, default: false
     }
-}).index( { location : "2dsphere" } );
+}).index( { game: 1, location : "2dsphere" } );
 
 const Location = mongoose.model('location', locationSchema);
 // --------------------------------------------------------------------
@@ -181,7 +181,7 @@ const clusterSchema = Schema({
     }, 
     cluster: { type: Number, default: 1 },
     nr_extracted_loc: { type: Number, default: 1 }
-}).index( { game: 1, cluster: 1}, { unique: true } );
+}).index( { game: 1, cluster: 1 }, { unique: true } );
 
 const Cluster = mongoose.model('cluster', clusterSchema);
 // --------------------------------------------------------------------
@@ -208,7 +208,7 @@ const riddleSchema = Schema({
     is_final: {
         type: Boolean, default: false
     }
-});
+}).index({ riddle_solution: 1, riddle_category: 1 });
 
 const Riddle = mongoose.model('riddle', riddleSchema);
 // --------------------------------------------------------------------
