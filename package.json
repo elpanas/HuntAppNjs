@@ -12,13 +12,13 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "millisec": "^0.2.0",
-    "mongoose": "^5.11.10",
+    "mongoose": "^5.11.11",
     "multer": "^1.4.2",
     "pofile": "^1.1.0",
-    "prince": "^1.8.4",
+    "prince": "^1.8.6",
     "qrcode": "^1.4.4",
     "string-multiple-replace": "^1.0.1",
-    "swagger-autogen": "^2.3.5"
+    "swagger-autogen": "^2.3.6"
   },
   "scripts": {
     "swagger-autogen": "node ./swaggergen.js"

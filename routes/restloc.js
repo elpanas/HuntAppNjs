@@ -64,7 +64,7 @@ router.post('/', upload.single('lphoto'), (req, res) => {
                             .then(result => {                                 
                                 if (result._id) {
                                     if (req.body.new_cluster == 'true') createCluster(result.game, result.cluster);
-                                    if (result.is_final) generateQrPdf(result.game); 
+                                    //if (result.is_final) generateQrPdf(result.game); 
                                     res.status(200).send(); 
                                 }
                                 else res.status(400).send();
