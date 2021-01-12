@@ -4,8 +4,7 @@ var PO = require('pofile');
 
 // CREATE RIDDLE
 async function createRiddle(riddle_data) {
-
-    const riddle = new Riddle({
+    return await Riddle.create({
         riddle_category: riddle_data.category,
         riddle_type: riddle_data.type,
         riddle_param: riddle_data.param,
@@ -13,8 +12,6 @@ async function createRiddle(riddle_data) {
         riddle_solution: riddle_data.solution,
         is_final: (riddle_data.final == 'true')
     });
-
-    return await riddle.save();
 }
 
 /*

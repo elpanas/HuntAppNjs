@@ -2,8 +2,7 @@ const { Event } = require('../models/schemas');
 
 // CREATE EVENT
 async function createEvent(event_data, user_id) {
-
-    const event = new Event({
+    return await Event.create({
         name: event_data.name,
         min_locations: event_data.minloc,
         max_locations: event_data.maxloc,
@@ -11,9 +10,6 @@ async function createEvent(event_data, user_id) {
         organizer: user_id,
         location: event_data.location
     });
-
-    // salva il documento
-    return await event.save();
 }
 // --------------------------------------------------------------------
 

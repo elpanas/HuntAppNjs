@@ -16,7 +16,7 @@ async function createLocation(loc_data) {
         
     const imagepath = (loc_data.image == '') ? '' : 'data/locphoto/' + loc_data.image;
 
-    const loc = new Location({
+    return await Location.create({
         game: loc_data.game_id,
         name: loc_data.name,
         cluster: parseInt(loc_data.cluster),
@@ -27,8 +27,6 @@ async function createLocation(loc_data) {
         is_start: (loc_data.is_start == 'true'),
         is_final: (loc_data.is_final == 'true')
     });
-
-    return await loc.save();
 }
 // --------------------------------------------------------------------
 

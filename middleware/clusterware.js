@@ -2,10 +2,7 @@ const { Cluster } = require('../models/schemas');
 
 // CREATE
 async function createCluster(idg) {
-
-    const cluster = new Cluster({ game: idg });
-
-    return await cluster.save();
+    return await Cluster.create({ game: idg });
 }
 // --------------------------------------------------------------------
 

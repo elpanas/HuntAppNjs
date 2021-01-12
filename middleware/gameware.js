@@ -3,6 +3,8 @@ const { Game } = require('../models/schemas');
 // CREATE
 async function createGame(game_data) {
 
+    return await Game.create(game_data);
+    /*
     const game = new Game({
         event: game_data.event_id,
         name: game_data.name,
@@ -12,6 +14,7 @@ async function createGame(game_data) {
     });
 
     return await game.save();
+    */
 }
 // --------------------------------------------------------------------
 

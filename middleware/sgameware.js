@@ -2,7 +2,7 @@ const { SingleGame, Riddle, Actions, Location, Cluster } = require('../models/sc
 
 // ----- CREATE -----
 async function createSingleGame(single_data, idu) {
-    const sgame = new SingleGame({
+    return await SingleGame.create({
         game: single_data.game_id,                  
         group_name: single_data.group_name,
         group_captain: idu,
@@ -10,8 +10,6 @@ async function createSingleGame(single_data, idu) {
         group_flag: single_data.group_flag
         //group_photo_path: single_data.group_photo_path
     });
-    
-    return await sgame.save();
 }
 
 // generate random steps on the 
