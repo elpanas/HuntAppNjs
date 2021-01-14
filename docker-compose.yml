@@ -26,7 +26,6 @@ services:
       ME_CONFIG_MONGODB_ADMINPASSWORD: password  
       ME_CONFIG_MONGODB_SERVER: mongodb
       ME_CONFIG_SITE_SSL_ENABLED: true
-
 volumes:
   db-data:
     driver: local
