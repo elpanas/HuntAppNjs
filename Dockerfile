@@ -1,8 +1,16 @@
 FROM node:12.18-alpine
-ENV NODE_ENV=production
-WORKDIR /usr/src/app
+
+ENV NODE_ENV=production \
+    MONGODB_URI="mongodb://admin:password@mongodb:27017"
+
+RUN mkdir -p /home/app
+
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
+
 RUN npm install --production --silent && mv node_modules ../
-COPY . .
+
+COPY . /home/app
+
 EXPOSE 3000
-CMD ["node", "server.js"]
+
+CMD ["node", "/home/app/server.js"]
