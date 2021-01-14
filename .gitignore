@@ -4,9 +4,9 @@
 /HuntAppNjs.zip
 /node_modules
 /obj
-/data/gamephoto/*
-/data/locphoto/*
-/html2pdf/pdfs
+#/data/gamephoto/*.jpg
+#/data/locphoto/*.jpg
+#/html2pdf/pdfs/*.pdf
 /swaggergen.js
 .vscode/settings.json
 .env
