@@ -6,6 +6,8 @@
   "author": {
     "name": "Luca Panariello"
   },
+  "repository": "https://github.com/elpanas/HuntAppNjs",
+  "license": "SEE LICENSE IN LICENSE",
   "dependencies": {
     "core-js": "^3.8.2",
     "dateformat": "^4.4.1",
