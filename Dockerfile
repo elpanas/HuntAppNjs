@@ -1,7 +1,7 @@
 FROM node:12.18-alpine
 
 ENV NODE_ENV=production \
-    MONGODB_URI="mongodb://admin:password@mongodb:27017"
+    DB_URI="mongodb://admin:password@mongodb:27017"
 
 RUN mkdir -p /home/app
 
