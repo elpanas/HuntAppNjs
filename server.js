@@ -12,14 +12,21 @@ const express = require('express'), // framework nodejs
       resttest = require('./testing/test'), // route test
       //restutility = require('./utility/loadRiddles'), // route riddles
       //url = process.env.DB_LOC_URI; // local db
-      url = process.env.DB_URI; // remote db connection string
+      url = process.env.MONGODB_URI; // remote db connection string
 
 const app = express();
 
 app.use(express.json()); // built-in middleware
 
+const connOpts = { 
+    useNewUrlParser: true, 
+    useUnifiedTopology: true, 
+    useFindAndModify: false, 
+    useCreateIndex: true 
+    }
+
 // connection to db
-mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
+mongoose.connect(url, connOpts)
     .then(() => console.log('Connected to MongoDB...'))
     .catch(err => console.error('Could not connect to MongoDB...', err));
 
