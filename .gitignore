@@ -8,6 +8,6 @@
 #/data/locphoto/*.jpg
 #/html2pdf/pdfs/*.pdf
 /swaggergen.js
+#/docker-compose.yml
 .vscode/settings.json
 .env
-

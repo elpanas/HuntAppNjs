@@ -12,8 +12,8 @@ const { Location, Actions } = require('../models/schemas'),
 
 // create the pdf file with qrcodes and related infos
 async function generateQrPdf(idg) {  
-    const tmpqrc = process.cwd() + 'html2pdf/temp/qrcodes/' + idg,
-        tmppdf = process.cwd() + 'html2pdf/temp/templates/' + idg,
+    const tmpqrc = process.cwd() + 'html2pdf/temp/qrcodes/' + idg + '/',
+        tmppdf = process.cwd() + 'html2pdf/temp/templates/' + idg + '/',
         dirpdf = process.cwd() + 'html2pdf/pdfs/',
         dirimg = process.cwd() + 'html2pdf/images/',
         dirtemplate1 = process.cwd() + 'html2pdf/template1.html',
@@ -23,9 +23,9 @@ async function generateQrPdf(idg) {
         qrfilename,
         pathinputs = [];
     console.log(fs.existsSync(process.cwd() + 'html2pdf/temp/qrcodes/'));
-    if(!fs.existsSync(tmpqrc)) fs.mkdirSync(tmpqrc);
-    if(!fs.existsSync(tmppdf)) fs.mkdirSync(tmppdf);
-    if(!fs.existsSync(dirpdf)) fs.mkdirSync(dirpdf);    
+    if(!fs.existsSync(tmpqrc)) fs.mkdirSync(tmpqrc, { recursive: true });
+    if(!fs.existsSync(tmppdf)) fs.mkdirSync(tmppdf, { recursive: true });
+    if(!fs.existsSync(dirpdf)) fs.mkdirSync(dirpdf, { recursive: true });    
 
     const locations = await getLocations(idg);
 
