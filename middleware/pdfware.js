@@ -22,10 +22,10 @@ async function generateQrPdf(idg) {
     var matcherObj,
         qrfilename,
         pathinputs = [];
-    console.log(fs.access(process.cwd() + 'html2pdf/temp/qrcodes/'));
-    if(!fs.access(tmpqrc)) fs.mkdir(tmpqrc, (err) => {});
-    if(!fs.access(tmppdf)) fs.mkdir(tmppdf, (err) => {});
-    if(!fs.access(dirpdf)) fs.mkdir(dirpdf, (err) => {});    
+    console.log(fs.existsSync(process.cwd() + 'html2pdf/temp/qrcodes/'));
+    if(!fs.existsSync(tmpqrc)) fs.mkdirSync(tmpqrc);
+    if(!fs.existsSync(tmppdf)) fs.mkdirSync(tmppdf);
+    if(!fs.existsSync(dirpdf)) fs.mkdirSync(dirpdf);    
 
     const locations = await getLocations(idg);
 
