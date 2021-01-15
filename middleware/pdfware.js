@@ -12,12 +12,12 @@ const { Location, Actions } = require('../models/schemas'),
 
 // create the pdf file with qrcodes and related infos
 async function generateQrPdf(idg) {  
-    const tmpqrc = './html2pdf/temp/qrcodes/' + idg +'/',
-        tmppdf = './html2pdf/temp/templates/' + idg +'/',
-        dirpdf = './html2pdf/pdfs/',
+    const tmpqrc = '/html2pdf/temp/qrcodes/' + idg +'/',
+        tmppdf = '/html2pdf/temp/templates/' + idg +'/',
+        dirpdf = '/html2pdf/pdfs/',
         dirimg = '/html2pdf/images/',
-        dirtemplate1 = './html2pdf/template1.html',
-        dirtemplate2 = './html2pdf/template2.html';
+        dirtemplate1 = '/html2pdf/template1.html',
+        dirtemplate2 = '/html2pdf/template2.html';
     
     var matcherObj,
         qrfilename,
