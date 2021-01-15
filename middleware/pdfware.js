@@ -22,7 +22,7 @@ async function generateQrPdf(idg) {
     var matcherObj,
         qrfilename,
         pathinputs = [];
-        
+    console.log(fs.existsSync(tmpqrc));
     if(!fs.existsSync(tmpqrc)) fs.mkdir(tmpqrc);
     if(!fs.existsSync(tmppdf)) fs.mkdir(tmppdf);
     if(!fs.existsSync(dirpdf)) fs.mkdir(dirpdf);    
