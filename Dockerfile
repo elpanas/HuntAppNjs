@@ -5,6 +5,8 @@ ENV NODE_ENV=production \
 
 RUN mkdir -p /home/app
 
+WORKDIR /home/app
+
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
 
 RUN npm install
