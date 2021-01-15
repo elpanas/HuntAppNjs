@@ -23,9 +23,9 @@ async function generateQrPdf(idg) {
         qrfilename,
         pathinputs = [];
         
-    if(!fs.existsSync(tmpqrc)) fs.mkdirSync(tmpqrc);
-    if(!fs.existsSync(tmppdf)) fs.mkdirSync(tmppdf);
-    if(!fs.existsSync(dirpdf)) fs.mkdirSync(dirpdf);    
+    if(!fs.existsSync(tmpqrc)) fs.mkdirSync(tmpqrc, {recursive: true});
+    if(!fs.existsSync(tmppdf)) fs.mkdirSync(tmppdf, {recursive: true});
+    if(!fs.existsSync(dirpdf)) fs.mkdirSync(dirpdf, {recursive: true});    
 
     const locations = await getLocations(idg);
 
