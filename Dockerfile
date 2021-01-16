@@ -3,18 +3,18 @@ FROM node:12.18-alpine3.10
 ENV NODE_ENV production \
     DB_URI "mongodb+srv://huntluke:game1983@cluster0.ngn3c.mongodb.net/test?authSource=admin&replicaSet=atlas-oqjc10-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true"
 
-#RUN mkdir -p /usr/src/app
+RUN mkdir -p /home/app
 
-WORKDIR /usr/src/app
+WORKDIR /home/app
 
-#RUN apt-get update && apt-get install -y libgif7
+# RUN apt-get update && apt-get install -y libgif7
 
 COPY package*.json ./
 
-RUN npm install
+RUN npm ci --only=production
 
-COPY . /usr/src/app
+COPY . /home/app
 
 EXPOSE 3000
 
-CMD ["node", "/usr/src/app/server.js"]
+CMD ["node", "/home/app/server.js"]
