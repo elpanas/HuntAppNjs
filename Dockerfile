@@ -7,7 +7,7 @@ RUN mkdir -p /home/app
 
 WORKDIR /home/app
 
-RUN apt-get upgrade
+RUN apt-get update && apt-get install -y libgif4
 
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
 
