@@ -7,7 +7,7 @@ RUN mkdir -p /home/app
 
 WORKDIR /home/app
 
-RUN apt-get install -y libgif7
+RUN apt-get upgrade
 
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
 
