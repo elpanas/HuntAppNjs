@@ -60,7 +60,7 @@ async function generateQrPdf(idg) {
         .inputs(pathinputs)
         .option('page-size', 'A4')
         .output(dirpdf + idg + '-file.pdf')    
-        //.binary(process.cwd() + '/bin/prince')            
+        .binary(process.cwd() + '/node_modules/prince/prince/lib/prince/bin/prince')            
         .execute()
         .then(() => {
             console.log("OK: done");
