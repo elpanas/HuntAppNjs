@@ -1,4 +1,4 @@
-FROM node:12.18
+FROM node:12.18-alpine
 
 ENV NODE_ENV production \
     DB_URI "mongodb+srv://huntluke:game1983@cluster0.ngn3c.mongodb.net/test?authSource=admin&replicaSet=atlas-oqjc10-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true"
