@@ -5,7 +5,7 @@ ENV NODE_ENV=production \
 
 RUN mkdir -p /home/app
 
-RUN apt-get install -y libgif4
+RUN apt-get install nodejs nodejs-legacy npm libgif4 curl
 
 WORKDIR /home/app
 
