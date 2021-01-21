@@ -69,11 +69,12 @@ async function generateQrPdf(idg) {
         }, (error) => {
             console.log("ERROR: ", util.inspect(error));
         });
+
+    return;
 }
 
 // support generalization function to the previous one
-function populateTemplate(tmppdf, dirtemplate, matcherObj, idl, p) {      
-    
+function populateTemplate(tmppdf, dirtemplate, matcherObj, idl, p) {          
     var base_file = fs.readFileSync(dirtemplate, {encoding: 'utf8', flag: 'r+'} );
     base_file = multiReplace(base_file, matcherObj); 
     fs.writeFileSync(tmppdf + idl + 'page' + p + '.html', base_file);
