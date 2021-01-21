@@ -5,6 +5,8 @@ ENV NODE_ENV=production \
 
 RUN mkdir -p /home/app
 
+RUN apt-get install -y libgif4
+
 WORKDIR /home/app
 
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
