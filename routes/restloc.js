@@ -83,11 +83,11 @@ router.post('/', upload.single('lphoto'), (req, res) => {
 
 // READ
 // Generate and send the final pdf
-router.get('/pdf/:idg', (req, res) => {  
+router.get('/pdf/:idg', async (req, res) => {  
     checkUser(req.headers.authorization)
         .then(async idu => {            
             if (idu) {
-                generateQrPdf(req.params.idg).then((_) => {                                         
+                await generateQrPdf(req.params.idg).then((_) => {                                         
                     res.download(process.cwd() + '/html2pdf/pdfs/' + req.params.idg + '-file.pdf',
                                 req.params.idg + '-file.pdf',
                                 err => console.log('Error: ' + err))
