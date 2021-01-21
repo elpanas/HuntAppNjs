@@ -87,10 +87,11 @@ router.get('/pdf/:idg', (req, res) => {
     checkUser(req.headers.authorization)
         .then(async idu => {            
             if (idu) {
-                generateQrPdf(req.params.idg);                                          
-                res.download(process.cwd() + '/html2pdf/pdfs/' + req.params.idg + '-file.pdf',
-                            req.params.idg + '-file.pdf',
-                            err => console.log('Error: ' + err));
+                generateQrPdf(req.params.idg).then((_) => {                                         
+                    res.download(process.cwd() + '/html2pdf/pdfs/' + req.params.idg + '-file.pdf',
+                                req.params.idg + '-file.pdf',
+                                err => console.log('Error: ' + err))
+                })
             }                 
             else
                 res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send();
