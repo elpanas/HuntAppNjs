@@ -11,7 +11,7 @@ WORKDIR /home/app
 
 COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
 
-RUN npm install -g npm@latest
+RUN npm install
 
 COPY . /home/app
 
