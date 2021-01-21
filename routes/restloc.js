@@ -5,7 +5,7 @@ const express = require('express'),
     getDistances,
     computeMean} = require('../middleware/locatware'),
     { checkUser } = require('../middleware/userware'),
-    { generateQrPdf, generateQrHtml } = require('../middleware/pdfware2'),
+    { generateQrPdf, generateQrHtml } = require('../middleware/pdfware'),
     { createCluster } = require('../middleware/clusterware'),
     multer = require('multer');
 const router = express.Router();

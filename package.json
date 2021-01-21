@@ -13,6 +13,7 @@
     "dateformat": "^4.4.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "libgif": "0.0.3",
     "millisec": "^0.2.0",
     "mongoose": "^5.11.12",
     "multer": "^1.4.2",
