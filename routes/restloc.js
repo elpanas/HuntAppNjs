@@ -5,7 +5,7 @@ const express = require('express'),
     getDistances,
     computeMean} = require('../middleware/locatware'),
     { checkUser } = require('../middleware/userware'),
-    { generateQrPdf } = require('../middleware/pdfware'),
+    { generateQrPdf, generateQrHtml } = require('../middleware/pdfware2'),
     { createCluster } = require('../middleware/clusterware'),
     multer = require('multer');
 const router = express.Router();
@@ -64,7 +64,8 @@ router.post('/', upload.single('lphoto'), (req, res) => {
                             .then(result => {                                 
                                 if (result._id) {
                                     if (req.body.new_cluster == 'true') createCluster(result.game, result.cluster);
-                                    //if (result.is_final) generateQrPdf(result.game); 
+                                    generateQrHtml(result);
+                                    if (result.is_final) generateQrPdf(result.game); 
                                     res.status(200).send(); 
                                 }
                                 else res.status(400).send();
@@ -84,9 +85,9 @@ router.post('/', upload.single('lphoto'), (req, res) => {
 // Generate and send the final pdf
 router.get('/pdf/:idg', (req, res) => {  
     checkUser(req.headers.authorization)
-        .then(async idu => {            
+        .then(idu => {            
             if (idu) {
-                generateQrPdf(req.params.idg);                                          
+                // generateQrPdf(req.params.idg);  // just for testing                                      
                 res.download(process.cwd() + '/html2pdf/pdfs/' + req.params.idg + '-file.pdf',
                             req.params.idg + '-file.pdf',
                             err => console.log('Error: ' + err));

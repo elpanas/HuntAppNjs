@@ -1,4 +1,4 @@
-const { Location, Actions } = require('../models/schemas'),
+const { Actions } = require('../models/schemas'),
     mongoose = require('mongoose'),
     QRCode = require('qrcode'),
     fs = require('fs'),
@@ -10,51 +10,50 @@ const { Location, Actions } = require('../models/schemas'),
     dateFormat = require("dateformat"),
     { setQrCode } = require('./gameware');
 
-// create the pdf file with qrcodes and related infos
-async function generateQrPdf(idg) {  
+function generateQrHtml(loc) {
     const tmpqrc = process.cwd() + '/html2pdf/temp/qrcodes/' + idg + '/',
-        tmppdf = process.cwd() + '/html2pdf/temp/templates/' + idg + '/',
+    tmphtml = process.cwd() + '/html2pdf/temp/templates/' + idg + '/',
         dirpdf = process.cwd() + '/html2pdf/pdfs/',
         dirimg = process.cwd() + '/html2pdf/images/',
         dirtemplate1 = process.cwd() + '/html2pdf/template1.html',
         dirtemplate2 = process.cwd() + '/html2pdf/template2.html';
-    
-    var matcherObj,
-        qrfilename,
-        pathinputs = [];
+
+    var matcherObj;
    
     if(!fs.existsSync(tmpqrc)) fs.mkdirSync(tmpqrc, { recursive: true });
-    if(!fs.existsSync(tmppdf)) fs.mkdirSync(tmppdf, { recursive: true });
+    if(!fs.existsSync(tmphtml)) fs.mkdirSync(tmphtml, { recursive: true });
     if(!fs.existsSync(dirpdf)) fs.mkdirSync(dirpdf, { recursive: true });    
 
-    const locations = await getLocations(idg);
+    const qrfilename = tmpqrc + loc._id + '.png';
+    QRCode.toFile(qrfilename, '' + loc._id);
+    
+    matcherObj = {
+        "%header%": dirimg + "header.png",
+        "%qrcode%": qrfilename
+    }
 
-    locations.forEach(loc => {
+    populateTemplate(tmphtml, dirtemplate1, matcherObj, loc._id, 1);  
+    
+    matcherObj = {
+        "%header%": dirimg + "header.png",
+        "%loclatitude%": loc.location.coordinates[0],
+        "%loclongitude%": loc.location.coordinates[1],
+        "%locid%": loc._id,
+        "%qrcontent%": loc._id,
+        "%locname%": loc.name
+    }
+    
+    populateTemplate(tmphtml, dirtemplate2, matcherObj, loc._id, 2);  
+}
 
-        // qrocode creation
-        qrfilename = tmpqrc + loc._id + '.png';
-        QRCode.toFile(qrfilename, '' + loc._id);
-        
-        matcherObj = {
-            "%header%": dirimg + "header.png",
-            "%qrcode%": qrfilename
-        }
+// create the pdf file with qrcodes and related infos
+function generateQrPdf(idg) {  
+    const tmpqrc = process.cwd() + '/html2pdf/temp/qrcodes/' + idg + '/',
+        tmphtml = process.cwd() + '/html2pdf/temp/templates/' + idg + '/',
+        dirpdf = process.cwd() + '/html2pdf/pdfs/';
+    const pathinputs = fs.readdirSync(tmphtml);
 
-        populateTemplate(tmppdf, dirtemplate1, matcherObj, loc._id, 1);  
-        pathinputs.push(tmppdf + loc._id + 'page1.html');
-        
-        matcherObj = {
-            "%header%": dirimg + "header.png",
-            "%loclatitude%": loc.location.coordinates[0],
-            "%loclongitude%": loc.location.coordinates[1],
-            "%locid%": loc._id,
-            "%qrcontent%": loc._id,
-            "%locname%": loc.name
-        }
-        
-        populateTemplate(tmppdf, dirtemplate2, matcherObj, loc._id, 2);  
-        pathinputs.push(tmppdf + loc._id + 'page2.html');  
-    })
+    if(!fs.existsSync(dirpdf)) fs.mkdirSync(dirpdf, { recursive: true });      
 
     Prince()
         .inputs(pathinputs)
@@ -65,17 +64,18 @@ async function generateQrPdf(idg) {
             console.log("OK: done");
             setQrCode(idg);
             rimraf(tmpqrc);
-            rimraf(tmppdf);
+            rimraf(tmphtml);
         }, (error) => {
             console.log("ERROR: ", util.inspect(error));
         });
 }
 
 // support generalization function to the previous one
-function populateTemplate(tmppdf, dirtemplate, matcherObj, idl, p) {          
+function populateTemplate(tmphtml, dirtemplate, matcherObj, idl, p) {      
+    
     var base_file = fs.readFileSync(dirtemplate, {encoding: 'utf8', flag: 'r+'} );
     base_file = multiReplace(base_file, matcherObj); 
-    fs.writeFileSync(tmppdf + idl + 'page' + p + '.html', base_file);
+    fs.writeFileSync(tmphtml + idl + 'page' + p + '.html', base_file);
 }
 
 // create a certificate pdf file
@@ -125,11 +125,6 @@ async function generateCertPdf(idsg) {
     }  
 }
 
-// auxiliary functions
-async function getLocations(idg) {
-    return await Location.find({ game: idg }).sort('cluster').lean();
-}
-
 // get the session game duration
 async function getTime(idg) {
     return await Actions.aggregate([
@@ -152,6 +147,6 @@ async function getGroup(idsg) {
     return await SingleGame.findById(idsg).select('group_name').lean();
 }
 
-
+module.exports.generateQrHtml = generateQrHtml;
 module.exports.generateQrPdf = generateQrPdf;
 module.exports.generateCertPdf = generateCertPdf;
