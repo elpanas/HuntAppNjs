@@ -64,13 +64,11 @@ async function generateQrPdf(idg) {
         .then(() => {
             console.log("OK: done");
             setQrCode(idg);
-            rimraf.sync(tmpqrc);
-            rimraf.sync(tmppdf);
+            rimraf(tmpqrc);
+            rimraf(tmppdf);
         }, (error) => {
             console.log("ERROR: ", util.inspect(error));
         });
-
-    return;
 }
 
 // support generalization function to the previous one

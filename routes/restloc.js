@@ -5,7 +5,7 @@ const express = require('express'),
     getDistances,
     computeMean} = require('../middleware/locatware'),
     { checkUser } = require('../middleware/userware'),
-    { generateQrPdf, generateQrHtml } = require('../middleware/pdfware'),
+    { generateQrPdf, generateQrHtml } = require('../middleware/pdfware2'),
     { createCluster } = require('../middleware/clusterware'),
     multer = require('multer');
 const router = express.Router();
@@ -83,11 +83,11 @@ router.post('/', upload.single('lphoto'), (req, res) => {
 
 // READ
 // Generate and send the final pdf
-router.get('/pdf/:idg', async (req, res) => {  
+router.get('/pdf/:idg', (req, res) => {  
     checkUser(req.headers.authorization)
-        .then(async idu => {            
+        .then(idu => {            
             if (idu) {
-                await generateQrPdf(req.params.idg)                                        
+                // generateQrPdf(req.params.idg);  // just for testing                                      
                 res.download(process.cwd() + '/html2pdf/pdfs/' + req.params.idg + '-file.pdf',
                             req.params.idg + '-file.pdf',
                             err => console.log('Error: ' + err));
