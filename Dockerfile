@@ -9,8 +9,6 @@ RUN apt-get update && apt-get -y install curl && apt-get install -y libgif7
 
 WORKDIR /home/app
 
-# RUN apt-get update && apt-get install -y libgif7
-
 COPY package*.json ./
 
 RUN npm ci --only=production
