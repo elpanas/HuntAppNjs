@@ -1,12 +1,18 @@
-const { User } = require('../models/schemas');
+const { User } = require('../models/schemas'),
+    bcrypt = require('bcrypt'),
+    saltRounds = 10;
 
 // CREATE USER
 async function createUser(user_data) {
+    const psw = Buffer.from(user_data.password, 'base64').toString();
+    const pswhash = await bcrypt.hash(psw, saltRounds);
+
+    bcrypt.hash(myPlaintextPassword, saltRounds);
     return await User.create({
         first_name: user_data.first_name,
         full_name: user_data.full_name,
         username: Buffer.from(user_data.username, 'base64').toString(),
-        password: Buffer.from(user_data.password, 'base64').toString(),
+        password: pswhash,
         is_admin: user_data.is_admin
     });
 }
@@ -26,9 +32,11 @@ async function checkUser(auth) {
     const buf = Buffer.from(tmp[1], 'base64').toString(); // creo un buffer e lo avviso che l'input e' in base64
     const [username, password] = buf.split(':');      // divido auth in base a ':'
 
+    const pswhash = await bcrypt.hash(password, saltRounds);
+
     const result = await User.findOne({
         username: username,
-        password: password
+        password: pswhash
     }).lean() // criteri di ricerca         
 
     if (result)
@@ -44,11 +52,13 @@ async function checkLogin(auth) {
     const buf = Buffer.from(tmp[1], 'base64').toString(); // creo un buffer e lo avviso che l'input e' in base64
     const [username, password] = buf.split(':');      // divido auth in base a ':'
 
+    const pswhash = await bcrypt.hash(password, saltRounds);
+
     const user = await User.aggregate([
         { $match: 
             { 
                 username: username,
-                password: password
+                password: pswhash
             }
         },              
         {
@@ -60,7 +70,7 @@ async function checkLogin(auth) {
     if (user[0].logStatus < (60*60000)) {
         return await User.findOneAndUpdate({
             username: username,
-            password: password
+            password: pswhash
             },
             { logged: Date.now() },
             { new: true }).lean();
@@ -76,9 +86,11 @@ async function makeLogin(auth) {
     const buf = Buffer.from(tmp[1], 'base64').toString(); // creo un buffer e lo avviso che l'input e' in base64
     const [username, password] = buf.split(':');      // divido auth in base a ':'
     
+    const pswhash = await bcrypt.hash(password, saltRounds);
+
     return await User.findOneAndUpdate({
         username: username,
-        password: password
+        password: pswhash
         },
         { logged: Date.now() },
         { new: true }).lean();      
@@ -90,9 +102,11 @@ async function makeLogout(auth) {
     const buf = Buffer.from(tmp[1], 'base64').toString(); // creo un buffer e lo avviso che l'input e' in base64
     const [username, password] = buf.split(':');      // divido auth in base a ':'
     
+    const pswhash = await bcrypt.hash(password, saltRounds);
+
     return await User.findOneAndUpdate({
         username: username,
-        password: password
+        password: pswhash
         },
         { logged: null },
         { new: true }).lean();      
