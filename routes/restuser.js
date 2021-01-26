@@ -29,7 +29,7 @@ router.put('/login', (req, res) => {
         .then(result => {            
             (!result)
                 ? res.status(401).setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"').send()
-                : res.status(200).send(result.is_admin);
+                : res.status(200).json({ id: result._id, admin: result.is_admin });
         })
         .catch(err => res.status(404).send(err))
 });
