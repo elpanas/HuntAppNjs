@@ -9,7 +9,6 @@ const express = require('express'), // framework nodejs
       restloc = require('./routes/restloc'), // route location
       restriddle = require('./routes/restriddle'), // route riddle
       restuser = require('./routes/restuser'), // route user
-      resttest = require('./testing/test'), // route test
       //restutility = require('./utility/loadRiddles'), // route riddles
       //url = process.env.DB_LOC_URI; // local db
       url = process.env.DB_URI; // remote db connection string
@@ -45,7 +44,6 @@ app.use('/api/cluster', restcluster);
 app.use('/api/loc', restloc); 
 app.use('/api/riddle', restriddle); 
 app.use('/api/user', restuser);
-app.use('/api/test', resttest);
 // app.use('/api/loadrid', restutility);
 
 const port = process.env.PORT || 3000;
