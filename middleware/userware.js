@@ -6,8 +6,7 @@ const { User } = require('../models/schemas'),
 async function createUser(user_data) {
     const psw = Buffer.from(user_data.password, 'base64').toString();
     const pswhash = await bcrypt.hash(psw, saltRounds);
-
-    bcrypt.hash(myPlaintextPassword, saltRounds);
+    
     return await User.create({
         first_name: user_data.first_name,
         full_name: user_data.full_name,
@@ -69,8 +68,8 @@ async function checkLogin(auth) {
 
     if (user[0].logStatus < (60*60000)) {
         return await User.findOneAndUpdate({
-            username: username,
-            password: pswhash
+                username: username,
+                password: pswhash
             },
             { logged: Date.now() },
             { new: true }).lean();
@@ -89,8 +88,8 @@ async function makeLogin(auth) {
     const pswhash = await bcrypt.hash(password, saltRounds);
 
     return await User.findOneAndUpdate({
-        username: username,
-        password: pswhash
+            username: username,
+            password: pswhash
         },
         { logged: Date.now() },
         { new: true }).lean();      
@@ -105,8 +104,8 @@ async function makeLogout(auth) {
     const pswhash = await bcrypt.hash(password, saltRounds);
 
     return await User.findOneAndUpdate({
-        username: username,
-        password: pswhash
+            username: username,
+            password: pswhash
         },
         { logged: null },
         { new: true }).lean();      
