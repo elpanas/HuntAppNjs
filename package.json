@@ -4,7 +4,8 @@
   "description": "Hunting Treasure Web Service",
   "main": "server.js",
   "author": {
-    "name": "Luca Panariello"
+    "name": "Luca Panariello",
+    "email": "l.panariello@campus.uniurb.com"
   },
   "repository": "https://github.com/elpanas/HuntAppNjs",
   "license": "SEE LICENSE IN LICENSE",
