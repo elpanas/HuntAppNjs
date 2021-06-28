@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:12.18-alpine
 ENV NODE_ENV production
 RUN mkdir -p /home/app
 RUN apt-get update && apt-get -y install curl && apt-get install -y libgif7
