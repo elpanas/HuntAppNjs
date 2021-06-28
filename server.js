@@ -30,7 +30,6 @@ app.use('/api/cluster', restcluster);
 app.use('/api/loc', restloc);
 app.use('/api/riddle', restriddle);
 app.use('/api/user', restuser);
-app.use('/api/test', resttest);
 
 app.listen(config.app.port, () =>
   console.log(`Listening on port ${config.app.port}...`)
