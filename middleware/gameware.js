@@ -1,10 +1,9 @@
-const { Game } = require('../models/schemas');
+const { Game } = require('../models/game');
 
 // CREATE
 async function createGame(game_data) {
-
-    return await Game.create(game_data);
-    /*
+  return await Game.create(game_data);
+  /*
     const game = new Game({
         event: game_data.event_id,
         name: game_data.name,
@@ -20,24 +19,26 @@ async function createGame(game_data) {
 
 //READ
 // get all games infos
-function getAllGames(event_id) {
-    return Game.find({ event: event_id }).select('_id name riddle_category organizer qr_created active is_open').lean();
+async function getAllGames(event_id) {
+  return await Game.find({ event: event_id })
+    .select('_id name riddle_category organizer qr_created active is_open')
+    .lean();
 }
 
 // get the riddle category of a game
-function getGameCategory(idg) {
-    return Game.findById(idg).select('riddle_category').lean();
+async function getGameCategory(idg) {
+  return await Game.findById(idg).select('riddle_category').lean();
 }
 
 // UPDATE
 // set qrcode pdf as created
-function setQrCode(idg) {
-    return Game.findByIdAndUpdate(idg, { qr_created: true }).lean();
+async function setQrCode(idg) {
+  return await Game.findByIdAndUpdate(idg, { qr_created: true }).lean();
 }
 
 // set a game as active
-function activateGame(idg) {
-    return Game.findByIdAndUpdate(idg, { active: true }).lean();
+async function activateGame(idg) {
+  return await Game.findByIdAndUpdate(idg, { active: true }).lean();
 }
 // --------------------------------------------------------------------
 
