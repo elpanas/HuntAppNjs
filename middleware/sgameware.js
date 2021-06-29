@@ -18,42 +18,36 @@ async function createSingleGame(single_data, idu) {
 
 // generate random steps on the
 async function createSteps(idg, idsg, riddle_cat) {
-  const clusters = await getClusters(idg), // get all cluster infos of this game
-    locations = await getLocations(idg); // get all location of this game
-  const startLocObj = locations.find((loc) => loc.is_start), // get start location
-    finalLocObj = locations.find((loc) => loc.is_final); // get final location
+  const clusters = await getClusters(idg),
+    locations = await getLocations(idg);
+  const startLocObj = locations.find((loc) => loc.is_start),
+    finalLocObj = locations.find((loc) => loc.is_final);
   let steps = [],
     s = 0,
     tot_steps = 2;
 
-  steps.push(createObj(1, idsg, startLocObj._id)); // push the first loc in the array
+  steps.push(createObj(1, idsg, startLocObj._id)); // First
 
   clusters.forEach((clt) => {
-    // get an array without start and final locations for each clusters
     const filteredLocs = locations.filter(
       (loc) => loc.cluster == clt.cluster && !loc.is_start && !loc.is_final
     );
-
     const shuffleLocs = shuffle(filteredLocs);
-    // extract the number of locations, specified in the cluster options
     const middleLocs =
       shuffleLocs.length > clt.nr_extracted_loc
         ? shuffleLocs.slice(0, clt.nr_extracted_loc - 1)
         : shuffleLocs;
 
-    for (
-      let m = 0;
-      m < middleLocs.length;
-      m++ // create and push an "action" object (step) for each middle location
-    )
+    for (let m = 0; m < middleLocs.length; m++)
       steps.push(createObj(tot_steps++, idsg, middleLocs[m]._id));
-  });
+  }); // Middle
 
-  steps.push(createObj(tot_steps, idsg, finalLocObj._id)); // push the final loc in the array
+  steps.push(createObj(tot_steps, idsg, finalLocObj._id)); // Last
 
-  const riddles = await getRiddles(tot_steps, riddle_cat); // get riddles as much as the locations
-  riddles.forEach((r) => (steps[s++].riddle = r._id)); // insert riddle id in each step just created
-  await Actions.insertMany(steps); // push steps into the action collection
+  const riddles = await getRiddles(tot_steps, riddle_cat);
+  riddles.forEach((r) => (steps[s++].riddle = r._id));
+
+  await Actions.insertMany(steps);
 }
 
 // auxiliary functions

@@ -66,9 +66,9 @@ async function checkLogin(auth) {
 // --------------------------------------------------------------------
 
 async function makeLogin(auth) {
-  const tmp = auth.split(' '); // Divido in base allo spazio  "Basic Y2hhcmxlczoxMjM0NQ==" per recuperare la 2a parte
-  const buf = Buffer.from(tmp[1], 'base64').toString(); // creo un buffer e lo avviso che l'input e' in base64
-  const [username, password] = buf.split(':'); // divido auth in base a ':'
+  const tmp = auth.split(' ');
+  const buf = Buffer.from(tmp[1], 'base64').toString();
+  const [username, password] = buf.split(':');
 
   return await User.findOneAndUpdate(
     {
@@ -81,9 +81,9 @@ async function makeLogin(auth) {
 }
 
 async function makeLogout(auth) {
-  const tmp = auth.split(' '); // Divido in base allo spazio  "Basic Y2hhcmxlczoxMjM0NQ==" per recuperare la 2a parte
-  const buf = Buffer.from(tmp[1], 'base64').toString(); // creo un buffer e lo avviso che l'input e' in base64
-  const [username, password] = buf.split(':'); // divido auth in base a ':'
+  const tmp = auth.split(' ');
+  const buf = Buffer.from(tmp[1], 'base64').toString();
+  const [username, password] = buf.split(':');
 
   return await User.findOneAndUpdate(
     {

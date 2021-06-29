@@ -11,12 +11,12 @@ const { Actions } = require('../models/action'),
   { setQrCode } = require('./gameware');
 
 function generateQrHtml(loc) {
-  const tmpqrc = process.cwd() + '/html2pdf/temp/qrcodes/' + idg + '/',
-    tmphtml = process.cwd() + '/html2pdf/temp/templates/' + idg + '/',
-    dirpdf = process.cwd() + '/html2pdf/pdfs/',
-    dirimg = process.cwd() + '/html2pdf/images/',
-    dirtemplate1 = process.cwd() + '/html2pdf/template1.html',
-    dirtemplate2 = process.cwd() + '/html2pdf/template2.html';
+  const tmpqrc = `${process.cwd()}/html2pdf/temp/qrcodes/${idg}/`,
+    tmphtml = `${process.cwd()}/html2pdf/temp/templates/${idg}/`,
+    dirpdf = `${process.cwd()}/html2pdf/pdfs/`,
+    dirimg = `${process.cwd()}/html2pdf/images/`,
+    dirtemplate1 = `${process.cwd()}/html2pdf/template1.html`,
+    dirtemplate2 = `${process.cwd()}/html2pdf/template2.html`;
 
   let matcherObj;
 
@@ -48,9 +48,9 @@ function generateQrHtml(loc) {
 
 // create the pdf file with qrcodes and related infos
 function generateQrPdf(idg) {
-  const tmpqrc = process.cwd() + `/html2pdf/temp/qrcodes/${idg}/`,
-    tmphtml = process.cwd() + `/html2pdf/temp/templates/${idg}/`,
-    dirpdf = process.cwd() + '/html2pdf/pdfs/';
+  const tmpqrc = `${process.cwd()}/html2pdf/temp/qrcodes/${idg}/`,
+    tmphtml = `${process.cwd()}/html2pdf/temp/templates/${idg}/`,
+    dirpdf = `${process.cwd()}/html2pdf/pdfs/`;
   const pathinputs = fs.readdirSync(tmphtml);
 
   if (!fs.existsSync(dirpdf)) fs.mkdirSync(dirpdf, { recursive: true });
