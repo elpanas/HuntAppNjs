@@ -47,10 +47,10 @@ router.post('/', (req, res) => {
 // CREATE
 router.post('/', upload.single('lphoto'), async (req, res) => {
   await authHandler(req);
-  const distances = await getDistances(req.body);
-  var is_mean = false;
-  const start = req.body.is_start == 'true',
+  const distances = await getDistances(req.body),
+    start = req.body.is_start == 'true',
     avgdist = parseInt(req.body.avg_distance);
+  let is_mean = false;
 
   if (!start) {
     is_mean =
@@ -80,7 +80,7 @@ router.get('/pdf/:idg', async (req, res) => {
   res.download(
     `${process.cwd()}/html2pdf/pdfs/${req.params.idg}-file.pdf`,
     `${req.params.idg}-file.pdf`,
-    (err) => console.log('Error: ' + err)
+    (err) => console.log(`Error: ${err}`)
   );
 });
 
@@ -92,9 +92,7 @@ router.get('/game/:idg', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   const result = await getLocation(req.params.id);
-  result.length != 0
-    ? res.status(200).json(result)
-    : res.status(404).send('Location was not found');
+  result.length != 0 ? res.status(200).json(result) : res.status(404).send();
 });
 // --------------------------------------------------------------------
 

@@ -31,9 +31,7 @@ router.get('/game/:idg', async (req, res) => {
 router.get('/multiple/:idg', async (req, res) => {
   const idu = await authHandler(req);
   const result = await checkMultipleGame(req.params.idg, idu);
-  if (result == null) res.status(200).send();
-  else if (result.game.is_open) res.status(200).send();
-  else res.status(404).send();
+  result ? res.status(200).send() : res.status(404).send();
 });
 
 // Generate and send the final pdf
@@ -56,12 +54,11 @@ router.get('/terminated', async (req, res) => {
 router.put('/completed', async (req, res) => {
   // richiamo questa funzione se non c'è un id-action memorizzato in locale
   await authHandler(req);
-  setCompleted(req.body.idsg)
-    .then(() => {
-      generateCertPdf(req.body.idsg)
+  const isOk = await setCompleted(req.body.idsg);
+  isOk
+    ? generateCertPdf(req.body.idsg)
         .then(() => res.status(200).send())
-        .catch((err) => res.status(400).send(err));
-    })
-    .catch((err) => res.status(400).send(err));
+        .catch((err) => res.status(400).send(err))
+    : res.status(400).send(err);
 });
 module.exports = router;

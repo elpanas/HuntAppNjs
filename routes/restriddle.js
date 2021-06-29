@@ -24,7 +24,7 @@ router.post('/', upload.single('rphoto'), async (req, res) => {
   await authHandler(req);
   createRiddle(req.body)
     .then(() => res.status(201).send())
-    .catch((err) => res.status(400).send());
+    .catch((err) => res.status(400).send(err));
 });
 
 // CREATE
@@ -38,9 +38,7 @@ router.post('/', async (req, res) => {
 // READ
 router.get('/:id', (req, res) => {
   const result = (await = generateRiddle(req.params.id));
-  result.length != 0
-    ? res.status(200).json(result)
-    : res.status(404).send('Riddle was not found');
+  result.length != 0 ? res.status(200).json(result) : res.status(404).send();
 });
 // --------------------------------------------------------------------
 

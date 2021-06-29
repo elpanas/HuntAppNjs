@@ -15,7 +15,7 @@ router.post('/', async (req, res) => {
     ? createEvent(req.body, idu)
         .then(() => res.status(201).send())
         .catch((err) => res.status(400).send(err))
-    : res.status(400).send('Error: name already exists');
+    : res.status(409).send();
 });
 // --------------------------------------------------------------------
 
@@ -23,9 +23,7 @@ router.post('/', async (req, res) => {
 router.get('/lat/:lat/long/:long', async (req, res) => {
   await authHandler(req);
   const result = await getAllEvents(req.params.lat, req.params.long);
-  result.length > 0
-    ? res.status(200).json(result)
-    : res.status(404).send('Events not found');
+  result.length > 0 ? res.status(200).json(result) : res.status(404).send();
 });
 // --------------------------------------------------------------------
 

@@ -10,9 +10,7 @@ const router = express.Router();
 router.get('/:idg', async (req, res) => {
   await authHandler(req);
   const result = await getClusterList(req.params.idg);
-  result.length > 0
-    ? res.status(200).json(result)
-    : res.status(404).send('Clusters was not found');
+  result.length > 0 ? res.status(200).json(result) : res.status(404).send();
 });
 
 router.get('/game/:idg/clt/:clt', async (req, res) => {

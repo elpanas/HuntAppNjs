@@ -5,6 +5,8 @@ const express = require('express'),
     makeLogin,
     makeLogout,
   } = require('../middleware/userware'),
+  auth = 'WWW-Authenticate',
+  errorMessage = 'Basic realm: "Restricted Area"';
 const router = express.Router();
 
 // CREATE
@@ -26,10 +28,7 @@ router.get('/chklogin', async (req, res) => {
 router.put('/login', async (req, res) => {
   const result = await makeLogin(req.get('Authorization'));
   !result
-    ? res
-        .status(401)
-        .setHeader('WWW-Authenticate', 'Basic realm: "Restricted Area"')
-        .send()
+    ? res.status(401).setHeader(auth, errorMessage).send()
     : res.status(200).send(result.is_admin);
 });
 

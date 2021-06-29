@@ -18,7 +18,7 @@ function generateQrHtml(loc) {
     dirtemplate1 = process.cwd() + '/html2pdf/template1.html',
     dirtemplate2 = process.cwd() + '/html2pdf/template2.html';
 
-  var matcherObj;
+  let matcherObj;
 
   if (!fs.existsSync(tmpqrc)) fs.mkdirSync(tmpqrc, { recursive: true });
   if (!fs.existsSync(tmphtml)) fs.mkdirSync(tmphtml, { recursive: true });
@@ -58,7 +58,7 @@ function generateQrPdf(idg) {
   Prince()
     .inputs(pathinputs)
     .option('page-size', 'A4')
-    .output(dirpdf + idg + '-file.pdf')
+    .output(`${dirpdf}${idg}-file.pdf`)
     .execute()
     .then(
       () => {
@@ -75,27 +75,27 @@ function generateQrPdf(idg) {
 
 // support generalization function to the previous one
 function populateTemplate(tmphtml, dirtemplate, matcherObj, idl, p) {
-  var base_file = fs.readFileSync(dirtemplate, {
+  let base_file = fs.readFileSync(dirtemplate, {
     encoding: 'utf8',
     flag: 'r+',
   });
   base_file = multiReplace(base_file, matcherObj);
-  fs.writeFileSync(tmphtml + idl + 'page' + p + '.html', base_file);
+  fs.writeFileSync(`${tmphtml}${idl}page${p}.html`, base_file);
 }
 
 // create a certificate pdf file
 async function generateCertPdf(idsg) {
-  const tmppdf = process.cwd() + '/html2pdf/temp/templates/' + idsg + '/',
-    dirpdf = process.cwd() + '/html2pdf/pdfs/',
-    dirimg = process.cwd() + '/html2pdf/images/',
-    dirtemplate = process.cwd() + '/html2pdf/template-certificate.html',
+  const tmppdf = `${process.cwd()}/html2pdf/temp/templates/${idsg}/`,
+    dirpdf = `${process.cwd()}/html2pdf/pdfs/`,
+    dirimg = `${process.cwd()}/html2pdf/images/`,
+    dirtemplate = `${process.cwd()}/html2pdf/template-certificate.html`,
     newidg = mongoose.Types.ObjectId(idsg);
 
   if (!fs.existsSync(dirpdf + idsg + '-cert.pdf')) {
     if (!fs.existsSync(tmppdf)) fs.mkdirSync(tmppdf);
     if (!fs.existsSync(dirpdf)) fs.mkdirSync(dirpdf);
 
-    var base_file = fs.readFileSync(dirtemplate, {
+    let base_file = fs.readFileSync(dirtemplate, {
       encoding: 'utf8',
       flag: 'r+',
     });
@@ -106,22 +106,22 @@ async function generateCertPdf(idsg) {
     const time_elapsed = millisec(loadtime[0].timeElapsed).format('mm');
 
     const matcherObj = {
-      '%backimage%': dirimg + 'codeweek_certificate.jpg',
-      '%bubble%': dirimg + 'bubbles-50.png',
+      '%backimage%': `${dirimg}codeweek_certificate.jpg`,
+      '%bubble%': `${dirimg}bubbles-50.png`,
       '%TEAM_NAME%': loadgroup.group_name,
       '%DATE%': dateFormat(Date.now(), 'd/m/yyyy'),
       '%ELAPSED_MINS%': time_elapsed,
-      '%AVATAR_NAME%': dirimg + 'default_user.jpg',
+      '%AVATAR_NAME%': `${dirimg}default_user.jpg`,
     };
 
     base_file = multiReplace(base_file, matcherObj);
 
-    fs.writeFileSync(tmppdf + idsg + 'tmp.html', base_file);
+    fs.writeFileSync(`${tmppdf}${idsg}tmp.html`, base_file);
 
     Prince()
-      .inputs(tmppdf + idsg + 'tmp.html')
+      .inputs(`${tmppdf}${idsg}tmp.html`)
       .option('page-size', 'A4 landscape')
-      .output(dirpdf + idsg + '-cert.pdf')
+      .output(`${dirpdf}${idsg}-cert.pdf`)
       .execute()
       .then(
         () => {

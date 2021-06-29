@@ -20,9 +20,7 @@ router.post('/', async (req, res) => {
 router.get('/event/:ide', async (req, res) => {
   await authHandler(req);
   const result = await getAllGames(req.params.ide);
-  result.length > 0
-    ? res.status(200).json(result)
-    : res.status(404).send('No games found');
+  result.length > 0 ? res.status(200).json(result) : res.status(404).send();
 });
 
 router.get('/activate/:idg', async (req, res) => {
@@ -35,9 +33,7 @@ router.get('/activate/:idg', async (req, res) => {
 router.put('/qrc', async (req, res) => {
   await authHandler(req);
   const result = await setQrCode(req.body.idg);
-  result.length != 0
-    ? res.status(200).send()
-    : res.status(404).send('Game was not found');
+  result.length != 0 ? res.status(200).send() : res.status(404).send();
 });
 
 router.put('/activate/:idg', async (req, res) => {

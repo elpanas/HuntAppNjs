@@ -8,26 +8,27 @@ async function createLocations(locs_data) {
 
 async function createLocation(loc_data) {
   const locobj = {
-    type: 'Point',
-    coordinates: [
-      parseFloat(loc_data.latitude),
-      parseFloat(loc_data.longitude),
-    ],
-  };
-
-  const imagepath =
-    loc_data.image == '' ? '' : `data/locphoto/${loc_data.image}`;
+      type: 'Point',
+      coordinates: [
+        parseFloat(loc_data.latitude),
+        parseFloat(loc_data.longitude),
+      ],
+    },
+    imagepath = loc_data.image == '' ? '' : `data/locphoto/${loc_data.image}`,
+    isStart = loc_data.is_start == 'true',
+    isFinal = loc_data.is_final == 'true',
+    intCluster = parseInt(loc_data.cluster);
 
   return await Location.create({
     game: loc_data.game_id,
     name: loc_data.name,
-    cluster: parseInt(loc_data.cluster),
+    cluster: intCluster,
     location: locobj,
     description: loc_data.description,
     image_path: imagepath,
     hint: loc_data.hint,
-    is_start: loc_data.is_start == 'true',
-    is_final: loc_data.is_final == 'true',
+    is_start: isStart,
+    is_final: isFinal,
   });
 }
 // --------------------------------------------------------------------
@@ -64,7 +65,7 @@ async function getDistances(locdata) {
 
 // mean computation among the distances
 function computeMean(distances) {
-  var sum = 0,
+  let sum = 0,
     i = 0;
   for (i = 0; i < distances.length; i++) sum += distances[i].distance; // don't forget to add the base
 

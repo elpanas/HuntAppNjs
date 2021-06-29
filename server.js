@@ -4,14 +4,14 @@ const app = express(),
   config = require('./config/config'), // CONFIGURATIONS
   compression = require('compression'), // MIDDLEWARES
   helmet = require('helmet'),
-  restaction = require('./routes/restaction'), // route paths
-  restevent = require('./routes/restevent'), // route paths
-  restgame = require('./routes/restgame'), // route game
-  restsgame = require('./routes/restsgame'), // route group
-  restcluster = require('./routes/restcluster'), // route group
-  restloc = require('./routes/restloc'), // route location
-  restriddle = require('./routes/restriddle'), // route riddle
-  restuser = require('./routes/restuser'); // route user
+  restAction = require('./routes/restaction'), // route paths
+  restEvent = require('./routes/restevent'), // route paths
+  restGame = require('./routes/restgame'), // route game
+  restSgame = require('./routes/restsgame'), // route group
+  restCluster = require('./routes/restcluster'), // route group
+  restLoc = require('./routes/restloc'), // route location
+  restRiddle = require('./routes/restriddle'), // route riddle
+  restUser = require('./routes/restuser'); // route user
 
 // MIDDLEWARES ACTIVACTION
 app.use(helmet());
@@ -22,14 +22,14 @@ app.use(express.json());
 app.get('/', (req, res) => res.send('Hunting Treasure Web Service'));
 
 app.use(express.static(__dirname)); // static calls
-app.use('/api/action', restaction);
-app.use('/api/event', restevent);
-app.use('/api/game', restgame);
-app.use('/api/sgame', restsgame);
-app.use('/api/cluster', restcluster);
-app.use('/api/loc', restloc);
-app.use('/api/riddle', restriddle);
-app.use('/api/user', restuser);
+app.use('/api/action', restAction);
+app.use('/api/event', restEvent);
+app.use('/api/game', restGame);
+app.use('/api/sgame', restSgame);
+app.use('/api/cluster', restCluster);
+app.use('/api/loc', restLoc);
+app.use('/api/riddle', restRiddle);
+app.use('/api/user', restUser);
 
 app.listen(config.app.port, () =>
   console.log(`Listening on port ${config.app.port}...`)
