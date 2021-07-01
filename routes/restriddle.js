@@ -22,9 +22,8 @@ var upload = multer({ storage: storage, fileFilter: imgFilter });
 
 router.post('/', upload.single('rphoto'), async (req, res) => {
   await authHandler(req);
-  createRiddle(req.body)
-    .then(() => res.status(201).send())
-    .catch((err) => res.status(400).send(err));
+  const result = await createRiddle(req.body);
+  result ? res.status(201).send() : res.status(400).send();
 });
 
 // CREATE
