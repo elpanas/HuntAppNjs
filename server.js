@@ -1,17 +1,17 @@
 require('./db/db'); // DATABASE CONNECTIONS
-const express = require('express'); // FRAMEWORK
+const express = require('express'); // FRAMEWORKs
 const app = express(),
   config = require('./config/config'), // CONFIGURATIONS
   compression = require('compression'), // MIDDLEWARES
   helmet = require('helmet'),
-  restAction = require('./routes/restaction'), // route paths
-  restEvent = require('./routes/restevent'), // route paths
-  restGame = require('./routes/restgame'), // route game
-  restSgame = require('./routes/restsgame'), // route group
-  restCluster = require('./routes/restcluster'), // route group
-  restLoc = require('./routes/restloc'), // route location
-  restRiddle = require('./routes/restriddle'), // route riddle
-  restUser = require('./routes/restuser'); // route user
+  restAction = require('./routes/restaction'), // ROUTES
+  restEvent = require('./routes/restevent'),
+  restGame = require('./routes/restgame'),
+  restSgame = require('./routes/restsgame'),
+  restCluster = require('./routes/restcluster'),
+  restLoc = require('./routes/restloc'),
+  restRiddle = require('./routes/restriddle'),
+  restUser = require('./routes/restuser');
 
 // MIDDLEWARES ACTIVACTION
 app.use(helmet());

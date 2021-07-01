@@ -38,8 +38,11 @@ async function createSteps(idg, idsg, riddle_cat) {
         ? shuffleLocs.slice(0, clt.nr_extracted_loc - 1)
         : shuffleLocs;
 
-    for (let m = 0; m < middleLocs.length; m++)
-      steps.push(createObj(tot_steps++, idsg, middleLocs[m]._id));
+    middleLocs.forEach((midLoc) =>
+      steps.push(createObj(tot_steps++, idsg, midLoc._id))
+    );
+    /*for (let m = 0; m < middleLocs.length; m++)
+      steps.push(createObj(tot_steps++, idsg, middleLocs[m]._id));*/
   }); // Middle
 
   steps.push(createObj(tot_steps, idsg, finalLocObj._id)); // Last

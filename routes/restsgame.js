@@ -34,7 +34,6 @@ router.get('/multiple/:idg', async (req, res) => {
   result ? res.status(200).send() : res.status(404).send();
 });
 
-// Generate and send the final pdf
 router.get('/pdf/:idsg', async (req, res) => {
   await authHandler(req);
   res.download(

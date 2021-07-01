@@ -24,18 +24,18 @@ function generateQrHtml(loc) {
   if (!fs.existsSync(tmphtml)) fs.mkdirSync(tmphtml, { recursive: true });
   if (!fs.existsSync(dirpdf)) fs.mkdirSync(dirpdf, { recursive: true });
 
-  const qrfilename = tmpqrc + loc._id + '.png';
-  QRCode.toFile(qrfilename, '' + loc._id);
+  const qrfilename = `${tmpqrc}${loc._id}.png`;
+  QRCode.toFile(qrfilename, `${loc._id}`);
 
   matcherObj = {
-    '%header%': dirimg + 'header.png',
+    '%header%': `${dirimg}header.png`,
     '%qrcode%': qrfilename,
   };
 
   populateTemplate(tmphtml, dirtemplate1, matcherObj, loc._id, 1);
 
   matcherObj = {
-    '%header%': dirimg + 'header.png',
+    '%header%': `${dirimg}header.png`,
     '%loclatitude%': loc.location.coordinates[0],
     '%loclongitude%': loc.location.coordinates[1],
     '%locid%': loc._id,
@@ -67,9 +67,7 @@ function generateQrPdf(idg) {
         rimraf(tmpqrc);
         rimraf(tmphtml);
       },
-      (error) => {
-        console.log('ERROR: ', util.inspect(error));
-      }
+      (error) => console.log('ERROR: ', util.inspect(error))
     );
 }
 
@@ -91,7 +89,7 @@ async function generateCertPdf(idsg) {
     dirtemplate = `${process.cwd()}/html2pdf/template-certificate.html`,
     newidg = mongoose.Types.ObjectId(idsg);
 
-  if (!fs.existsSync(dirpdf + idsg + '-cert.pdf')) {
+  if (!fs.existsSync(`${dirpdf}${idsg}-cert.pdf`)) {
     if (!fs.existsSync(tmppdf)) fs.mkdirSync(tmppdf);
     if (!fs.existsSync(dirpdf)) fs.mkdirSync(dirpdf);
 
@@ -144,9 +142,7 @@ async function getTime(idg) {
         maxDate: { $max: '$reachedOn' },
       },
     },
-    {
-      $addFields: { timeElapsed: { $subtract: ['$maxDate', '$minDate'] } },
-    },
+    { $addFields: { timeElapsed: { $subtract: ['$maxDate', '$minDate'] } } },
     { $project: { _id: 0, timeElapsed: 1 } },
   ]);
 }

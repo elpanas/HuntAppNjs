@@ -13,6 +13,9 @@ const config = {
       useFindAndModify: false,
     },
   },
+  bcrypt: {
+    saltRounds: 10,
+  },
 };
 
 module.exports = config;

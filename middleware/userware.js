@@ -1,12 +1,20 @@
-const { User } = require('../models/user');
+const { credentialsHandler } = require('../functions/functions');
+const { User } = require('../models/user'),
+  bcrypt = require('bcrypt'),
+  config = require('../config/config'),
+  saltRounds = ({
+    bcrypt: { saltRounds },
+  } = config);
 
 // CREATE USER
 async function createUser(user_data) {
+  const password = Buffer.from(user_data.password, 'base64').toString();
+  const hashPassword = await bcrypt.hashSync(password, saltRounds);
   return await User.create({
     first_name: user_data.first_name,
     full_name: user_data.full_name,
     username: Buffer.from(user_data.username, 'base64').toString(),
-    password: Buffer.from(user_data.password, 'base64').toString(),
+    password: hashPassword,
     is_admin: user_data.is_admin,
   });
 }
@@ -20,76 +28,45 @@ async function getUser(id) {
 
 // check credentials
 async function checkUser(auth) {
-  const tmp = auth.split(' '); // Divido in base allo spazio  "Basic Y2hhcmxlczoxMjM0NQ==" per recuperare la 2a parte
-  const buf = Buffer.from(tmp[1], 'base64').toString(); // creo un buffer e lo avviso che l'input e' in base64
-  const [username, password] = buf.split(':'); // divido auth in base a ':'
-
-  const result = await User.findOne({
-    username: username,
-    password: password,
-  }).lean(); // criteri di ricerca
-
+  const credentialObject = credentialsHandler(auth);
+  const result = await User.findOne(credentialObject).lean(); // criteri di ricerca
   if (result) return result._id;
-  else return false;
+  return false;
 }
 
 // check the same thing but it returns the whole document
 async function checkLogin(auth) {
-  const tmp = auth.split(' '); // Divido in base allo spazio  "Basic Y2hhcmxlczoxMjM0NQ==" per recuperare la 2a parte
-  const buf = Buffer.from(tmp[1], 'base64').toString(); // creo un buffer e lo avviso che l'input e' in base64
-  const [username, password] = buf.split(':'); // divido auth in base a ':'
-
+  const credentialObject = credentialsHandler(auth);
   const user = await User.aggregate([
-    {
-      $match: {
-        username: username,
-        password: password,
-      },
-    },
-    {
-      $addFields: { logStatus: { $subtract: ['$$NOW', '$logged'] } },
-    },
+    { $match: credentialObject },
+    { $addFields: { logStatus: { $subtract: ['$$NOW', '$logged'] } } },
     { $project: { _id: 0, logStatus: 1 } },
   ]);
 
   if (user[0].logStatus < 60 * 60000) {
-    return await User.findOneAndUpdate(
-      {
-        username: username,
-        password: password,
-      },
+    return await User.findByIdAndUpdate(
+      user[0]._id,
       { logged: Date.now() },
       { new: true }
     ).lean();
-  } else return false;
+  }
+  return false;
 }
 // --------------------------------------------------------------------
 
 async function makeLogin(auth) {
-  const tmp = auth.split(' ');
-  const buf = Buffer.from(tmp[1], 'base64').toString();
-  const [username, password] = buf.split(':');
-
+  const credentialObject = credentialsHandler(auth);
   return await User.findOneAndUpdate(
-    {
-      username: username,
-      password: password,
-    },
+    credentialObject,
     { logged: Date.now() },
     { new: true }
   ).lean();
 }
 
 async function makeLogout(auth) {
-  const tmp = auth.split(' ');
-  const buf = Buffer.from(tmp[1], 'base64').toString();
-  const [username, password] = buf.split(':');
-
+  const credentialObject = credentialsHandler(auth);
   return await User.findOneAndUpdate(
-    {
-      username: username,
-      password: password,
-    },
+    credentialObject,
     { logged: null },
     { new: true }
   ).lean();

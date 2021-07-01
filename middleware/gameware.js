@@ -3,17 +3,6 @@ const { Game } = require('../models/game');
 // CREATE
 async function createGame(game_data) {
   return await Game.create(game_data);
-  /*
-    const game = new Game({
-        event: game_data.event_id,
-        name: game_data.name,
-        organizer: game_data.organizer,
-        riddle_category: game_data.riddle_category,
-        is_open: game_data.is_open
-    });
-
-    return await game.save();
-    */
 }
 // --------------------------------------------------------------------
 

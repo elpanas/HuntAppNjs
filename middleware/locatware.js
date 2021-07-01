@@ -65,10 +65,7 @@ async function getDistances(locdata) {
 
 // mean computation among the distances
 function computeMean(distances) {
-  let sum = 0,
-    i = 0;
-  for (i = 0; i < distances.length; i++) sum += distances[i].distance; // don't forget to add the base
-
+  const sum = distances.reduce((a, b) => a + b);
   return sum / distances.length;
 }
 // --------------------------------------------------------------------

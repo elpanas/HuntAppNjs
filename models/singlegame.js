@@ -2,7 +2,6 @@ const mongoose = require('mongoose'); // MongoDB framework
 const Schema = mongoose.Schema;
 
 const singleGameSchema = Schema({
-  // when game is booted
   game: {
     type: Schema.Types.ObjectId,
     ref: 'game',

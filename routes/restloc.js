@@ -62,13 +62,18 @@ router.post('/', upload.single('lphoto'), async (req, res) => {
   if (start || is_mean) {
     const result = await createLocation(req.body);
     if (result._id) {
-      if (req.body.new_cluster == 'true')
+      if (req.body.new_cluster == 'true') {
         createCluster(result.game, result.cluster);
+      }
       generateQrHtml(result);
-      if (result.is_final) generateQrPdf(result.game);
-      res.status(200).send();
-    } else res.status(400).send();
-  } else res.status(400).send();
+      if (result.is_final) {
+        generateQrPdf(result.game);
+      }
+      res.status(201).send();
+    }
+    res.status(400).send();
+  }
+  res.status(400).send();
 });
 // --------------------------------------------------------------------
 

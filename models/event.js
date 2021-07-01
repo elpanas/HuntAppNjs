@@ -1,7 +1,6 @@
 const mongoose = require('mongoose'); // MongoDB framework
 const Schema = mongoose.Schema;
 
-// ----- EVENTS -----
 const eventSchema = Schema({
   name: {
     type: String,

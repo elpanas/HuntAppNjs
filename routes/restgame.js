@@ -12,7 +12,7 @@ const router = express.Router();
 router.post('/', async (req, res) => {
   await authHandler(req);
   const result = await createGame(req.body);
-  result ? res.status(200).send() : res.status(400).send();
+  result ? res.status(201).send() : res.status(400).send();
 });
 // --------------------------------------------------------------------
 

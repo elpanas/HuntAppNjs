@@ -1,7 +1,6 @@
 const mongoose = require('mongoose'); // MongoDB framework
 const Schema = mongoose.Schema;
 
-// ----- GAMES -----
 const gameSchema = Schema({
   event: {
     type: Schema.Types.ObjectId,

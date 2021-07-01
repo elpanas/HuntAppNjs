@@ -32,7 +32,7 @@ var upload = multer({ storage: storage, fileFilter: imgFilter });
 router.post('/gphoto', upload.single('selfie'), async (req, res) => {
   await authHandler(req);
   setPhoto(req.body.ida, req.body.img)
-    .then(() => res.status(200).send())
+    .then(() => res.status(201).send())
     .catch(() => res.status(400).send());
 });
 // --------------------------------------------------------------------
