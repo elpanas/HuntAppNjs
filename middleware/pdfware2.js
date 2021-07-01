@@ -97,12 +97,9 @@ async function generateCertPdf(idsg) {
       encoding: 'utf8',
       flag: 'r+',
     });
-
     const loadtime = await getTime(newidg),
       loadgroup = await getGroup(idsg);
-
     const time_elapsed = millisec(loadtime[0].timeElapsed).format('mm');
-
     const matcherObj = {
       '%backimage%': `${dirimg}codeweek_certificate.jpg`,
       '%bubble%': `${dirimg}bubbles-50.png`,

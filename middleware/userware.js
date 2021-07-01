@@ -8,12 +8,13 @@ const { User } = require('../models/user'),
 
 // CREATE USER
 async function createUser(user_data) {
-  const password = Buffer.from(user_data.password, 'base64').toString();
+  const username = Buffer.from(user_data.username, 'base64').toString(),
+    password = Buffer.from(user_data.password, 'base64').toString();
   const hashPassword = await bcrypt.hashSync(password, saltRounds);
   return await User.create({
     first_name: user_data.first_name,
     full_name: user_data.full_name,
-    username: Buffer.from(user_data.username, 'base64').toString(),
+    username: username,
     password: hashPassword,
     is_admin: user_data.is_admin,
   });

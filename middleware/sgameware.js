@@ -24,28 +24,28 @@ async function createSteps(idg, idsg, riddle_cat) {
     finalLocObj = locations.find((loc) => loc.is_final);
   let steps = [],
     s = 0,
-    tot_steps = 2;
+    tot_steps = 1;
 
   steps.push(createObj(1, idsg, startLocObj._id)); // First
 
   clusters.forEach((clt) => {
-    const filteredLocs = locations.filter(
-      (loc) => loc.cluster == clt.cluster && !loc.is_start && !loc.is_final
+    const filteredLocs = shuffle(
+      locations.filter(
+        (loc) => loc.cluster == clt.cluster && !loc.is_start && !loc.is_final
+      )
     );
-    const shuffleLocs = shuffle(filteredLocs);
-    const middleLocs =
-      shuffleLocs.length > clt.nr_extracted_loc
-        ? shuffleLocs.slice(0, clt.nr_extracted_loc - 1)
-        : shuffleLocs;
 
-    middleLocs.forEach((midLoc) =>
-      steps.push(createObj(tot_steps++, idsg, midLoc._id))
+    const middleLocs =
+      filteredLocs.length > clt.nr_extracted_loc
+        ? filteredLocs.slice(0, clt.nr_extracted_loc - 1)
+        : filteredLocs;
+
+    middleLocs.forEach((loc) =>
+      steps.push(createObj(tot_steps++, idsg, loc._id))
     );
-    /*for (let m = 0; m < middleLocs.length; m++)
-      steps.push(createObj(tot_steps++, idsg, middleLocs[m]._id));*/
   }); // Middle
 
-  steps.push(createObj(tot_steps, idsg, finalLocObj._id)); // Last
+  steps.push(createObj(tot_steps++, idsg, finalLocObj._id)); // Last
 
   const riddles = await getRiddles(tot_steps, riddle_cat);
   riddles.forEach((r) => (steps[s++].riddle = r._id));
