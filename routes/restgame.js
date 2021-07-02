@@ -5,8 +5,8 @@ const express = require('express'),
     activateGame,
     setQrCode,
   } = require('../middleware/gameware'),
-  { authHandler } = require('../functions/functions');
-const router = express.Router();
+  { authHandler } = require('../functions/functions'),
+  router = express.Router();
 
 // CREATE
 router.post('/', async (req, res) => {

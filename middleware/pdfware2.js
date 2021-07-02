@@ -15,32 +15,31 @@ function generateQrHtml(loc) {
     tmphtml = `${process.cwd()}/html2pdf/temp/templates/${idg}/`,
     dirpdf = `${process.cwd()}/html2pdf/pdfs/`,
     dirimg = `${process.cwd()}/html2pdf/images/`,
-    dirtemplate1 = `${process.cwd()}/html2pdf/template1.html`,
-    dirtemplate2 = `${process.cwd()}/html2pdf/template2.html`;
-
+    dirtemplate1 = `${process.cwd()}/html2pdf/template1.ejs`,
+    dirtemplate2 = `${process.cwd()}/html2pdf/template2.ejs`,
+    qrfilename = `${tmpqrc}${loc._id}.png`;
   let matcherObj;
 
   if (!fs.existsSync(tmpqrc)) fs.mkdirSync(tmpqrc, { recursive: true });
   if (!fs.existsSync(tmphtml)) fs.mkdirSync(tmphtml, { recursive: true });
   if (!fs.existsSync(dirpdf)) fs.mkdirSync(dirpdf, { recursive: true });
 
-  const qrfilename = `${tmpqrc}${loc._id}.png`;
   QRCode.toFile(qrfilename, `${loc._id}`);
 
   matcherObj = {
-    '%header%': `${dirimg}header.png`,
-    '%qrcode%': qrfilename,
+    header: `${dirimg}header.png`,
+    qrcode: qrfilename,
   };
 
   populateTemplate(tmphtml, dirtemplate1, matcherObj, loc._id, 1);
 
   matcherObj = {
-    '%header%': `${dirimg}header.png`,
-    '%loclatitude%': loc.location.coordinates[0],
-    '%loclongitude%': loc.location.coordinates[1],
-    '%locid%': loc._id,
-    '%qrcontent%': loc._id,
-    '%locname%': loc.name,
+    header: `${dirimg}header.png`,
+    loclatitude: loc.location.coordinates[0],
+    loclongitude: loc.location.coordinates[1],
+    locid: loc._id,
+    qrcontent: loc._id,
+    locname: loc.name,
   };
 
   populateTemplate(tmphtml, dirtemplate2, matcherObj, loc._id, 2);
@@ -50,8 +49,8 @@ function generateQrHtml(loc) {
 function generateQrPdf(idg) {
   const tmpqrc = `${process.cwd()}/html2pdf/temp/qrcodes/${idg}/`,
     tmphtml = `${process.cwd()}/html2pdf/temp/templates/${idg}/`,
-    dirpdf = `${process.cwd()}/html2pdf/pdfs/`;
-  const pathinputs = fs.readdirSync(tmphtml);
+    dirpdf = `${process.cwd()}/html2pdf/pdfs/`,
+    pathinputs = fs.readdirSync(tmphtml);
 
   if (!fs.existsSync(dirpdf)) fs.mkdirSync(dirpdf, { recursive: true });
 
@@ -72,13 +71,13 @@ function generateQrPdf(idg) {
 }
 
 // support generalization function to the previous one
-function populateTemplate(tmphtml, dirtemplate, matcherObj, idl, p) {
-  let base_file = fs.readFileSync(dirtemplate, {
-    encoding: 'utf8',
-    flag: 'r+',
-  });
-  base_file = multiReplace(base_file, matcherObj);
-  fs.writeFileSync(`${tmphtml}${idl}page${p}.html`, base_file);
+async function populateTemplate(tmphtml, dirtemplate, matcherObj, idl, p) {
+  let template = await ejs.renderFile(
+    dirtemplate,
+    { data: matcherObj },
+    { async: true }
+  );
+  fs.writeFileSync(`${tmphtml}${idl}page${p}.html`, template);
 }
 
 // create a certificate pdf file
@@ -86,7 +85,7 @@ async function generateCertPdf(idsg) {
   const tmppdf = `${process.cwd()}/html2pdf/temp/templates/${idsg}/`,
     dirpdf = `${process.cwd()}/html2pdf/pdfs/`,
     dirimg = `${process.cwd()}/html2pdf/images/`,
-    dirtemplate = `${process.cwd()}/html2pdf/template-certificate.html`,
+    dirtemplate = `${process.cwd()}/html2pdf/template-certificate.ejs`,
     newidg = mongoose.Types.ObjectId(idsg);
 
   if (!fs.existsSync(`${dirpdf}${idsg}-cert.pdf`)) {
@@ -98,16 +97,16 @@ async function generateCertPdf(idsg) {
       flag: 'r+',
     });
     const loadtime = await getTime(newidg),
-      loadgroup = await getGroup(idsg);
-    const time_elapsed = millisec(loadtime[0].timeElapsed).format('mm');
-    const matcherObj = {
-      '%backimage%': `${dirimg}codeweek_certificate.jpg`,
-      '%bubble%': `${dirimg}bubbles-50.png`,
-      '%TEAM_NAME%': loadgroup.group_name,
-      '%DATE%': dateFormat(Date.now(), 'd/m/yyyy'),
-      '%ELAPSED_MINS%': time_elapsed,
-      '%AVATAR_NAME%': `${dirimg}default_user.jpg`,
-    };
+      loadgroup = await getGroup(idsg),
+      time_elapsed = millisec(loadtime[0].timeElapsed).format('mm'),
+      matcherObj = {
+        backimage: `${dirimg}codeweek_certificate.jpg`,
+        bubble: `${dirimg}bubbles-50.png`,
+        TEAM_NAME: loadgroup.group_name,
+        DATE: dateFormat(Date.now(), 'd/m/yyyy'),
+        ELAPSED_MINS: time_elapsed,
+        AVATAR_NAME: `${dirimg}default_user.jpg`,
+      };
 
     base_file = multiReplace(base_file, matcherObj);
 

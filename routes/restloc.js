@@ -1,6 +1,5 @@
 const express = require('express'),
   {
-    createLocations,
     createLocation,
     getLocations,
     getDistances,
@@ -8,8 +7,8 @@ const express = require('express'),
   } = require('../middleware/locatware'),
   { authHandler, makeUpload } = require('../functions/functions'),
   { generateQrPdf, generateQrHtml } = require('../middleware/pdfware2'),
-  { createCluster } = require('../middleware/clusterware');
-const router = express.Router();
+  { createCluster } = require('../middleware/clusterware'),
+  router = express.Router();
 var upload = makeUpload('/data/locphoto');
 
 // CREATE

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+    <title>Code Hunting Games certificate</title>
+
+    <style>
+      html,
+      body {
+        margin-left: 82px;
+        padding: 0;
+        font-family: 'DejaVu Sans', 'Arial', sans-serif;
+        font-weight: 500;
+        font-size: 26pt;
+        background: rgb(255, 255, 255);
+        -webkit-print-color-adjust: exact;
+        box-sizing: border-box;
+      }
+      .background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .page {
+        position: absolute;
+        padding: 10mm;
+        width: 277mm;
+        height: 190mm;
+      }
+      .overlay {
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        width: 297mm;
+        height: 210mm;
+        background-image: url('%bubble%');
+        background-repeat: no-repeat;
+      }
+      .left-overlay {
+        background-position: -90mm 0;
+      }
+      .right-overlay {
+        background-position: 170mm -120mm;
+      }
+      .header {
+        margin-top: 12mm;
+        height: 50mm;
+        text-align: center;
+      }
+      .header img {
+        margin-top: 10mm;
+        height: auto;
+      }
+      .content {
+        position: absolute;
+        top: 60mm;
+        padding: 0 2em;
+        text-align: center;
+        line-height: 1.2;
+      }
+      .content .big {
+        display: block;
+        margin: 0;
+        font-size: 34pt;
+        font-weight: bold;
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+  <body>
+    <img src="<%= backimage %>" class="background" />
+
+    <div class="page">
+      <!--<div class="header">
+            <img src="/html2pdf/images/title.png" style="width: 145mm" />
+        </div>-->
+
+      <div class="content">
+        <div class="big"><%= TEAM_NAME %></div>
+        for completing the
+        <div class="big">Code Week<br /><i>Code Hunting Game</i></div>
+        on <%= DATE %> in <%= ELAPSED_MINS %> minutes
+      </div>
+    </div>
+
+    <!--<div style="position: absolute; width: 277mm; height: 34mm; left: 10mm; top: 160mm; text-align: center">
+        <img src="%root%/data/certificates/%BASE_GEN_FILE%-montage.png" style="max-width: 277mm; height: 34mm" />
+    </div>-->
+
+    <!--<div class="overlay left-overlay">
+    </div>
+
+    <div class="overlay right-overlay">
+    </div>-->
+
+    <img
+      src="<%= AVATAR_NAME %>"
+      style="
+        position: absolute;
+        width: 40mm;
+        height: auto;
+        max-height: 70mm;
+        top: 48mm;
+        left: 22mm;
+      "
+    />
+
+    <!--<img src="/html2pdf/images/codyroby.png" style="position: absolute; width: 50mm; height: auto; top: 21mm; right: 10mm" />-->
+  </body>
+</html>

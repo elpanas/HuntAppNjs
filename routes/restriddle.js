@@ -2,7 +2,7 @@ const express = require('express'),
   { createRiddle, generateRiddle } = require('../middleware/riddleware'),
   { authHandler, makeUpload } = require('../functions/functions'),
   { makeUpload } = require('../functions/functions'),
-const router = express.Router();
+  router = express.Router();
 var upload = makeUpload('/src/riddles');
 
 router.post('/', upload.single('rphoto'), async (req, res) => {

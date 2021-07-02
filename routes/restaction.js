@@ -8,8 +8,8 @@ const express = require('express'),
     setPhoto,
   } = require('../middleware/actionware'),
   { generateRiddle, checkRiddle } = require('../middleware/riddleware'),
-  { authHandler, makeUpload } = require('../functions/functions');
-const router = express.Router();
+  { authHandler, makeUpload } = require('../functions/functions'),
+  router = express.Router();
 var upload = makeUpload('/data/gamephoto');
 
 // CREATE

@@ -17,6 +17,7 @@ const app = express(),
 app.use(helmet());
 app.use(compression());
 app.use(express.json());
+app.set('view engine', 'ejs');
 
 // in case of web request
 app.get('/', (req, res) => res.send('Hunting Treasure Web Service'));

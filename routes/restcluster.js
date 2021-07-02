@@ -4,8 +4,8 @@ const express = require('express'),
     getClusterList,
     getClusterInfo,
   } = require('../middleware/clusterware'),
-  { authHandler } = require('../functions/authHandler');
-const router = express.Router();
+  { authHandler } = require('../functions/authHandler'),
+  router = express.Router();
 
 router.get('/:idg', async (req, res) => {
   await authHandler(req);

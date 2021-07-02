@@ -6,8 +6,8 @@ const express = require('express'),
     makeLogout,
   } = require('../middleware/userware'),
   auth = 'WWW-Authenticate',
-  errorMessage = 'Basic realm: "Restricted Area"';
-const router = express.Router();
+  errorMessage = 'Basic realm: "Restricted Area"',
+  router = express.Router();
 
 // CREATE
 router.post('/', (req, res) => {

@@ -2,7 +2,7 @@ const { SingleGame } = require('../models/singlegame'),
   { Actions } = require('../models/action'),
   { Cluster } = require('../models/cluster'),
   { Riddle } = require('../models/riddle'),
-  { createObj, shuffle } = require('../models/functions');
+  { createObj, shuffle } = require('../functions/functions');
 
 // ----- CREATE -----
 async function createSingleGame(single_data, idu) {
@@ -119,7 +119,9 @@ async function getFinishedList(idu) {
 
 // set a game session as completed
 async function setCompleted(idsg) {
-  return SingleGame.findByIdAndUpdate(idsg, { is_completed: true }).lean();
+  return await SingleGame.findByIdAndUpdate(idsg, {
+    is_completed: true,
+  }).lean();
 }
 // --------------------------------------------------------------------
 

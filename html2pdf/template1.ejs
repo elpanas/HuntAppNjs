@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <meta charset="utf8" />
+    <title>Code Hunting Games</title>
+    <style>
+      html,
+      body {
+        margin-left: 30px;
+        padding: 0;
+        font-family: sans-serif;
+        font-weight: 500;
+        font-size: 40pt;
+        /*background: rgb(255,255,255);*/
+        -webkit-print-color-adjust: exact;
+        box-sizing: border-box;
+      }
+      .page {
+        padding: 10mm;
+        width: 128.5mm;
+        height: 190mm;
+        /*position: absolute; */
+      }
+
+      .header-img {
+      }
+      .qrcode {
+      }
+
+      .url {
+        margin-top: 10mm;
+        font-weight: bold;
+        font-size: 16pt;
+        text-align: center;
+      }
+      .content {
+        font-size: 20pt;
+      }
+      .label {
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <img class="header-img" width="100%" src="<% header %>" /><br />
+      <img class="qrcode" width="100%" src="<% qrcode %>" /><br />
+      <div class="url">http://codehunting.game</div>
+    </div>
+  </body>
+</html>

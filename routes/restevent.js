@@ -4,13 +4,13 @@ const express = require('express'),
     getAllEvents,
     checkEvent,
   } = require('../middleware/eventware'),
-  { authHandler } = require('../functions/authHandler');
-const router = express.Router();
+  { authHandler } = require('../functions/authHandler'),
+  router = express.Router();
 
 // CREATE
 router.post('/', async (req, res) => {
-  const idu = await authHandler(req);
-  const eventexist = await checkEvent(req.body.name);
+  const idu = await authHandler(req),
+    eventexist = await checkEvent(req.body.name);
   !eventexist
     ? createEvent(req.body, idu)
         .then(() => res.status(201).send())

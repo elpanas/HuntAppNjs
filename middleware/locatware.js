@@ -1,5 +1,5 @@
-const { Location } = require('../models/location');
-const mongoose = require('mongoose');
+const { Location } = require('../models/location'),
+  mongoose = require('mongoose');
 
 // CREATE
 async function createLocations(locs_data) {
