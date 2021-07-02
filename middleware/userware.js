@@ -1,5 +1,5 @@
-const { credentialsHandler } = require('../functions/functions');
-const { User } = require('../models/user'),
+const { credentialsHandler } = require('../functions/functions'),
+  { User } = require('../models/user'),
   bcrypt = require('bcrypt'),
   config = require('../config/config'),
   saltRounds = ({
@@ -30,7 +30,7 @@ async function getUser(id) {
 // check credentials
 async function checkUser(auth) {
   const credentialObject = credentialsHandler(auth);
-  const result = await User.findOne(credentialObject).lean(); // criteri di ricerca
+  const result = await User.findOne(credentialObject).lean();
   if (result) return result._id;
   return false;
 }

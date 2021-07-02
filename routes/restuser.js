@@ -11,9 +11,8 @@ const router = express.Router();
 
 // CREATE
 router.post('/', (req, res) => {
-  createUser(req.body)
-    .then((result) => res.status(201).json(result))
-    .catch((err) => res.status(400).send(err));
+  const result = await createUser(req.body);
+  result ? res.status(201).json(result) : res.status(400).send(err);
 });
 // --------------------------------------------------------------------
 
@@ -25,14 +24,13 @@ router.get('/chklogin', async (req, res) => {
 });
 // --------------------------------------------------------------------
 
-router.put('/login', async (req, res) => {
+router.patch('/login', async (req, res) => {
   const result = await makeLogin(req.get('Authorization'));
-  !result
-    ? res.status(401).setHeader(auth, errorMessage).send()
-    : res.status(200).send(result.is_admin);
+  if (!result) res.status(401).setHeader(auth, errorMessage).send();
+  res.status(200).send(result.is_admin);
 });
 
-router.put('/logout', async (req, res) => {
+router.patch('/logout', async (req, res) => {
   const result = await makeLogout(req.get('Authorization'));
   resultHandler(res, result);
 });

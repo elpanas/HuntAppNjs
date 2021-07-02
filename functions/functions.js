@@ -3,24 +3,20 @@ const { checkUser } = require('../middleware/userware'),
   errorMessage = 'Basic realm: "Restricted Area"',
   config = require('../config/config'),
   bcrypt = require('bcrypt'),
+  multer = require('multer'),
   saltRounds = ({
     bcrypt: { saltRounds },
   } = config);
 
 async function authHandler(req) {
   const idu = await checkUser(req.get('Authorization'));
-
-  if (idu) {
-    return idu;
-  } else {
-    res.status(401).setHeader(auth, errorMessage).send();
-  }
+  if (idu) return idu;
+  res.status(401).setHeader(auth, errorMessage).send();
 }
 
 function resultHandler(res, result) {
-  result
-    ? res.status(200).send()
-    : res.status(401).setHeader(auth, errorMessage).send();
+  if (result) res.status(200).send();
+  res.status(401).setHeader(auth, errorMessage).send();
 }
 
 function credentialsHandler(auth) {
@@ -45,6 +41,24 @@ function shuffle(arr) {
   }
   return arr;
 }
+
+function makeUpload(path) {
+  const storage = multer.diskStorage({
+      destination: (req, file, cb) => {
+        cb(null, `${process.cwd()}${path}`);
+      },
+      filename: (req, file, cb) => {
+        cb(null, file.originalname);
+      },
+    }),
+    imgFilter = (req, file, cb) => {
+      file.mimetype == 'image/jpeg' || file.mimetype == 'image/png'
+        ? cb(null, true)
+        : cb(null, false);
+    };
+
+  return multer({ storage: storage, fileFilter: imgFilter });
+}
 // ------------------------------------------------------
 
 module.exports.authHandler = authHandler;
@@ -52,3 +66,4 @@ module.exports.resultHandler = resultHandler;
 module.exports.credentialsHandler = credentialsHandler;
 module.exports.createObj = createObj;
 module.exports.shuffle = shuffle;
+module.exports.makeUpload = makeUpload;

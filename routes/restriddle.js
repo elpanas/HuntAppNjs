@@ -1,24 +1,9 @@
 const express = require('express'),
   { createRiddle, generateRiddle } = require('../middleware/riddleware'),
-  { authHandler } = require('../functions/authHandler'),
-  multer = require('multer');
+  { authHandler, makeUpload } = require('../functions/functions'),
+  { makeUpload } = require('../functions/functions'),
 const router = express.Router();
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, `${process.cwd()}/src/riddles`);
-    },
-    filename: (req, file, cb) => {
-      cb(null, file.originalname);
-    },
-  }),
-  imgFilter = (req, file, cb) => {
-    if (file.mimetype == 'image/jpeg' || file.mimetype == 'image/png')
-      cb(null, true);
-    else cb(null, false);
-  };
-
-var upload = multer({ storage: storage, fileFilter: imgFilter });
+var upload = makeUpload('/src/riddles');
 
 router.post('/', upload.single('rphoto'), async (req, res) => {
   await authHandler(req);

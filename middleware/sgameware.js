@@ -16,7 +16,7 @@ async function createSingleGame(single_data, idu) {
   });
 }
 
-// generate random steps on the
+// generate random steps
 async function createSteps(idg, idsg, riddle_cat) {
   const clusters = await getClusters(idg),
     locations = await getLocations(idg);

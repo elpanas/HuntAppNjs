@@ -15,17 +15,16 @@ router.get('/:idg', async (req, res) => {
 
 router.get('/game/:idg/clt/:clt', async (req, res) => {
   await authHandler(req);
-  getClusterInfo(req.params.idg, req.params.clt)
-    .then((result) => res.status(200).send(result))
-    .catch((err) => res.status(400).send(err));
+  const result = await getClusterInfo(req.params.idg, req.params.clt);
+  result ? res.status(200).send(result) : res.status(400).send();
 });
 // --------------------------------------------------------------
 
-router.put('/', (req, res) => {
+// UPDATE
+router.patch('/', (req, res) => {
   await authHandler(req);
-  addExtractedLoc(req.body)
-    .then(() => res.status(200).send())
-    .catch((err) => res.status(400).send(err));
+  const result = await addExtractedLoc(req.body);
+  result ? res.status(200).send() : res.status(400).send();
 });
 // --------------------------------------------------------------
 

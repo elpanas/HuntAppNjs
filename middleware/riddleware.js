@@ -13,11 +13,6 @@ async function createRiddle(riddle_data) {
     is_final: riddle_data.final == 'true',
   });
 }
-
-/*
-async function createRiddles(riddle_data) {
-    return await Riddle.insertMany(riddle_data);
-}*/
 // --------------------------------------------------------------------
 
 // create the riddle, joining the text with a parameter

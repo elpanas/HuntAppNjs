@@ -7,7 +7,7 @@ const express = require('express'),
     checkMultipleGame,
     getFinishedList,
   } = require('../middleware/sgameware'),
-  { authHandler } = require('../functions/authHandler'),
+  { authHandler } = require('../functions/functions'),
   { generateCertPdf } = require('../middleware/pdfware');
 const router = express.Router();
 
@@ -50,8 +50,8 @@ router.get('/terminated', async (req, res) => {
 });
 // --------------------------------------------------------------------
 
-router.put('/completed', async (req, res) => {
-  // richiamo questa funzione se non c'è un id-action memorizzato in locale
+// UPDATE
+router.patch('/completed', async (req, res) => {
   await authHandler(req);
   const isOk = await setCompleted(req.body.idsg);
   isOk
@@ -60,4 +60,5 @@ router.put('/completed', async (req, res) => {
         .catch((err) => res.status(400).send(err))
     : res.status(400).send(err);
 });
+// --------------------------------------------------------------------
 module.exports = router;
