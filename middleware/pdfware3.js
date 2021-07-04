@@ -1,5 +1,5 @@
 const { Actions } = require('../models/action'),
-  { SingleGame } = require('../models/singlegame'),
+  mongoose = require('mongoose'),
   QRCode = require('qrcode'),
   fs = require('fs'),
   Prince = require('prince'),
@@ -8,11 +8,7 @@ const { Actions } = require('../models/action'),
   rimraf = require('rimraf'),
   multiReplace = require('string-multiple-replace'),
   dateFormat = require('dateformat'),
-  { setQrCode } = require('./gameware'),
-  config = require('../config/config'),
-  {
-    redis: { time },
-  } = config;
+  { setQrCode } = require('./gameware');
 
 function generateQrHtml(loc) {
   const tmpqrc = `${process.cwd()}/html2pdf/temp/qrcodes/${idg}/`,
@@ -22,6 +18,7 @@ function generateQrHtml(loc) {
     dirtemplate1 = `${process.cwd()}/html2pdf/template1.ejs`,
     dirtemplate2 = `${process.cwd()}/html2pdf/template2.ejs`,
     qrfilename = `${tmpqrc}${loc._id}.png`;
+
   let matcherObj;
 
   if (!fs.existsSync(tmpqrc)) fs.mkdirSync(tmpqrc, { recursive: true });
@@ -89,7 +86,7 @@ async function generateCertPdf(idsg) {
   const tmppdf = `${process.cwd()}/html2pdf/temp/templates/${idsg}/`,
     dirpdf = `${process.cwd()}/html2pdf/pdfs/`,
     dirimg = `${process.cwd()}/html2pdf/images/`,
-    dirtemplate = `${process.cwd()}/html2pdf/template-certificate.ejs`,
+    dirtemplate = `${process.cwd()}/html2pdf/template-certificate.html`,
     newidg = mongoose.Types.ObjectId(idsg);
 
   if (!fs.existsSync(`${dirpdf}${idsg}-cert.pdf`)) {
@@ -101,16 +98,16 @@ async function generateCertPdf(idsg) {
       flag: 'r+',
     });
     const loadtime = await getTime(newidg),
-      loadgroup = await getGroup(idsg),
-      time_elapsed = millisec(loadtime[0].timeElapsed).format('mm'),
-      matcherObj = {
-        backimage: `${dirimg}codeweek_certificate.jpg`,
-        bubble: `${dirimg}bubbles-50.png`,
-        TEAM_NAME: loadgroup.group_name,
-        DATE: dateFormat(Date.now(), 'd/m/yyyy'),
-        ELAPSED_MINS: time_elapsed,
-        AVATAR_NAME: `${dirimg}default_user.jpg`,
-      };
+      loadgroup = await getGroup(idsg);
+    const time_elapsed = millisec(loadtime[0].timeElapsed).format('mm');
+    const matcherObj = {
+      '%backimage%': `${dirimg}codeweek_certificate.jpg`,
+      '%bubble%': `${dirimg}bubbles-50.png`,
+      '%TEAM_NAME%': loadgroup.group_name,
+      '%DATE%': dateFormat(Date.now(), 'd/m/yyyy'),
+      '%ELAPSED_MINS%': time_elapsed,
+      '%AVATAR_NAME%': `${dirimg}default_user.jpg`,
+    };
 
     base_file = multiReplace(base_file, matcherObj);
 
@@ -144,18 +141,13 @@ async function getTime(idg) {
     },
     { $addFields: { timeElapsed: { $subtract: ['$maxDate', '$minDate'] } } },
     { $project: { _id: 0, timeElapsed: 1 } },
-  ]).cache({ ttl: time });
+  ]);
 }
 
 async function getGroup(idsg) {
-  return await SingleGame.findById(idsg)
-    .select('group_name')
-    .lean()
-    .cache({ ttl: time });
+  return await SingleGame.findById(idsg).select('group_name').lean();
 }
 
-module.exports = {
-  generateQrHtml: generateQrHtml,
-  generateQrPdf: generateQrPdf,
-  generateCertPdf: generateCertPdf,
-};
+module.exports.generateQrHtml = generateQrHtml;
+module.exports.generateQrPdf = generateQrPdf;
+module.exports.generateCertPdf = generateCertPdf;

@@ -1,8 +1,13 @@
-const { Event } = require('../models/event');
+const { Event } = require('../models/event'),
+  { clearCache } = require('redis_mongoose'),
+  config = require('../config/config'),
+  {
+    redis: { time },
+  } = config;
 
 // CREATE EVENT
 async function createEvent(event_data, user_id) {
-  return await Event.create({
+  const result = await Event.create({
     name: event_data.name,
     min_locations: event_data.minloc,
     max_locations: event_data.maxloc,
@@ -10,6 +15,8 @@ async function createEvent(event_data, user_id) {
     organizer: user_id,
     location: event_data.location,
   });
+  clearCache();
+  return result;
 }
 // --------------------------------------------------------------------
 
@@ -25,15 +32,18 @@ async function getAllEvents(lat, long) {
     },
   })
     .lean()
-    .populate('organizer');
+    .populate('organizer')
+    .cache({ ttl: time });
 }
 
 // check if there is an event with the same name
 async function checkEvent(event_name) {
-  return await Event.exists({ name: event_name });
+  return await Event.exists({ name: event_name }).cache({ ttl: time });
 }
 // --------------------------------------------------------------------
 
-module.exports.createEvent = createEvent;
-module.exports.getAllEvents = getAllEvents;
-module.exports.checkEvent = checkEvent;
+module.exports = {
+  createEvent: createEvent,
+  getAllEvents: getAllEvents,
+  checkEvent: checkEvent,
+};

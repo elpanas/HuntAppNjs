@@ -1,8 +1,15 @@
-const { Cluster } = require('../models/cluster');
+const { Cluster } = require('../models/cluster'),
+  { clearCache } = require('redis_mongoose'),
+  config = require('../config/config'),
+  {
+    redis: { time },
+  } = config;
 
 // CREATE
 async function createCluster(idg, cluster_nr) {
-  return await Cluster.create({ game: idg, cluster: cluster_nr });
+  const result = await Cluster.create({ game: idg, cluster: cluster_nr });
+  clearCache();
+  return result;
 }
 // --------------------------------------------------------------------
 
@@ -11,25 +18,31 @@ async function getClusterList(idg) {
   return await Cluster.find({ game: idg })
     .sort('cluster')
     .select('cluster')
-    .lean();
+    .lean()
+    .cache({ ttl: time });
 }
 
 async function getClusterInfo(idg, clt) {
   return await Cluster.findOne({ game: idg, cluster: clt })
     .select('nr_extracted_loc')
-    .lean();
+    .lean()
+    .cache({ ttl: time });
 }
 // --------------------------------------------------------------------
 
 // UPDATE
 async function addExtractedLoc(clt_data) {
-  return await Cluster.findByIdAndUpdate(clt_data.idc, {
+  const result = await Cluster.findByIdAndUpdate(clt_data.idc, {
     nr_extracted_loc: clt_data.stepsnr,
   }).lean();
+  clearCache();
+  return result;
 }
 // --------------------------------------------------------------------
 
-module.exports.createCluster = createCluster;
-module.exports.getClusterList = getClusterList;
-module.exports.getClusterInfo = getClusterInfo;
-module.exports.addExtractedLoc = addExtractedLoc;
+module.exports = {
+  createCluster: createCluster,
+  getClusterList: getClusterList,
+  getClusterInfo: getClusterInfo,
+  addExtractedLoc: addExtractedLoc,
+};

@@ -1,8 +1,15 @@
-const { Game } = require('../models/game');
+const { Game } = require('../models/game'),
+  { clearCache } = require('redis_mongoose'),
+  config = require('../config/config'),
+  {
+    redis: { time },
+  } = config;
 
 // CREATE
 async function createGame(game_data) {
-  return await Game.create(game_data);
+  const result = await Game.create(game_data);
+  clearCache();
+  return result;
 }
 // --------------------------------------------------------------------
 
@@ -11,28 +18,38 @@ async function createGame(game_data) {
 async function getAllGames(event_id) {
   return await Game.find({ event: event_id })
     .select('_id name riddle_category organizer qr_created active is_open')
-    .lean();
+    .lean()
+    .cache({ ttl: time });
 }
 
 // get the riddle category of a game
 async function getGameCategory(idg) {
-  return await Game.findById(idg).select('riddle_category').lean();
+  return await Game.findById(idg)
+    .select('riddle_category')
+    .lean()
+    .cache({ ttl: time });
 }
 
 // UPDATE
 // set qrcode pdf as created
 async function setQrCode(idg) {
-  return await Game.findByIdAndUpdate(idg, { qr_created: true }).lean();
+  const result = await Game.findByIdAndUpdate(idg, { qr_created: true }).lean();
+  clearCache();
+  return result;
 }
 
 // set a game as active
 async function activateGame(idg) {
-  return await Game.findByIdAndUpdate(idg, { active: true }).lean();
+  const result = await Game.findByIdAndUpdate(idg, { active: true }).lean();
+  clearCache();
+  return result;
 }
 // --------------------------------------------------------------------
 
-module.exports.createGame = createGame;
-module.exports.getGameCategory = getGameCategory;
-module.exports.getAllGames = getAllGames;
-module.exports.setQrCode = setQrCode;
-module.exports.activateGame = activateGame;
+module.exports = {
+  createGame: createGame,
+  getGameCategory: getGameCategory,
+  getAllGames: getAllGames,
+  setQrCode: setQrCode,
+  activateGame: activateGame,
+};

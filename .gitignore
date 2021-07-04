@@ -11,3 +11,4 @@
 #/docker-compose.yml
 .vscode/settings.json
 .env
+html2pdf/template-certificate.html

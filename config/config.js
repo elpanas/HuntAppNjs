@@ -16,6 +16,10 @@ const config = {
   bcrypt: {
     saltRounds: 10,
   },
+  redis: {
+    redisUri: process.env.REDIS_URL,
+    time: 120,
+  },
 };
 
 module.exports = config;

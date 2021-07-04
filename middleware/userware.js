@@ -9,8 +9,8 @@ const { credentialsHandler } = require('../functions/functions'),
 // CREATE USER
 async function createUser(user_data) {
   const username = Buffer.from(user_data.username, 'base64').toString(),
-    password = Buffer.from(user_data.password, 'base64').toString();
-  const hashPassword = await bcrypt.hashSync(password, saltRounds);
+    password = Buffer.from(user_data.password, 'base64').toString(),
+    hashPassword = await bcrypt.hashSync(password, saltRounds);
   return await User.create({
     first_name: user_data.first_name,
     full_name: user_data.full_name,
@@ -29,20 +29,20 @@ async function getUser(id) {
 
 // check credentials
 async function checkUser(auth) {
-  const credentialObject = credentialsHandler(auth);
-  const result = await User.findOne(credentialObject).lean();
+  const credentialObject = credentialsHandler(auth),
+    result = await User.findOne(credentialObject).lean();
   if (result) return result._id;
   return false;
 }
 
 // check the same thing but it returns the whole document
 async function checkLogin(auth) {
-  const credentialObject = credentialsHandler(auth);
-  const user = await User.aggregate([
-    { $match: credentialObject },
-    { $addFields: { logStatus: { $subtract: ['$$NOW', '$logged'] } } },
-    { $project: { _id: 0, logStatus: 1 } },
-  ]);
+  const credentialObject = credentialsHandler(auth),
+    user = await User.aggregate([
+      { $match: credentialObject },
+      { $addFields: { logStatus: { $subtract: ['$$NOW', '$logged'] } } },
+      { $project: { _id: 0, logStatus: 1 } },
+    ]);
 
   if (user[0].logStatus < 60 * 60000) {
     return await User.findByIdAndUpdate(
@@ -73,9 +73,11 @@ async function makeLogout(auth) {
   ).lean();
 }
 
-module.exports.createUser = createUser;
-module.exports.getUser = getUser;
-module.exports.checkUser = checkUser;
-module.exports.checkLogin = checkLogin;
-module.exports.makeLogin = makeLogin;
-module.exports.makeLogout = makeLogout;
+module.exports = {
+  createUser: createUser,
+  getUser: getUser,
+  checkUser: checkUser,
+  checkLogin: checkLogin,
+  makeLogin: makeLogin,
+  makeLogout: makeLogout,
+};

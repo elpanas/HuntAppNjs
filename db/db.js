@@ -1,9 +1,12 @@
 const mongoose = require('mongoose'),
-  config = require('../config/config');
+  redisMongoose = require('redis_mongoose'),
+  config = require('../config/config'),
+  {
+    db: { uri, options },
+    redis: { redisUri },
+  } = config;
 
-const {
-  db: { uri, options },
-} = config;
+redisMongoose.init(mongoose, redisUri);
 
 mongoose
   .connect(uri, options)

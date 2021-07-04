@@ -2,11 +2,16 @@ const { SingleGame } = require('../models/singlegame'),
   { Actions } = require('../models/action'),
   { Cluster } = require('../models/cluster'),
   { Riddle } = require('../models/riddle'),
-  { createObj, shuffle } = require('../functions/functions');
+  { createObj, shuffle } = require('../functions/functions'),
+  { clearCache } = require('redis_mongoose'),
+  config = require('../config/config'),
+  {
+    redis: { time },
+  } = config;
 
 // ----- CREATE -----
 async function createSingleGame(single_data, idu) {
-  return await SingleGame.create({
+  const result = await SingleGame.create({
     game: single_data.game_id,
     group_name: single_data.group_name,
     group_captain: idu,
@@ -14,6 +19,8 @@ async function createSingleGame(single_data, idu) {
     group_flag: single_data.group_flag,
     //group_photo_path: single_data.group_photo_path
   });
+  clearCache();
+  return result;
 }
 
 // generate random steps
@@ -51,6 +58,7 @@ async function createSteps(idg, idsg, riddle_cat) {
   riddles.forEach((r) => (steps[s++].riddle = r._id));
 
   await Actions.insertMany(steps);
+  clearCache();
 }
 
 // auxiliary functions
@@ -84,7 +92,8 @@ async function checkGroup(idg, idu) {
   })
     .select('_id')
     .sort('-bootdate')
-    .lean();
+    .lean()
+    .cache({ ttl: time });
 }
 
 // check if there are other games already played by this user
@@ -97,7 +106,8 @@ async function checkMultipleGame(idg, idu) {
     })
       .select('game')
       .lean()
-      .populate('game');
+      .populate('game')
+      .cache({ ttl: time });
 
     return result.game.is_open;
   } catch (e) {
@@ -113,21 +123,26 @@ async function getFinishedList(idu) {
   })
     .select('_id game')
     .lean()
-    .populate('game');
+    .populate('game')
+    .cache({ ttl: time });
 }
 // --------------------------------------------------------------------
 
 // set a game session as completed
 async function setCompleted(idsg) {
-  return await SingleGame.findByIdAndUpdate(idsg, {
+  const result = await SingleGame.findByIdAndUpdate(idsg, {
     is_completed: true,
   }).lean();
+  clearCache();
+  return result;
 }
 // --------------------------------------------------------------------
 
-module.exports.createSingleGame = createSingleGame;
-module.exports.createSteps = createSteps;
-module.exports.checkGroup = checkGroup;
-module.exports.checkMultipleGame = checkMultipleGame;
-module.exports.getFinishedList = getFinishedList;
-module.exports.setCompleted = setCompleted;
+module.exports = {
+  createSingleGame: createSingleGame,
+  createSteps: createSteps,
+  checkGroup: checkGroup,
+  checkMultipleGame: checkMultipleGame,
+  getFinishedList: getFinishedList,
+  setCompleted: setCompleted,
+};
