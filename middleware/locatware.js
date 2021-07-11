@@ -1,6 +1,8 @@
 const { Location } = require('../models/location'),
   mongoose = require('mongoose'),
   { clearCache } = require('redis_mongoose'),
+  { createCluster } = require('./clusterware'),
+  { generateQrPdf, generateQrHtml } = require('./pdfware2'),
   config = require('../config/config'),
   {
     redis: { time },
@@ -40,7 +42,7 @@ async function createLocation(loc_data) {
 }
 // --------------------------------------------------------------------
 
-// GET
+// READ
 // get locations nr
 async function getNrLocations(idg) {
   return await Location.estimatedDocumentCount({ game: idg }).cache({
@@ -82,6 +84,35 @@ function computeMean(distances) {
   const sum = distances.reduce((a, b) => a + b);
   return sum / distances.length;
 }
+
+async function locationPhotoHandler(reqBody) {
+  const distances = await getDistances(reqBody),
+    start = reqBody.is_start == 'true',
+    avgdist = parseInt(reqBody.avg_distance);
+  let is_mean = false;
+
+  if (!start) {
+    is_mean =
+      distances.length == 1 && distances[0].distance >= avgdist
+        ? true
+        : computeMean(distances) >= avgdist;
+  }
+
+  if (start || is_mean) {
+    const result = await createLocation(reqBody);
+    if (result._id) {
+      if (reqBody.new_cluster == 'true')
+        createCluster(result.game, result.cluster);
+
+      generateQrHtml(result);
+      if (result.is_final) generateQrPdf(result.game);
+
+      return true;
+    }
+    return false;
+  }
+  return false;
+}
 // --------------------------------------------------------------------
 
 module.exports = {
@@ -89,6 +120,5 @@ module.exports = {
   createLocations: createLocations,
   getNrLocations: getNrLocations,
   getLocations: getLocations,
-  getDistances: getDistances,
-  computeMean: computeMean,
+  locationPhotoHandler: locationPhotoHandler,
 };

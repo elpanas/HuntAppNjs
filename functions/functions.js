@@ -61,9 +61,11 @@ function makeUpload(path) {
 }
 // ------------------------------------------------------
 
-module.exports.authHandler = authHandler;
-module.exports.resultHandler = resultHandler;
-module.exports.credentialsHandler = credentialsHandler;
-module.exports.createObj = createObj;
-module.exports.shuffle = shuffle;
-module.exports.makeUpload = makeUpload;
+module.exports = {
+  authHandler: authHandler,
+  resultHandler: resultHandler,
+  credentialsHandler: credentialsHandler,
+  createObj: createObj,
+  shuffle: shuffle,
+  makeUpload: makeUpload,
+};

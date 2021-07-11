@@ -26,8 +26,8 @@ async function createSingleGame(single_data, idu) {
 // generate random steps
 async function createSteps(idg, idsg, riddle_cat) {
   const clusters = await getClusters(idg),
-    locations = await getLocations(idg);
-  const startLocObj = locations.find((loc) => loc.is_start),
+    locations = await getLocations(idg),
+    startLocObj = locations.find((loc) => loc.is_start),
     finalLocObj = locations.find((loc) => loc.is_final);
   let steps = [],
     s = 0,
@@ -40,7 +40,7 @@ async function createSteps(idg, idsg, riddle_cat) {
       locations.filter(
         (loc) => loc.cluster == clt.cluster && !loc.is_start && !loc.is_final
       )
-    );
+    ),
 
     const middleLocs =
       filteredLocs.length > clt.nr_extracted_loc

@@ -1,7 +1,10 @@
 require('./db/db'); // DATABASE CONNECTIONS
-const express = require('express'); // FRAMEWORKs
-const app = express(),
+const express = require('express'), // FRAMEWORKs
+  app = express(),
   config = require('./config/config'), // CONFIGURATIONS
+  {
+    app: { port },
+  } = config,
   compression = require('compression'), // MIDDLEWARES
   helmet = require('helmet'),
   restAction = require('./routes/restaction'), // ROUTES
@@ -32,6 +35,4 @@ app.use('/api/loc', restLoc);
 app.use('/api/riddle', restRiddle);
 app.use('/api/user', restUser);
 
-app.listen(config.app.port, () =>
-  console.log(`Listening on port ${config.app.port}...`)
-);
+app.listen(port, () => console.log(`Listening on port ${port}...`));

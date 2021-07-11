@@ -1,13 +1,9 @@
-const mongoose = require('mongoose'); // MongoDB framework
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose'), // MongoDB framework
+  Schema = mongoose.Schema;
 
 const userSchema = Schema({
-  first_name: {
-    type: String,
-  },
-  full_name: {
-    type: String,
-  },
+  first_name: String,
+  full_name: String,
   username: {
     type: String,
     require: true,
@@ -28,4 +24,5 @@ const userSchema = Schema({
 }).index({ username: 1, password: 1 });
 
 const User = mongoose.model('user', userSchema);
-exports.User = User;
+
+moduleexports.User = User;

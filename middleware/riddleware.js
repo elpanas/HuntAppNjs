@@ -17,8 +17,8 @@ async function createRiddle(riddle_data) {
 
 // create the riddle, joining the text with a parameter
 function generateRiddle(riddle, mylocale, readValue) {
-  const locales = fs.readdirSync(`${process.cwd()}/src/translation/`);
-  const locale = locales.includes(mylocale) ? mylocale : 'en_US';
+  const locales = fs.readdirSync(`${process.cwd()}/src/translation/`),
+    locale = locales.includes(mylocale) ? mylocale : 'en_US';
 
   PO.load(`src/translation/${locale}/LC_MESSAGES/riddles.po`, (err, po) => {
     const message = po.items.find(

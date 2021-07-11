@@ -1,5 +1,6 @@
 const { Actions } = require('../models/action'),
   { SingleGame } = require('../models/singlegame'),
+  mongoose = require('mongoose'),
   QRCode = require('qrcode'),
   fs = require('fs'),
   Prince = require('prince'),

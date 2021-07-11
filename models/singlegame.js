@@ -1,15 +1,16 @@
-const mongoose = require('mongoose'); // MongoDB framework
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose'), // MongoDB framework
+  Schema = mongoose.Schema,
+  stringOpts = {
+    type: String,
+    default: null,
+  };
 
 const singleGameSchema = Schema({
   game: {
     type: Schema.Types.ObjectId,
     ref: 'game',
   },
-  group_name: {
-    type: String,
-    default: null,
-  },
+  group_name: stringOpts,
   group_captain: {
     type: Schema.Types.ObjectId,
     ref: 'user',
@@ -18,13 +19,8 @@ const singleGameSchema = Schema({
     type: Number,
     required: true,
   },
-  group_photo_path: {
-    type: String,
-    default: null,
-  },
-  group_flag: {
-    type: String,
-  },
+  group_photo_path: stringOpts,
+  group_flag: String,
   is_completed: {
     type: Boolean,
     default: false,
@@ -33,4 +29,4 @@ const singleGameSchema = Schema({
 
 const SingleGame = mongoose.model('singlegame', singleGameSchema);
 
-exports.SingleGame = SingleGame;
+module.exports.SingleGame = SingleGame;

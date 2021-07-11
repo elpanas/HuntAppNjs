@@ -5,13 +5,13 @@ const express = require('express'),
   router = express.Router();
 var upload = makeUpload('/src/riddles');
 
+// CREATE
 router.post('/', upload.single('rphoto'), async (req, res) => {
   await authHandler(req);
   const result = await createRiddle(req.body);
   result ? res.status(201).send() : res.status(400).send();
 });
 
-// CREATE
 router.post('/', async (req, res) => {
   await authHandler(req);
   const result = await createRiddle(req.body);

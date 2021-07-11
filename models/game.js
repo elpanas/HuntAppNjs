@@ -1,5 +1,9 @@
-const mongoose = require('mongoose'); // MongoDB framework
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose'), // MongoDB framework
+  Schema = mongoose.Schema,
+  boolOpts = {
+    type: Boolean,
+    default: false,
+  };
 
 const gameSchema = Schema({
   event: {
@@ -20,20 +24,11 @@ const gameSchema = Schema({
     enum: ['Basic', 'Intermediate', 'Advanced'],
   },
   //start_date: Date,
-  qr_created: {
-    type: Boolean,
-    default: false,
-  },
-  active: {
-    type: Boolean,
-    default: false,
-  },
-  is_open: {
-    type: Boolean,
-    default: false,
-  },
+  qr_created: boolOpts,
+  active: boolOpts,
+  is_open: boolOpts,
 }).index({ event: 1 });
 
 const Game = mongoose.model('game', gameSchema);
 
-exports.Game = Game;
+module.exports.Game = Game;

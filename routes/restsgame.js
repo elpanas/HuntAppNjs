@@ -21,7 +21,7 @@ router.post('/', async (req, res) => {
 });
 // --------------------------------------------------------------------
 
-// ----- GET -----
+// ----- READ -----
 router.get('/game/:idg', async (req, res) => {
   const idu = await authHandler(req),
     idsg = checkGroup(req.params.idg, idu);

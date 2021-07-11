@@ -1,5 +1,13 @@
-const mongoose = require('mongoose'); // MongoDB framework
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose'), // MongoDB framework
+  Schema = mongoose.Schema,
+  stringOpts = {
+    type: String,
+    default: null,
+  },
+  boolOpts = {
+    type: Boolean,
+    default: false,
+  };
 
 const locationSchema = Schema({
   game: {
@@ -24,24 +32,12 @@ const locationSchema = Schema({
     type: String,
     default: '',
   },
-  description: {
-    type: String,
-    default: null,
-  },
-  hint: {
-    type: String,
-    default: null,
-  },
-  is_start: {
-    type: Boolean,
-    default: false,
-  },
-  is_final: {
-    type: Boolean,
-    default: false,
-  },
+  description: stringOpts,
+  hint: stringOpts,
+  is_start: boolOpts,
+  is_final: boolOpts,
 }).index({ location: '2dsphere', game: 1 });
 
 const Location = mongoose.model('location', locationSchema);
 
-exports.Location = Location;
+module.exports.Location = Location;

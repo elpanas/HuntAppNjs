@@ -7,6 +7,7 @@ const express = require('express'),
   { authHandler } = require('../functions/authHandler'),
   router = express.Router();
 
+// READ
 router.get('/:idg', async (req, res) => {
   await authHandler(req);
   const result = await getClusterList(req.params.idg);

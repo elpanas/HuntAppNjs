@@ -1,5 +1,5 @@
-const mongoose = require('mongoose'); // MongoDB framework
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose'), // MongoDB framework
+  Schema = mongoose.Schema;
 
 const riddleSchema = Schema({
   riddle_category: {
@@ -29,4 +29,4 @@ const riddleSchema = Schema({
 
 const Riddle = mongoose.model('riddle', riddleSchema);
 
-exports.Riddle = Riddle;
+module.exports.Riddle = Riddle;

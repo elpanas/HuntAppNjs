@@ -162,5 +162,7 @@ async function getGroup(idsg) {
   return await SingleGame.findById(idsg).select('group_name').lean();
 }
 
-module.exports.generateQrPdf = generateQrPdf;
-module.exports.generateCertPdf = generateCertPdf;
+module.exports = {
+  generateQrPdf: generateQrPdf,
+  generateCertPdf: generateCertPdf,
+};

@@ -1,5 +1,5 @@
-const mongoose = require('mongoose'); // MongoDB framework
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose'), // MongoDB framework
+  Schema = mongoose.Schema;
 
 const eventSchema = Schema({
   name: {
@@ -39,4 +39,4 @@ const eventSchema = Schema({
 
 const Event = mongoose.model('event', eventSchema);
 
-exports.Event = Event;
+module.exports.Event = Event;

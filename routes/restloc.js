@@ -1,45 +1,14 @@
 const express = require('express'),
-  {
-    createLocation,
-    getLocations,
-    getDistances,
-    computeMean,
-  } = require('../middleware/locatware'),
+  { getLocations, locationPhotoHandler } = require('../middleware/locatware'),
   { authHandler, makeUpload } = require('../functions/functions'),
-  { generateQrPdf, generateQrHtml } = require('../middleware/pdfware2'),
-  { createCluster } = require('../middleware/clusterware'),
   router = express.Router();
 var upload = makeUpload('/data/locphoto');
 
 // CREATE
 router.post('/', upload.single('lphoto'), async (req, res) => {
   await authHandler(req);
-  const distances = await getDistances(req.body),
-    start = req.body.is_start == 'true',
-    avgdist = parseInt(req.body.avg_distance);
-  let is_mean = false;
-
-  if (!start) {
-    is_mean =
-      distances.length == 1 && distances[0].distance >= avgdist
-        ? true
-        : computeMean(distances) >= avgdist;
-  }
-
-  if (start || is_mean) {
-    const result = await createLocation(req.body);
-    if (result._id) {
-      if (req.body.new_cluster == 'true')
-        createCluster(result.game, result.cluster);
-
-      generateQrHtml(result);
-      if (result.is_final) generateQrPdf(result.game);
-
-      res.status(201).send();
-    }
-    res.status(400).send();
-  }
-  res.status(400).send();
+  const result = await locationPhotoHandler(req.body);
+  result ? res.status(201).send() : res.status(400).send();
 });
 // --------------------------------------------------------------------
 
